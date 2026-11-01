@@ -26,6 +26,16 @@ git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git ..\skil
 
 코파 원격 환경 시험에서는 **방법 1**을 쓴다. 명령은 미리 복사해 두거나 메모에 띄워 둔다. 원격 환경에서 GitHub 접속, Python, Node가 되는지는 사전 체험 때 `docs/RULES_CHECKLIST.md`로 확인한다.
 
+### 코파 환경에서는 Codex에게 설치를 시킨다
+
+2026-10-30 사전 체험에서 확인했다. 플랫폼 터미널에서 직접 실행하면 설치가 되지 않았고, **Codex에게 명령을 실행해 달라고 하면** Skill이 설치됐다.
+
+1. 코파 환경에서 Codex를 연다.
+2. "아래 명령을 실행해 줘"라고 하고 방법 1의 PowerShell 명령을 붙여 넣는다.
+3. 출력 끝의 `Status:` 줄이 `READY`인지 확인한다.
+4. **Codex 세션을 새로 시작한다.** 켜져 있던 세션은 새로 설치한 Skill과 MCP를 읽지 못할 수 있다.
+5. 아래 "설치 뒤 공통 확인"을 따른다.
+
 ### 방법 1. 공개 저장소에서 받아 설치 (어느 PC든)
 
 작업 폴더 안에서 실행한다. 키트는 형제 폴더 `..\skill_kit_kch`에 받는다.
@@ -69,6 +79,7 @@ git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_ki
 1. Codex를 **키트를 설치한 작업 폴더에서** 연다. 다른 폴더에서 열면 키트 Skill이 보이지 않는다.
 2. 신뢰(trust) 확인창이 뜨면 신뢰를 고른다. MCP는 신뢰한 폴더에서만 켜진다. Skill과 AGENTS.md는 신뢰와 무관하게 읽힌다.
 3. `/skills`로 키트 Skill을, `/mcp`로 `sequential-thinking`을 확인한다. 안 보이면 `docs/RULES_CHECKLIST.md`의 대체 경로를 따른다.
+4. MCP가 안 보여도 시험은 진행할 수 있다. 핵심은 Skill과 AGENTS.md다. 신뢰, 재시작, `node --version` 순으로 한 번 확인하고 안 되면 MCP 없이 간다.
 
 ## 프로필
 

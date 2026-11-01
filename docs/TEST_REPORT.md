@@ -20,7 +20,8 @@
 
 ## 미검증
 - 시험 환경(Cofa) 전체: docs/ASSUMPTIONS.md 참고
-- 요청 시 전용 Skill 3개(`implementation-review`, `benchmark`, `design-review`)가 키워드나 `$이름`에만 반응하고 평소에는 끼어들지 않는지: 사용자의 대화형 확인 필요
+- Codex가 Skill 8개를 실제로 로드하는지: 2026-10-30 노트북(FactChat 프로필)에서 `/skills`에 모두 표시됨을 사용자가 확인했다. 코파 환경 결과는 `docs/RULES_CHECKLIST.md`의 "사전 체험 결과"를 본다.
+- 요청 시 전용 Skill 3개(`implementation-review`, `benchmark`, `design-review`)가 키워드에만 반응하고 평소에는 끼어들지 않는지: 2026-11-01 `codex exec`로 확인했다(아래 "Codex 실행 확인과 algorithm-options 트리거 수정")
 - PSScriptAnalyzer가 설치되지 않아 `bootstrap.ps1` 정적 분석은 실행하지 못했다
 
 # 계획 2 (프로필, MCP, 감사)
@@ -63,6 +64,10 @@
 | `uv run ruff format --check .` | PASS | `50 files already formatted` |
 | `uv run python devtools/make_examples.py` | PASS | `docs/examples/*.log` 5개 재생성. 변경은 `Skills: N expected / M verified` 줄(`install`·`rerun`·`failure`·`offline`은 8/8, `conflict.log`는 8/7)과 `rerun.log`에 추가된 PASS 두 줄(`optional skill:systematic-debugging`, `optional skill:codebase-explorer`)뿐 |
 | `run_kit.py --profile core` 빈 폴더 설치 | PASS | `Status:       READY`, `exit=0`, `Skills:       8 expected / 8 verified`, `.agents/skills`에 8개 폴더, `THIRD_PARTY_NOTICES.md`는 대상에 없음 |
+| 최종 리뷰 수정 후 `uv run pytest -q` | PASS | `320 passed, 1 skipped` (병합된 `main`에서 재실행해도 동일) |
+| 새 저장소 주소(`skill_kit_kch`)로 bash 한 줄 설치 | PASS | 빈 폴더에서 `Status:       READY`, `Skills:       8 expected / 8 verified` |
+| Codex `/skills` (노트북, FactChat 프로필) | PASS | 2026-10-30, 8개 모두 표시(사용자 확인) |
+| 코파 사전 체험 | 부분 | 플랫폼 터미널 설치 실패, Codex에게 실행시키면 Skill 설치·표시. `/mcp`는 표시 안 됨. 자세한 내용은 `docs/RULES_CHECKLIST.md` |
 
 # 추가 Skill 3개 (counterexample-hunter, algorithm-options, design-review)와 요청 시 호출
 
