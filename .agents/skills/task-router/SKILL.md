@@ -22,8 +22,8 @@ Turn the task statement into a short written brief, then choose the fewest skill
    | Condition | Skill |
    |---|---|
    | Core logic with checkable inputs and outputs | `tdd-automator` |
-   | More than one algorithm could solve the core problem | `algorithm-options`, before writing core logic |
-   | Input sizes or time/memory limits are stated, or a naive approach would be too slow | `algorithm-optimizer` |
+   | Input sizes or time/memory limits are stated, or several algorithms could solve the core problem | `algorithm-options`, before writing core logic |
+   | A working solution is too slow or exceeds the limits | `algorithm-optimizer` |
    | Hidden tests decide the score and a brute force or answer checker can be written | `counterexample-hunter`, after the examples pass |
    | The task gives an existing repository to modify or extend | `codebase-explorer`, before any edit |
    | A test fails or the program misbehaves and the cause is unknown | `systematic-debugging` |

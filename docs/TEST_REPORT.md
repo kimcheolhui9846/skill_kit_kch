@@ -78,3 +78,22 @@
 | `codex debug prompt-input` (codex-cli 0.166.0, 설치한 빈 폴더) | PASS | `<skills_instructions>` 목록에 키트 Skill 11개가 모두 들어감. 명시 전용이던 `implementation-review`, `benchmark`도 이제 목록에 있음 |
 
 description 합계 상한을 2000자에서 3000자로 올렸다(`test_total_description_budget`). 현재 합계는 2791자다.
+
+# Codex 실행 확인과 algorithm-options 트리거 수정
+
+실행일: 2026-11-01, 환경: Windows 11 AMD64, codex-cli 0.166.0 (FactChat 프로필), `codex exec --json`. 경우마다 키트를 새로 설치한 작업 공간에서 실행하고, 실행 기록에서 읽은 `SKILL.md`로 Skill 사용을 판정했다. 이 PC의 사용자 전역 Skill(superpowers)과 전역 지침도 함께 로드됐다.
+
+| 요청 | 기대 | 읽은 키트 Skill | 결과 |
+|---|---|---|---|
+| "main.py 설계 리뷰 해줘" | `design-review` | `design-review` | PASS |
+| "응집도랑 결합도 좀 봐줘" | `design-review` | `design-review` | PASS |
+| 평범한 수정 작업(대조군) | 요청 시 전용 Skill 없음 | `codebase-explorer`, `submission-validator` | PASS |
+| "main.py 벤치마크 해줘" | `benchmark` | `benchmark` | PASS |
+| "main.py 풀이 설명해줘" | `implementation-review` | `implementation-review` | PASS |
+| 버그가 숨은 풀이 "더 검증해줘" | `counterexample-hunter` | `counterexample-hunter` 외 | PASS (반례 `[-1]` 발견, 회귀 테스트 추가) |
+| 제한이 주어진 알고리즘 문제(수정 전) | `algorithm-options` | `algorithm-optimizer` 외 | FAIL |
+| 같은 문제(수정 후, 2회) | `algorithm-options` | `algorithm-options` 외 | PASS (2회 모두 후보 3개 비교 후 선택 기록) |
+
+수정: `algorithm-optimizer`는 "이미 동작하는 풀이가 느리거나 제한을 넘을 때"로 좁히고, `algorithm-options`는 "입력 크기나 시간 제한이 주어진 알고리즘 문제에서 핵심 로직 전"으로 넓혔다. task-router 표도 맞췄다. `uv run pytest -q`: `338 passed, 1 skipped`, `ruff check`·`ruff format --check` 통과.
+
+미검증: `codex exec`는 사용자 답을 받을 수 없어 `algorithm-options`가 선택을 기다리는 동작은 확인하지 못했다. 이후 사용자가 대화형 Codex에서 동작을 확인했다(2026-11-01).
