@@ -1,6 +1,6 @@
 ---
 name: algorithm-options
-description: "Use before writing core logic when several algorithms could solve the problem - lists 2-3 candidates with complexity, fit to limits and risks, recommends one and waits for the user's choice. Do NOT use when only one approach is reasonable, or to speed up existing code."
+description: "Use before writing core logic for an algorithm problem with stated input sizes or time limits, or when several approaches could work - lists 2-3 candidates with complexity, fit to limits and risks, recommends one and waits for the user's choice. Do NOT use to speed up existing code."
 ---
 
 # Algorithm Options

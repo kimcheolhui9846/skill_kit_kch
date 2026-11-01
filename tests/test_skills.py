@@ -211,3 +211,14 @@ def test_design_review_is_read_only(kit_root):
     for needle in ("Cohesion", "Coupling", "Do not edit code", "| Location |"):
         assert needle in text
     assert list((kit_root / ".agents/skills/design-review/examples").glob("*.md"))
+
+
+def test_algorithm_options_owns_stated_limits(kit_root):
+    def description(name):
+        text = (kit_root / ".agents/skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        return parse_frontmatter(text)["description"]
+
+    assert description("algorithm-options").startswith(
+        "Use before writing core logic for an algorithm problem with stated input sizes"
+    )
+    assert description("algorithm-optimizer").startswith("Use when a working solution is too slow")

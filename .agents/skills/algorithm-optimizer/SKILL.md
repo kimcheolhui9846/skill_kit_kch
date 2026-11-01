@@ -1,6 +1,6 @@
 ---
 name: algorithm-optimizer
-description: "Use when the task states input sizes or time/memory limits, or a working solution is too slow - estimates allowed complexity, finds the bottleneck, compares better algorithms and re-runs tests. Do NOT use when inputs are small and limits are already met."
+description: "Use when a working solution is too slow or exceeds the time/memory limits - estimates allowed complexity, finds the bottleneck, compares better algorithms and re-runs tests. Do NOT use before a solution exists (use algorithm-options) or when limits are met."
 ---
 
 # Algorithm Optimizer
