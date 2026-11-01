@@ -22,12 +22,15 @@ Turn the task statement into a short written brief, then choose the fewest skill
    | Condition | Skill |
    |---|---|
    | Core logic with checkable inputs and outputs | `tdd-automator` |
-   | Input sizes or time/memory limits are stated, or a naive approach would be too slow | `algorithm-optimizer` |
+   | Input sizes or time/memory limits are stated, or several algorithms could solve the core problem | `algorithm-options`, before writing core logic |
+   | A working solution is too slow or exceeds the limits | `algorithm-optimizer` |
+   | Hidden tests decide the score and a brute force or answer checker can be written | `counterexample-hunter`, after the examples pass |
    | The task gives an existing repository to modify or extend | `codebase-explorer`, before any edit |
    | A test fails or the program misbehaves and the cause is unknown | `systematic-debugging` |
    | There is a deliverable (files, output format, run command) | `submission-validator`, before finishing |
-   | The user wants the design explained | `implementation-review` (explicit `$implementation-review` only) |
-   | Measured slowness needs profiling | `benchmark` (explicit `$benchmark` only) |
+   | The user asks why the solution works | `implementation-review` (only on request) |
+   | Measured slowness needs profiling | `benchmark` (only on request) |
+   | The user asks about cohesion, coupling or structure | `design-review` (only on request) |
 
 6. Write `TASK_BRIEF.md` in the workspace root with the template below. Keep it under 40 lines, not counting the Decision log.
 7. Re-read `TASK_BRIEF.md` when the conversation gets long and before declaring the task done. Append one Decision log line for each non-obvious decision.

@@ -1,6 +1,6 @@
 ---
 name: benchmark
-description: "Use only when explicitly invoked as $benchmark - measures runtime or memory on synthetic inputs (timeit, cProfile, tracemalloc) and compares before and after under the same conditions. Do NOT use automatically or when tests show it is fast enough."
+description: "Use only when the user invokes $benchmark or asks to measure speed or memory ('벤치마크', '프로파일링', 'benchmark', 'profile') - times synthetic inputs (timeit, cProfile, tracemalloc) and compares before and after. Do NOT use unasked or when tests show it is fast enough."
 ---
 
 # Benchmark

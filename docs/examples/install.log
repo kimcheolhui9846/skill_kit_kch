@@ -4,7 +4,7 @@ Tools:        git OK, uv OK, node OK, npx OK, codex OK, python OK
 Target:       <target>
 Profile:      core
 AGENTS.md:    INSTALLED
-Skills:       8 expected / 8 verified
+Skills:       11 expected / 11 verified
 Codex load:   UNVERIFIED (open Codex and run /skills)
 MCP:          none in profile 'core'
 Network:      not used

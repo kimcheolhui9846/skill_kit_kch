@@ -88,9 +88,14 @@ def test_agents_md_policy(kit_root):
     assert "hackathon-kit:begin" not in text
 
 
-EXTRA = ["systematic-debugging", "codebase-explorer"]
-ALL = CORE + ["implementation-review", "benchmark"] + EXTRA
-EXPLICIT_ONLY = ["implementation-review", "benchmark"]
+EXTRA = [
+    "systematic-debugging",
+    "codebase-explorer",
+    "counterexample-hunter",
+    "algorithm-options",
+]
+ON_REQUEST = ["implementation-review", "benchmark", "design-review"]
+ALL = CORE + ON_REQUEST + EXTRA
 
 
 @pytest.mark.parametrize("name", ALL)
@@ -108,17 +113,17 @@ def test_total_description_budget(kit_root):
     for name in ALL:
         text = (kit_root / ".agents" / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
         total += len(parse_frontmatter(text)["description"])
-    assert total <= 2000, total
+    assert total <= 3000, total
 
 
-@pytest.mark.parametrize("name", EXPLICIT_ONLY)
-def test_explicit_only_policy(kit_root, name):
-    yaml_text = (kit_root / ".agents" / "skills" / name / "agents" / "openai.yaml").read_text(
-        encoding="utf-8"
-    )
-    assert "allow_implicit_invocation: false" in yaml_text
-    text = (kit_root / ".agents" / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
-    assert parse_frontmatter(text)["description"].startswith("Use only when explicitly invoked")
+@pytest.mark.parametrize("name", ON_REQUEST)
+def test_on_request_policy(kit_root, name):
+    folder = kit_root / ".agents" / "skills" / name
+    assert not (folder / "agents" / "openai.yaml").exists()
+    text = (folder / "SKILL.md").read_text(encoding="utf-8")
+    description = parse_frontmatter(text)["description"]
+    assert description.startswith(f"Use only when the user invokes ${name} or asks")
+    assert "Do NOT use unasked" in description
 
 
 def test_benchmark_language_reference(kit_root):
@@ -180,3 +185,40 @@ def test_relative_links_resolve(kit_root, name):
     text = (folder / "SKILL.md").read_text(encoding="utf-8")
     for link in re.findall(r"`(\.\./[^`]+)`", text):
         assert (folder / link).is_file(), f"{name}: {link}"
+
+
+def test_task_router_routes_stress_and_options(kit_root):
+    text = (kit_root / ".agents/skills/task-router/SKILL.md").read_text(encoding="utf-8")
+    assert "`counterexample-hunter`" in text
+    assert "`algorithm-options`" in text
+
+
+def test_algorithm_options_waits_for_choice(kit_root):
+    text = (kit_root / ".agents/skills/algorithm-options/SKILL.md").read_text(encoding="utf-8")
+    assert "Stop and wait" in text
+    assert "../algorithm-optimizer/SKILL.md" in text
+
+
+def test_counterexample_hunter_keeps_failing_input(kit_root):
+    text = (kit_root / ".agents/skills/counterexample-hunter/SKILL.md").read_text(encoding="utf-8")
+    assert "brute" in text
+    assert "seed" in text
+    assert "regression test" in text
+
+
+def test_design_review_is_read_only(kit_root):
+    text = (kit_root / ".agents/skills/design-review/SKILL.md").read_text(encoding="utf-8")
+    for needle in ("Cohesion", "Coupling", "Do not edit code", "| Location |"):
+        assert needle in text
+    assert list((kit_root / ".agents/skills/design-review/examples").glob("*.md"))
+
+
+def test_algorithm_options_owns_stated_limits(kit_root):
+    def description(name):
+        text = (kit_root / ".agents/skills" / name / "SKILL.md").read_text(encoding="utf-8")
+        return parse_frontmatter(text)["description"]
+
+    assert description("algorithm-options").startswith(
+        "Use before writing core logic for an algorithm problem with stated input sizes"
+    )
+    assert description("algorithm-optimizer").startswith("Use when a working solution is too slow")

@@ -14,6 +14,9 @@ ALL_SKILLS = [
     "benchmark",
     "systematic-debugging",
     "codebase-explorer",
+    "counterexample-hunter",
+    "algorithm-options",
+    "design-review",
 ]
 
 PYTEST = {

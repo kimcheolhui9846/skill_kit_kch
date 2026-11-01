@@ -1,6 +1,6 @@
 ---
 name: implementation-review
-description: "Use only when explicitly invoked as $implementation-review - explains why the current solution works: key branches, data structures, correctness, complexity and limits. Do NOT use automatically, and never during the written-answer phase."
+description: "Use only when the user invokes $implementation-review or asks why the solution works ('풀이 설명', '구현 설명', 'explain the solution') - covers key branches, data structures, correctness, complexity and limits. Do NOT use unasked, and never in the written-answer phase."
 ---
 
 # Implementation Review
