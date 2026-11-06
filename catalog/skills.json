@@ -1,0 +1,611 @@
+{
+  "schema": 1,
+  "skills": [
+    {
+      "name": "task-router",
+      "location": ".agents/skills/task-router",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "tdd-automator",
+      "location": ".agents/skills/tdd-automator",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted"
+      ]
+    },
+    {
+      "name": "algorithm-optimizer",
+      "location": ".agents/skills/algorithm-optimizer",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "submission-validator",
+      "location": ".agents/skills/submission-validator",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted"
+      ]
+    },
+    {
+      "name": "implementation-review",
+      "location": ".agents/skills/implementation-review",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "benchmark",
+      "location": ".agents/skills/benchmark",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "systematic-debugging",
+      "location": ".agents/skills/systematic-debugging",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted"
+      ]
+    },
+    {
+      "name": "codebase-explorer",
+      "location": ".agents/skills/codebase-explorer",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "counterexample-hunter",
+      "location": ".agents/skills/counterexample-hunter",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "algorithm-options",
+      "location": ".agents/skills/algorithm-options",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "design-review",
+      "location": ".agents/skills/design-review",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "restricted",
+        "standard"
+      ]
+    },
+    {
+      "name": "systematic-debugging",
+      "location": "third_party/obra-superpowers/skills/systematic-debugging",
+      "origin": "source:superpowers-core",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "test-driven-development",
+      "location": "third_party/obra-superpowers/skills/test-driven-development",
+      "origin": "source:superpowers-core",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE",
+        "references/languages.md": ".agents/skills/tdd-automator/references/languages.md"
+      },
+      "replaces": [
+        "tdd-automator"
+      ],
+      "overlay": "shared/skills/overlays/test-driven-development",
+      "overlay_policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "verification-before-completion",
+      "location": "third_party/obra-superpowers/skills/verification-before-completion",
+      "origin": "source:superpowers-core",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE",
+        "references/languages.md": ".agents/skills/submission-validator/references/languages.md"
+      },
+      "replaces": [
+        "submission-validator"
+      ],
+      "overlay": "shared/skills/overlays/verification-before-completion",
+      "overlay_policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "requesting-code-review",
+      "location": "third_party/obra-superpowers/skills/requesting-code-review",
+      "origin": "source:superpowers-core",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "receiving-code-review",
+      "location": "third_party/obra-superpowers/skills/receiving-code-review",
+      "origin": "source:superpowers-core",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "brainstorming",
+      "location": "third_party/obra-superpowers/skills/brainstorming",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "writing-plans",
+      "location": "third_party/obra-superpowers/skills/writing-plans",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "executing-plans",
+      "location": "third_party/obra-superpowers/skills/executing-plans",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      },
+      "requires": [
+        "subagent-driven-development",
+        "requesting-code-review"
+      ]
+    },
+    {
+      "name": "subagent-driven-development",
+      "location": "third_party/obra-superpowers/skills/subagent-driven-development",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      },
+      "requires": [
+        "requesting-code-review"
+      ]
+    },
+    {
+      "name": "using-git-worktrees",
+      "location": "third_party/obra-superpowers/skills/using-git-worktrees",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "finishing-a-development-branch",
+      "location": "third_party/obra-superpowers/skills/finishing-a-development-branch",
+      "origin": "source:superpowers-workflow",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/obra-superpowers/LICENSE"
+      }
+    },
+    {
+      "name": "karpathy-guidelines",
+      "location": "third_party/multica-ai-andrej-karpathy-skills/skills/karpathy-guidelines",
+      "origin": "source:karpathy-guidelines",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/multica-ai-andrej-karpathy-skills/LICENSE-NOTE.md"
+      }
+    },
+    {
+      "name": "frontend-design",
+      "location": "third_party/anthropics-skills/skills/frontend-design",
+      "origin": "source:anthropics-frontend-design",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "emil-design-eng",
+      "location": "third_party/emilkowalski-skills/skills/emil-design-eng",
+      "origin": "source:emil-design-eng",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "web-design-guidelines",
+      "location": "shared/skills/web-design-guidelines",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "references/command.md": "third_party/vercel-labs-web-interface-guidelines/command.md",
+        "references/LICENSE": "third_party/vercel-labs-web-interface-guidelines/LICENSE"
+      }
+    },
+    {
+      "name": "add-skill-source",
+      "location": "shared/skills/add-skill-source",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "experimental-design",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "exploratory-data-analysis",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "pytorch-lightning",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "scientific-critical-thinking",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "scikit-learn",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "statistical-analysis",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    },
+    {
+      "name": "statistical-power",
+      "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power",
+      "origin": "source:k-dense-ai-scientific-agent-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "research"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+      }
+    }
+  ]
+}

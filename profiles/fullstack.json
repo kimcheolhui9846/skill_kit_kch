@@ -1,0 +1,28 @@
+{
+  "schema": 2,
+  "name": "fullstack",
+  "description": "Front end and back end: python and web together (pytest, ruff, package.json check, sequential-thinking MCP), the web design skills, and the hitl pack.",
+  "extends": [
+    "python",
+    "web"
+  ],
+  "packs": [
+    "hitl"
+  ],
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

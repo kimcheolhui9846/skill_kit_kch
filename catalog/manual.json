@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "note": "Guides only: the kit never runs, installs or configures these. `kit plan/install --manual NAME` prints the steps and risks; a person decides and runs them. Rules: kit/mcp_catalog.py load_manual.",
+  "tools": {
+    "claude-code-router": {
+      "package": "@musistudio/claude-code-router",
+      "version": "3.1.3",
+      "license": "MIT",
+      "origin": "https://github.com/musistudio/claude-code-router",
+      "commit": "057abaa1f955",
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "local gateway that sends Claude Code requests to other model providers (07_SOURCES_EVALUATION U-23)",
+      "network_egress": "your prompts and code go to the providers you configure",
+      "file_access": "stores provider credentials in its own data folder (~/.claude-code-router, Windows %APPDATA%\\claude-code-router)",
+      "steps": [
+        "Read the risks above; the kit does not run any of this.",
+        "Install (Node.js 22+, global npm): npm install -g @musistudio/claude-code-router@3.1.3",
+        "Start the service and open its UI: ccr ui   (management UI http://127.0.0.1:3458, gateway http://127.0.0.1:3456)",
+        "In the UI add a provider and its API key, then create a Claude Code profile under Agent Config.",
+        "Run Claude Code through it: ccr \"<profile-name>\" cli"
+      ],
+      "undo": [
+        "ccr stop",
+        "npm uninstall -g @musistudio/claude-code-router",
+        "Delete its data folder if you no longer need the stored provider keys."
+      ],
+      "docs": "https://ccrdesk.top/en/guides/cli/"
+    }
+  }
+}
