@@ -122,8 +122,8 @@ def test_install_puts_each_layer_where_it_belongs(kit, workspace):
     assert (workspace / ".agents/skills/codex-only/SKILL.md").is_file()
     assert not (workspace / ".claude/skills/codex-only").exists()
     assert "skipped skills: codex-only (not for claude)" in out
-    assert "Skills 16/16 verified in .agents/skills/" in out  # 14 standard core + 2 demo
-    assert "Skills 15/15 verified in .claude/skills/" in out
+    assert "Skills 17/17 verified in .agents/skills/" in out  # 15 standard core + 2 demo
+    assert "Skills 16/16 verified in .claude/skills/" in out  # 15 core + tree-demo
     assert not any(p.name.endswith(".append") for p in workspace.rglob("*"))
 
 

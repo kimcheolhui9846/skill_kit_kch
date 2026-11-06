@@ -250,6 +250,14 @@ project 범위는 `.kit/state/install-manifest.json`, user 범위는 `~/.kit-sta
 - 원문 형식을 그대로 쓴다.
 - `approvals[].by`는 `human-cli | human-hook | agent-recorded` 중 하나다.
 - ADR-011에 따라 Codex에서도 `human-hook`이 기록될 수 있다. 그때는 보고서에 "Codex 훅: 보조 수단" 주석을 붙인다.
+- **P5-T2 구현(`kit/tasks.py`, `kit/task_cli.py`).** 원문 형식에 다음 필드를 더한다.
+  - 각 Task: `grade`(L/S/C), `requirements`, `subtasks[]`(`id`는 `<Task>.<n>`, `state` TODO/DONE), `report`(작업 공간 기준 상대 경로), `submitted_sha256`(submit 때 보고서 해시), `approval`(마지막 승인 기록), `history[]`(`at`, `event`, `detail`).
+  - `approvals[]`: `task`, `at`, `by`, `evidence`(최대 2000자, 마스킹), `report_sha256`.
+  - 상태: TODO → IN_PROGRESS → SUBMITTED → APPROVED, SUBMITTED → CHANGES_REQUESTED → IN_PROGRESS. 동시에 IN_PROGRESS는 하나만.
+  - 읽을 때 검사한다: schema 1, 중복 id, 알 수 없는 상태, 없는 선행 Task, 의존 순환, 형식이 틀린 승인 기록 → 65. 저장은 임시 파일 뒤 `os.replace`.
+  - submit 검사: 보고서 §5.6의 1~9절이 모두 있음, must 요구사항마다 테스트 표 행이 있음, `NOT RUN`은 `NOT RUN: <이유>`. must 판정은 `trace.json`이 있으면 그 `priority`, 없으면 Task의 요구사항 전부(검토자 결정 2026-11-07).
+  - approve는 SUBMITTED에서만, 보고서가 submit 뒤 바뀌지 않았을 때만 된다. 승인 뒤 보고서가 바뀌거나 없어지면 `task status`가 경고하고 1을 낸다.
+  - **정직성 한계.** L1은 기록과 탐지다. 에이전트가 `--by agent-recorded`로 사용자 발화를 지어내거나 `tasks.json`을 직접 고치는 것을 막지 못한다. 그래서 `by`를 모든 출력에 드러내고, 막는 장치는 L2 훅(P5-T2b)으로 나눴다(검토자 결정 2026-11-07).
 
 ### 3.4 요구사항·추적 `.kit/work/trace.json`
 

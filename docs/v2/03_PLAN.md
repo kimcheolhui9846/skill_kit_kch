@@ -18,6 +18,7 @@
 | P5-T5 반례 | 신규 `counterexample-generator`를 만들지 않고 기존 `counterexample-hunter`를 확장(블랙박스 단계, `NEEDS_SPEC`, 기록 형식 추가)하는 안을 먼저 검토 | 01_ANALYSIS §0 |
 | P5-T6 알고리즘 | `algorithm-decision-reviewer` 대신 기존 `algorithm-options`를 확장하는 안을 먼저 검토. `data-quality-validator`는 신규 | 01_ANALYSIS §0 |
 | P5 | `launch-compliance-check` 스킬 추가(REQ-SKILL-001) | 보강 |
+| P5-T2 / P5-T2b (신규) | P5-T2는 L1(`kit task` 상태 기계·보고서 검사·승인 기록과 `task-approval` 스킬)만. L2 승인 훅(D-11, `human-hook`)은 P5-T2b로 나눈다 | 검토자 결정 2026-11-07 |
 
 ## 2. 결정 사항(ADR) 1차 의견
 

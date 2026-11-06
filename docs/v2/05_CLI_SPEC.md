@@ -143,6 +143,25 @@ kit recover
 - 비대화형에서는 `--by agent-recorded --quote "<사용자 발화 원문>"`이 있어야 하고, 이 경우 `by: agent-recorded`로 기록된다(04_DESIGN §3.3).
 - `--hooks`로 설치된 훅이 사용자 프롬프트에서 승인을 기록하면 `by: human-hook`이다.
 
+**P5-T2 구현(L1).** 모든 동작은 `--target DIR`과 `--json`을 받는다.
+
+```text
+kit task add <ID> --title T [--requires REQ-001]... [--depends-on <ID>]... [--grade L|S|C]
+kit task list
+kit task start <ID>
+kit task subtask add <ID> "<제목>" | kit task subtask done <ID>.<n>
+kit task report <ID> [--force]          # .kit/work/reports/<ID>.md에 §5.6 템플릿
+kit task submit <ID> [--report FILE]
+kit task approve <ID> [--by human-cli|agent-recorded] [--quote|--evidence "<발화 원문>"]
+kit task request-changes <ID> --reason "<이유>"
+kit task status [<ID>]
+```
+
+- 종료 코드: 0 완료, 1 `status`에 경고(승인 뒤 보고서 변경·삭제), 2 규칙이 거부함(`Refused:` 뒤에 이유, `Status: BLOCKED`), 64 인수 오류, 65 `tasks.json`·`trace.json` 손상.
+- 2가 되는 경우: 선행 Task가 APPROVED가 아님, 다른 Task가 IN_PROGRESS, 상태가 맞지 않는 전이, 끝나지 않은 Subtask, 보고서 검사 실패, submit 뒤 바뀐 보고서, TTY 없는 human-cli, 다시 입력한 ID 불일치, 작업 공간 밖 보고서 경로.
+- 64가 되는 경우: `--by human-hook`(훅만 쓴다), human-cli에 `--quote`, agent-recorded에 `--quote` 없음, id·REQ·grade 형식.
+- 보고서 테스트 표: 요구사항 열에 must REQ가 있는 행이 하나 이상 있어야 한다. 실행하지 않은 테스트는 `NOT RUN: <이유>`로 쓴다. 이유 없는 `NOT RUN`은 거부된다.
+
 ### 4.5 기타
 
 ```text

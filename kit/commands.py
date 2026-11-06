@@ -2,8 +2,8 @@
 
 Implemented here: install, plan, verify, doctor, profiles, help, version (P3-T6),
 update/uninstall/restore (P3-T7), capture and --scope user (P4-T7, ADR-018/019),
-source (P4-T8, ADR-021; kit.source_cli). Recognised but
-later: task/req/trace/report/recover (P5). They exit 64 with the Task that adds them.
+source (P4-T8, ADR-021; kit.source_cli), task (P5-T2; kit.task_cli). Recognised but
+later: req/trace/report/recover (P5). They exit 64 with the Task that adds them.
 
 --scope user: the target is the home folder (kit.userscope); writes need --yes or a yes at
 a terminal, and paths are shown as ~.
@@ -37,6 +37,7 @@ from . import (
     policy_render,
     profile_resolver,
     source_cli,
+    task_cli,
     tools,
     userscope,
     webcheck,
@@ -90,11 +91,11 @@ IMPLEMENTED = (
     "profiles",
     "capture",
     "source",
+    "task",
     "help",
     "version",
 )
 LATER = {
-    "task": "P5",
     "req": "P5",
     "trace": "P5",
     "report": "P5",
@@ -128,6 +129,10 @@ Commands:
   source    add URL [--path P]... [--all] [--pack K] [--yes]   copy a GitHub skill into
                                      third_party/ at a pinned commit (plan unless --yes)
             list | check [--online] | update ID [--ref R] | remove ID
+  task      add ID --title T [--requires REQ]... [--depends-on ID]... [--grade L|S|C]
+            | list | start ID | subtask add ID TITLE | subtask done SUB-ID | report ID
+            | submit ID [--report FILE] | approve ID [--by agent-recorded --quote TEXT]
+            | request-changes ID --reason TEXT | status [ID]     (.kit/work/tasks.json)
   doctor    [--target DIR]           which agents are on this PC, what the kit installed
   profiles  list | show a[,b] [--agent codex|claude|both]
   help, version
@@ -193,6 +198,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--write", action="store_true")
     p.add_argument("--json", action="store_true")
     source_cli.add_parser(sub)
+    task_cli.add_parser(sub)
     p = sub.add_parser("help", add_help=False)
     p.add_argument("topic", nargs="?")
     sub.add_parser("version", add_help=False)
@@ -1526,6 +1532,8 @@ def run(
             return run_capture(ns, kit_root, out)
         if command == "source":
             return source_cli.run(ns, kit_root, out, ask)
+        if command == "task":
+            return task_cli.run(ns, cwd, kit_root, out, ask)
         ctx = _ctx(ns, cwd, kit_root)
         ctx.ask = ask
         if ctx.user:

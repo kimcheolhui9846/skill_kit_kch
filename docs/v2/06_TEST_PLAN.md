@@ -125,7 +125,7 @@
 | HITL-003 | 자동 | TC-HTL-03: 선행 Task가 미승인일 때 `task start` → 2 | V-14 | P5-T1 |
 | HITL-004 | 자동 + 문서 | TC-HTL-04: 정책 렌더에 중간 승인 조건(A.3) 목록이 있음 | — | P5 |
 | HITL-005 | 자동 | TC-HTL-05: 보고서 템플릿이 §5.6 섹션을 모두 포함 | — | P5-T2 |
-| HITL-006 | 자동 + 수동 | TC-HTL-06: approve의 `by` 3종 기록. 비대화형 human-cli 거부. 훅이 승인 파일 쓰기를 막을 때 exit 2(Claude 형식, Codex 형식). 실제 에이전트 연동은 M-05 | — | P5 |
+| HITL-006 | 자동 + 수동 | TC-HTL-06: approve의 `by` 3종 기록. 비대화형 human-cli 거부. 훅이 승인 파일 쓰기를 막을 때 exit 2(Claude 형식, Codex 형식). 실제 에이전트 연동은 M-05. **P5-T2는 L1 부분**(`tests/hitl/test_tasks.py`: human-cli TTY·재입력, agent-recorded 발화 필수·마스킹, CLI의 `human-hook` 거부). 훅 부분은 P5-T2b | — | P5-T2, P5-T2b |
 | TEST-001 | 자동 | TC-HTL-07: `report tests` 표에 원문 열이 모두 있음 | — | P5-T3 |
 | TEST-002 | 자동 | TC-HTL-08: JUnit fixture 3종(pytest, vitest, go-junit-report). 없는 locator → NOT RUN, skipped/error 처리 | — | P5-T3 |
 | TRACE-001 | 자동 | TC-HTL-09: REQ ID 중복 거부 | V-12 | P5-T3 |

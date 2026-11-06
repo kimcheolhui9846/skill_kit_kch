@@ -189,6 +189,7 @@ def test_standard_replaces_and_adds_vendored_skills(kit_root, workspace):
             "counterexample-hunter",
             "design-review",
             "implementation-review",
+            "task-approval",
             "task-router",
             "systematic-debugging",
             "test-driven-development",

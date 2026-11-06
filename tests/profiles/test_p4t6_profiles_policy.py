@@ -31,6 +31,7 @@ STANDARD_CORE = sorted(
         "requesting-code-review",
         "receiving-code-review",
         "karpathy-guidelines",
+        "task-approval",  # P5-T2
     }
 )
 WEB_DESIGN = ["emil-design-eng", "frontend-design", "web-design-guidelines"]

@@ -15,7 +15,7 @@ from tests.userscope.pc_fixture import USER, kit_run, make_pc, put
 
 OMX_SKILLS = 29
 OMX_PROMPTS = 32
-STANDARD_CORE = 14
+STANDARD_CORE = 15  # +task-approval (P5-T2)
 CODEX_BLOCK = "## Rules\n- Work from `${HOME}\\work`.\n"
 CLAUDE_BLOCK = "# Global\n- Commit as the user.\n"
 TABLES = '[features]\ngoals = true\n\n[plugins."browser@openai-bundled"]\nenabled = true\n'

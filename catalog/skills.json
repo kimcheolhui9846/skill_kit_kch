@@ -482,6 +482,21 @@
       ]
     },
     {
+      "name": "task-approval",
+      "location": "shared/skills/task-approval",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
       "name": "experimental-design",
       "location": "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design",
       "origin": "source:k-dense-ai-scientific-agent-skills",
