@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "note": "New path only (kit install/plan/verify/update). The legacy installer keeps reading mcp/manifest.json and mcp/allowlist.json. Fields: 04_DESIGN 3.6, rules: kit/mcp_catalog.py.",
+  "servers": {
+    "sequential-thinking": {
+      "package": "@modelcontextprotocol/server-sequential-thinking",
+      "version": "2026.8.31",
+      "license": "package says 'SEE LICENSE IN LICENSE' (modelcontextprotocol/servers, moving from MIT to Apache-2.0); 2025.12.18 declared MIT",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking@2026.8.31"],
+      "startup_timeout_sec": 30,
+      "agents": ["codex", "claude"],
+      "policies": ["restricted", "standard"],
+      "risk": "low",
+      "enabled_by_default": true,
+      "disabled_reason": null,
+      "network_egress": "npm registry download on first start; the server itself is not expected to use the network (not verified)",
+      "file_access": "none expected",
+      "lifecycle_scripts": "registry package has no install scripts ('prepare' runs only for git installs)"
+    },
+    "playwright": {
+      "package": "@playwright/mcp",
+      "version": "0.0.84",
+      "license": "Apache-2.0",
+      "source": "playwright-mcp",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.84"],
+      "startup_timeout_sec": 60,
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "opens a real browser and visits any URL the agent chooses; first start downloads the package and may need browser binaries. Opt in with --mcp playwright",
+      "network_egress": "npm registry download on first start; the browser reaches any site the agent opens",
+      "file_access": "browser profile and downloads in a temporary directory; reads files the agent uploads",
+      "lifecycle_scripts": "none in @playwright/mcp@0.0.84, playwright and playwright-core 1.65.0-alpha-2026-10-30 (npm view, 2026-11-06)"
+    },
+    "context7": {
+      "package": "@upstash/context7-mcp",
+      "version": "4.5.1",
+      "license": "MIT",
+      "source": "context7-mcp",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@4.5.1"],
+      "startup_timeout_sec": 60,
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "sends the library names and questions the agent looks up to context7.com. Opt in with --mcp context7; works without a key (lower rate limits)",
+      "network_egress": "npm registry download on first start; context7.com API for every lookup",
+      "file_access": "none expected",
+      "lifecycle_scripts": "none in @upstash/context7-mcp@4.5.1 or its 12 direct dependencies (npm view, 2026-11-06)",
+      "credentials": [
+        {
+          "env": "CONTEXT7_API_KEY",
+          "required": false,
+          "purpose": "higher rate limits and private repositories; without it the server runs keyless (an unset ${CONTEXT7_API_KEY} placeholder is ignored by 4.5.1)",
+          "get_it": "https://context7.com/dashboard",
+          "cost": "free account"
+        }
+      ]
+    },
+    "fetch": {
+      "package": "mcp-server-fetch",
+      "transport": "stdio",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "enabled_by_default": false,
+      "disabled_reason": "fetches arbitrary URLs: can send task data outside the workspace. Listed only (no pinned version)",
+      "network_egress": "any URL",
+      "file_access": "none"
+    },
+    "git": {
+      "package": "mcp-server-git",
+      "transport": "stdio",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "enabled_by_default": false,
+      "disabled_reason": "exposes git operations including remote sync; the agents already run git through the shell with approval. Listed only (no pinned version)",
+      "network_egress": "git remotes",
+      "file_access": "the repository"
+    },
+    "filesystem": {
+      "package": "@modelcontextprotocol/server-filesystem",
+      "transport": "stdio",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "duplicates the agents' own file access and widens the reachable paths. Listed only (no pinned version)",
+      "network_egress": "none",
+      "file_access": "the directories given as arguments"
+    }
+  }
+}

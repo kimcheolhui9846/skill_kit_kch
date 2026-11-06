@@ -1,0 +1,31 @@
+{
+  "schema": 2,
+  "name": "ai-research",
+  "description": "Experiments, dataset checks, training and evaluation pipelines, reproducibility: data (python plus a numpy/pandas check) with benchmark and algorithm-options required, the hitl pack and the research pack (experiment design, statistics, ML training skills; standard policy).",
+  "extends": [
+    "data"
+  ],
+  "packs": [
+    "hitl",
+    "research"
+  ],
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": [
+      "benchmark",
+      "algorithm-options"
+    ]
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

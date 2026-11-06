@@ -1,0 +1,17 @@
+{
+  "runs": [
+    {
+      "args": [
+        "--profile",
+        "python",
+        "--offline",
+        "--dry-run"
+      ],
+      "exit": 0,
+      "stdout": "Environment:  <ENV>\nTarget:       <TARGET>\nProfile:      python\nNetwork:      none (--offline)\nPlanned changes:\n  CREATE    AGENTS.md\n  CREATE    .agents/skills/task-router/examples/example.md\n  CREATE    .agents/skills/task-router/SKILL.md\n  CREATE    .agents/skills/tdd-automator/examples/example.md\n  CREATE    .agents/skills/tdd-automator/references/languages.md\n  CREATE    .agents/skills/tdd-automator/SKILL.md\n  CREATE    .agents/skills/algorithm-optimizer/examples/example.md\n  CREATE    .agents/skills/algorithm-optimizer/references/languages.md\n  CREATE    .agents/skills/algorithm-optimizer/SKILL.md\n  CREATE    .agents/skills/submission-validator/examples/example.md\n  CREATE    .agents/skills/submission-validator/references/languages.md\n  CREATE    .agents/skills/submission-validator/SKILL.md\n  CREATE    .agents/skills/implementation-review/examples/example.md\n  CREATE    .agents/skills/implementation-review/SKILL.md\n  CREATE    .agents/skills/benchmark/examples/example.md\n  CREATE    .agents/skills/benchmark/references/languages.md\n  CREATE    .agents/skills/benchmark/SKILL.md\n  CREATE    .agents/skills/systematic-debugging/examples/example.md\n  CREATE    .agents/skills/systematic-debugging/SKILL.md\n  CREATE    .agents/skills/codebase-explorer/examples/example.md\n  CREATE    .agents/skills/codebase-explorer/SKILL.md\n  CREATE    .agents/skills/counterexample-hunter/examples/example.md\n  CREATE    .agents/skills/counterexample-hunter/SKILL.md\n  CREATE    .agents/skills/algorithm-options/examples/example.md\n  CREATE    .agents/skills/algorithm-options/SKILL.md\n  CREATE    .agents/skills/design-review/examples/example.md\n  CREATE    .agents/skills/design-review/SKILL.md\n  CREATE    .codex/config.toml\nSummary:      28 create, 0 update, 0 append, 0 conflict, 0 unchanged\nPlanned tools:\n  PRESENT   tool:pytest  (fake 1.0)\n  PRESENT   tool:ruff  (fake 1.0)\nPlanned MCP checks:\n  SKIPPED   mcp:sequential-thinking  (--offline)\nDRY RUN: nothing was written.\n",
+      "stderr": ""
+    }
+  ],
+  "tree": {},
+  "home_untouched": true
+}

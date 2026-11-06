@@ -1,0 +1,17 @@
+{
+  "runs": [
+    {
+      "args": [
+        "--profile",
+        "full",
+        "--offline",
+        "--verify-only"
+      ],
+      "exit": 2,
+      "stdout": "Environment:  <ENV>\nTools:        git OK, uv OK, node OK, npx OK, codex OK, python OK\nTarget:       <TARGET>\nProfile:      full\nAGENTS.md:    FAILED\nSkills:       11 expected / 0 verified\nCodex load:   UNVERIFIED (open Codex and run /skills)\nMCP:          sequential-thinking SKIPPED\nNetwork:      not used (--offline)\nItems:\n  FAIL       required AGENTS.md  (AGENTS.md missing)\n  FAIL       required skill:task-router  (not installed)\n  FAIL       required skill:tdd-automator  (not installed)\n  FAIL       required skill:algorithm-optimizer  (not installed)\n  FAIL       required skill:submission-validator  (not installed)\n  FAIL       optional skill:implementation-review  (not installed)\n  FAIL       optional skill:benchmark  (not installed)\n  FAIL       optional skill:systematic-debugging  (not installed)\n  FAIL       optional skill:codebase-explorer  (not installed)\n  FAIL       optional skill:counterexample-hunter  (not installed)\n  FAIL       optional skill:algorithm-options  (not installed)\n  FAIL       optional skill:design-review  (not installed)\n  FAIL       optional mcp-config  (.codex/config.toml missing)\nStatus:       BLOCKED\nNext action:\n  - Fix AGENTS.md: AGENTS.md missing. Then re-run.\n  - Fix skill:task-router: not installed. Then re-run.\n  - Fix skill:tdd-automator: not installed. Then re-run.\n",
+      "stderr": ""
+    }
+  ],
+  "tree": {},
+  "home_untouched": true
+}

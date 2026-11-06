@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path, PureWindowsPath
 
@@ -51,11 +52,16 @@ def audit_config(data: dict, allowlist: dict) -> list[str]:
         for text in _strings(cfg):
             if _REMOTE.search(text):
                 problems.append(f"{name}: remote endpoint '{text}'")
+        # P4-T9: a key name the catalog declares for this server may be passed through as a
+        # reference (Codex env_vars, or Claude "NAME": "${NAME}"); a written value never may.
+        declared = set(allowlist.get("declared_env", {}).get(name, []))
         env = cfg.get("env")
-        env_names = list(env) if isinstance(env, dict) else []
+        env_names = []
+        if isinstance(env, dict):
+            env_names = [k for k, v in env.items() if not (k in declared and v == "${" + k + "}")]
         env_vars = cfg.get("env_vars")
         if isinstance(env_vars, list):
-            env_names += [v for v in env_vars if isinstance(v, str)]
+            env_names += [v for v in env_vars if isinstance(v, str) and v not in declared]
         for env_name in env_names:
             if any(p.search(env_name) for p in patterns):
                 problems.append(f"{name}: secret-like env '{env_name}'")
@@ -104,7 +110,7 @@ def _fail(problems: list[str], suffix: str = "") -> ItemResult:
     return ItemResult(LABEL, True, True, True, FAIL, "; ".join(problems[:3]) + more + suffix)
 
 
-def audit_target(target: Path, kit_root: Path) -> ItemResult:
+def audit_target(target: Path, kit_root: Path, allowlist: dict | None = None) -> ItemResult:
     path = target / mcpconfig.CONFIG_REL
     if not path.is_file():
         return ItemResult(LABEL, True, True, True, PASS, f"no {mcpconfig.CONFIG_REL}")
@@ -113,7 +119,7 @@ def audit_target(target: Path, kit_root: Path) -> ItemResult:
     except (OSError, UnicodeDecodeError) as exc:
         return ItemResult(LABEL, True, True, False, FAIL, f"cannot read config: {exc}")
     status, data, error = mcpconfig.parse_toml(text)
-    allowlist = mcpconfig.load_allowlist(kit_root)
+    allowlist = allowlist or mcpconfig.load_allowlist(kit_root)
     if status is None or status is False:
         problems = scan_lines(text, allowlist)
         if problems:
@@ -127,3 +133,34 @@ def audit_target(target: Path, kit_root: Path) -> ItemResult:
     if problems:
         return _fail(problems)
     return ItemResult(LABEL, True, True, True, PASS, "MCP config matches the allowlist")
+
+
+MCP_JSON_REL = ".mcp.json"
+_LOCAL_TYPES = (None, "stdio")
+
+
+def audit_mcp_json(target: Path, kit_root: Path, allowlist: dict | None = None) -> ItemResult:
+    """Same rules as the TOML audit, applied to Claude Code's .mcp.json (P3-T4)."""
+    path = target / MCP_JSON_REL
+    if not path.is_file():
+        return ItemResult(LABEL, True, True, True, PASS, f"no {MCP_JSON_REL}")
+    try:
+        data = json.loads(path.read_bytes().decode("utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        return ItemResult(
+            LABEL, True, True, False, UNVERIFIED, f"cannot audit {MCP_JSON_REL}: {exc}"
+        )
+    if not isinstance(data, dict):
+        return _fail([f"{MCP_JSON_REL}: top level must be an object"])
+    servers = data.get("mcpServers", {})
+    allowlist = allowlist or mcpconfig.load_allowlist(kit_root)
+    problems = audit_config({"mcp_servers": servers}, allowlist)
+    if isinstance(servers, dict):
+        for name, cfg in servers.items():
+            if isinstance(cfg, dict) and cfg.get("type") not in _LOCAL_TYPES:
+                problems.append(f"{name}: transport '{cfg.get('type')}' is remote")
+            if isinstance(cfg, dict) and "headers" in cfg:
+                problems.append(f"{name}: forbidden key 'headers' (remote transport)")
+    if problems:
+        return _fail(problems)
+    return ItemResult(LABEL, True, True, True, PASS, f"{MCP_JSON_REL} matches the allowlist")

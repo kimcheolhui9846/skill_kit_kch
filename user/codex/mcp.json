@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "servers": [
+    {
+      "name": "node_repl"
+    },
+    {
+      "name": "context7"
+    },
+    {
+      "name": "playwright"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": 2,
+  "name": "hackathon",
+  "description": "Time-boxed contests: core skills with task-router, tests, submission checks and benchmark required, and the hitl pack. Choose the event's rules with --policy (restricted for exams).",
+  "extends": [
+    "core"
+  ],
+  "packs": [
+    "hitl"
+  ],
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "recommended_policy": "restricted",
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": [
+      "benchmark"
+    ]
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

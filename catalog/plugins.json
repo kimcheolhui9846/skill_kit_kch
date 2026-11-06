@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "note": "Claude Code plugins, off by default; opt in with --plugin NAME. The kit declares them in .claude/settings.json (kit-owned keys extraKnownMarketplaces/<marketplace>, an inline 'settings' marketplace whose plugin sources are pinned to a commit sha, and enabledPlugins/<plugin>@<marketplace>) and, behind the network gate, installs them on this PC with the claude CLI (kit/plugin_install.py). Codex plugins (agents: codex, source url or git-subdir) go into the kit-owned .agents/plugins/marketplace.json and, behind the same gate, are installed with the codex CLI; Codex has no install scope, so the plugin is enabled in every project (~/.codex/config.toml). Sources must be full https:// URLs.",
+  "marketplace": "hackathon-kit",
+  "plugins": {
+    "security-guidance": {
+      "agents": [
+        "claude"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "license": "Apache-2.0",
+      "origin": "https://github.com/anthropics/claude-plugins-official",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-plugins-official",
+        "path": "plugins/security-guidance",
+        "sha": "ff920a4094a341f282d5dee00daef2c3b8339c72"
+      },
+      "risk": "high",
+      "enabled_by_default": false,
+      "disabled_reason": "its hooks create ~/.claude/security/agent-sdk-venv and pip-install the Agent SDK at session start, and send git diffs to the Anthropic API on stop (ANTHROPIC_API_KEY or your Claude Code sign-in). Opt in with --plugin security-guidance",
+      "network_egress": "PyPI at session start; git diffs to the Anthropic API",
+      "file_access": "the repository diff; writes a venv and state under ~/.claude/security/",
+      "credentials": [
+        {
+          "env": "ANTHROPIC_API_KEY",
+          "required": false,
+          "purpose": "LLM review of git diffs on stop; without it the plugin uses your Claude Code sign-in (/login), else runs only its pattern warnings",
+          "get_it": "https://platform.claude.com/settings/keys",
+          "cost": "pay per use"
+        }
+      ]
+    }
+  }
+}

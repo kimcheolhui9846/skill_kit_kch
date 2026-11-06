@@ -1,0 +1,16 @@
+{
+  "runs": [
+    {
+      "args": [
+        "--offline",
+        "--target",
+        "<KIT>"
+      ],
+      "exit": 65,
+      "stdout": "",
+      "stderr": "error: target is the kit folder itself; run from your workspace or pass --target <workspace>\n"
+    }
+  ],
+  "tree": {},
+  "home_untouched": true
+}

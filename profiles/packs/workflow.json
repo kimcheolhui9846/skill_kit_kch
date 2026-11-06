@@ -1,0 +1,30 @@
+{
+  "schema": 2,
+  "name": "workflow",
+  "kind": "pack",
+  "description": "Opt-in planning chain from obra/superpowers (standard policy only): brainstorming, writing-plans, executing-plans, subagent-driven-development, using-git-worktrees, finishing-a-development-branch, plus requesting-code-review they link to. The agent may run their bundled bash scripts and a local server on 127.0.0.1, and create git worktrees and branches.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": [
+      "brainstorming",
+      "writing-plans",
+      "executing-plans",
+      "subagent-driven-development",
+      "using-git-worktrees",
+      "finishing-a-development-branch",
+      "requesting-code-review"
+    ]
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

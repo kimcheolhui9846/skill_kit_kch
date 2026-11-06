@@ -1,0 +1,17 @@
+{
+  "case": "self-target",
+  "runs": [
+    {
+      "args": [
+        "--offline",
+        "--target",
+        "D:\\aaa\\skill_kit_kch"
+      ],
+      "exit": 65,
+      "stdout": "",
+      "stderr": "error: target is the kit folder itself; run from your workspace or pass --target <workspace>\n"
+    }
+  ],
+  "tree": {},
+  "home_untouched": true
+}

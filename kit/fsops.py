@@ -5,10 +5,54 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 
 STATE_REL = ".kit/state.json"
+BACKUPS_REL = ".kit/backups"
+LOGS_REL = ".kit/logs"
+# user scope (ADR-018): the kit's own files in the home folder
+USER_STATE_REL = ".kit-state/state.json"
+USER_BACKUPS_REL = ".kit-backups"
+USER_LOGS_REL = ".kit-state/logs"
+
+_user_root: "Path | None" = None  # set only while a --scope user command runs
+
+
+@contextmanager
+def user_scope(home: Path):
+    """Inside this block the kit keeps its state, backups and logs for `home` in the user
+    places (~/.kit-state/, ~/.kit-backups/). Every other target keeps .kit/ (legacy too)."""
+    global _user_root
+    previous, _user_root = _user_root, home.resolve()
+    try:
+        yield
+    finally:
+        _user_root = previous
+
+
+def _is_user(target: Path) -> bool:
+    return _user_root is not None and target.resolve() == _user_root
+
+
+def state_rel(target: Path) -> str:
+    return USER_STATE_REL if _is_user(target) else STATE_REL
+
+
+def backups_rel(target: Path) -> str:
+    return USER_BACKUPS_REL if _is_user(target) else BACKUPS_REL
+
+
+def logs_rel(target: Path) -> str:
+    return USER_LOGS_REL if _is_user(target) else LOGS_REL
+
+
+def own_files(target: Path) -> tuple:
+    """Prefixes of the kit's own bookkeeping under target (never installed content)."""
+    if _is_user(target):
+        return (".kit-state/", USER_BACKUPS_REL + "/")
+    return (".kit/",)
 
 
 class PathEscapeError(Exception):
@@ -40,7 +84,7 @@ class State:
 
     @classmethod
     def load(cls, target: Path) -> State:
-        path = target / STATE_REL
+        path = target / state_rel(target)
         if not path.is_file():
             return cls()
         try:
@@ -51,7 +95,7 @@ class State:
         return cls(files if isinstance(files, dict) else {})
 
     def save(self, target: Path, profile: str) -> None:
-        path = safe_path(target, STATE_REL)
+        path = safe_path(target, state_rel(target))
         path.parent.mkdir(parents=True, exist_ok=True)
         payload = {"version": 1, "profile": profile, "files": dict(sorted(self.files.items()))}
         path.write_bytes((json.dumps(payload, indent=2) + "\n").encode("utf-8"))
@@ -59,7 +103,7 @@ class State:
 
 def backup_file(target: Path, rel: str, stamp: str) -> Path:
     src = safe_path(target, rel)
-    dst = safe_path(target, f".kit/backups/{stamp}/{rel}")
+    dst = safe_path(target, f"{backups_rel(target)}/{stamp}/{rel}")
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dst)
     return dst

@@ -136,7 +136,13 @@ def _codex_item(name: str, env: EnvReport, target: Path) -> ItemResult:
 
 
 def check_servers(
-    kit_root: Path, names: list[str], env: EnvReport, target: Path, offline: bool, no_mcp: bool
+    kit_root: Path,
+    names: list[str],
+    env: EnvReport,
+    target: Path,
+    offline: bool,
+    no_mcp: bool,
+    cli_check: bool = True,
 ) -> list[ItemResult]:
     items = []
     for name, entry in select_servers(kit_root, names):
@@ -155,5 +161,6 @@ def check_servers(
             continue
         verdict, detail = handshake([exe, *entry["args"]])
         items.append(ItemResult(label, False, True, True, verdict, detail))
-        items.append(_codex_item(name, env, target))
+        if cli_check:
+            items.append(_codex_item(name, env, target))
     return items

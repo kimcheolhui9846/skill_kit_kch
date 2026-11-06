@@ -7,7 +7,7 @@ from pathlib import Path
 from .agentsmd import MarkerError, extract_block
 from .mcpconfig import verify_config
 from .model import CONFLICT, FAIL, PASS, ItemResult, Outcome
-from .plan import FileChange, iter_skill_files
+from .plan import SKILL_SOURCE, FileChange, skill_target_files
 from .profiles import Profile
 from .skills import validate_skill
 
@@ -20,6 +20,10 @@ def verify_target(
     check_writable: bool,
     writable: bool,
     include_mcp: bool = False,
+    policy_rel: str = "AGENTS.md",
+    skill_root: str = SKILL_SOURCE,
+    policy_body: str | None = None,
+    skill_source=None,
 ) -> list[ItemResult]:
     conflicts: dict[str, str] = {}
     for change in changes:
@@ -38,48 +42,64 @@ def verify_target(
                 "" if writable else f"cannot write to {target}",
             )
         )
-    items.append(_verify_agents_md(target, kit_root, conflicts))
+    items.append(_verify_agents_md(target, kit_root, conflicts, policy_rel, policy_body))
     for name in profile.skills:
+        required = name in profile.required_skills
         items.append(
-            _verify_skill(target, kit_root, name, name in profile.required_skills, conflicts)
+            _verify_skill(target, kit_root, name, required, conflicts, skill_root, skill_source)
         )
     if include_mcp and profile.mcp:
         items.append(verify_config(target, kit_root, profile.mcp, conflicts.get("mcp-config")))
     return items
 
 
-def _verify_agents_md(target: Path, kit_root: Path, conflicts: dict[str, str]) -> ItemResult:
-    name = "AGENTS.md"
+def _verify_agents_md(
+    target: Path,
+    kit_root: Path,
+    conflicts: dict[str, str],
+    policy_rel: str = "AGENTS.md",
+    policy_body: str | None = None,
+) -> ItemResult:
+    name = policy_rel
     if name in conflicts:
         return ItemResult(name, True, True, False, CONFLICT, conflicts[name])
     path = target / name
     if not path.is_file():
-        return ItemResult(name, True, False, False, FAIL, "AGENTS.md missing")
+        return ItemResult(name, True, False, False, FAIL, f"{name} missing")
     try:
         found = extract_block(path.read_bytes().decode("utf-8"))
     except (MarkerError, UnicodeDecodeError) as exc:
         return ItemResult(name, True, True, False, FAIL, str(exc))
     if found is None:
         return ItemResult(name, True, True, False, FAIL, "kit block missing")
-    body = (kit_root / name).read_text(encoding="utf-8").strip()
+    if policy_body is None:
+        policy_body = (kit_root / "AGENTS.md").read_text(encoding="utf-8")
+    body = policy_body.strip()
     if found[2] != body:
         return ItemResult(name, True, True, True, FAIL, "kit block is outdated")
     return ItemResult(name, True, True, True, PASS)
 
 
 def _verify_skill(
-    target: Path, kit_root: Path, name: str, required: bool, conflicts: dict[str, str]
+    target: Path,
+    kit_root: Path,
+    name: str,
+    required: bool,
+    conflicts: dict[str, str],
+    skill_root: str = SKILL_SOURCE,
+    skill_source=None,
 ) -> ItemResult:
     label = f"skill:{name}"
     if label in conflicts:
         return ItemResult(label, required, True, False, CONFLICT, conflicts[label])
-    skill_dir = target / ".agents" / "skills" / name
+    skill_dir = target / skill_root / name
     if not skill_dir.is_dir():
         return ItemResult(label, required, False, False, FAIL, "not installed")
-    errors = validate_skill(skill_dir)
+    validate = getattr(skill_source, "validate", validate_skill)
+    errors = validate(skill_dir)
     if errors:
         return ItemResult(label, required, True, True, FAIL, "; ".join(errors))
-    for rel, data in iter_skill_files(kit_root, name):
+    for rel, data in skill_target_files(kit_root, name, skill_root, skill_source):
         path = target / rel
         try:
             differs = not path.is_file() or path.read_bytes() != data

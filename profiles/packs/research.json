@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "research",
+  "kind": "pack",
+  "description": "Experiment design, statistics and ML training skills from K-Dense-AI/scientific-agent-skills (U-40, standard policy only): experimental-design, statistical-analysis, statistical-power, scientific-critical-thinking, exploratory-data-analysis, scikit-learn, pytorch-lightning. They guide pip installs of their own Python packages; their bundled scripts are not copied.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

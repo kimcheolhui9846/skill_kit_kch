@@ -1,0 +1,941 @@
+{
+ "_note": "P4-T3 read-only GitHub API probe, 2026-11-06 (gh api repos/<r>, commits/<branch>, license, releases/latest, contents/package.json). Metadata only; nothing cloned or installed.",
+ "items": {
+  "U-01/U-31": {
+   "repo": "anthropics/skills",
+   "full_name": "anthropics/skills",
+   "archived": false,
+   "stars": 187775,
+   "open_issues": 1485,
+   "branch": "main",
+   "pushed": "2026-10-28T19:20:39Z",
+   "spdx": null,
+   "head": "ca45fc496a3436251f191354091d557da31c15b5",
+   "head_date": "2026-10-28T19:20:38Z",
+   "license_path": null,
+   "release": null,
+   "npm": null
+  },
+  "U-02": {
+   "repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+   "full_name": "nextlevelbuilder/ui-ux-pro-max-skill",
+   "archived": false,
+   "stars": 145730,
+   "open_issues": 90,
+   "branch": "main",
+   "pushed": "2026-11-05T07:07:39Z",
+   "spdx": "MIT",
+   "head": "b7d5353e0130feb8c5574ef1251f8a1db1873ccb",
+   "head_date": "2026-11-05T07:07:38Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v2.15.0",
+    "2026-08-13T17:10:40Z"
+   ],
+   "npm": null
+  },
+  "U-03": {
+   "repo": "Nutlope/hallmark",
+   "full_name": "Nutlope/hallmark",
+   "archived": false,
+   "stars": 48805,
+   "open_issues": 41,
+   "branch": "main",
+   "pushed": "2026-11-05T13:16:31Z",
+   "spdx": "MIT",
+   "head": "407fa689f4a276f2fd389208d271d0fef08f5058",
+   "head_date": "2026-11-05T13:16:31Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": {
+    "name": "hallmark",
+    "version": "2.0.0",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-04": {
+   "repo": "emilkowalski/skills",
+   "full_name": "emilkowalski/skills",
+   "archived": false,
+   "stars": 53872,
+   "open_issues": 1,
+   "branch": "main",
+   "pushed": "2026-11-04T15:04:40Z",
+   "spdx": "MIT",
+   "head": "c8a79627b59d72d764d6ab6f2c87c09a48169833",
+   "head_date": "2026-11-04T15:04:38Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-05": {
+   "repo": "vercel-labs/agent-skills",
+   "full_name": "vercel-labs/agent-skills",
+   "archived": false,
+   "stars": 33602,
+   "open_issues": 192,
+   "branch": "main",
+   "pushed": "2026-10-28T19:17:28Z",
+   "spdx": null,
+   "head": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+   "head_date": "2026-10-27T21:40:02Z",
+   "license_path": null,
+   "release": [
+    "agent-skills-1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+    "2026-10-27T21:40:25Z"
+   ],
+   "npm": {
+    "name": "@vercel-labs/agent-skills",
+    "version": null,
+    "lifecycle": {},
+    "deps": 1
+   }
+  },
+  "U-06": {
+   "repo": "DietrichGebert/ponytail",
+   "full_name": "DietrichGebert/ponytail",
+   "archived": false,
+   "stars": 185265,
+   "open_issues": 179,
+   "branch": "main",
+   "pushed": "2026-10-29T11:59:31Z",
+   "spdx": "MIT",
+   "head": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+   "head_date": "2026-10-29T11:59:31Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v5.3.3",
+    "2026-10-29T03:11:08Z"
+   ],
+   "npm": {
+    "name": "@dietrichgebert/ponytail",
+    "version": "5.3.3",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-07": {
+   "repo": "Graphify-Labs/graphify",
+   "full_name": "Graphify-Labs/graphify",
+   "archived": false,
+   "stars": 143012,
+   "open_issues": 1616,
+   "branch": "v8",
+   "pushed": "2026-11-05T16:35:09Z",
+   "spdx": "Apache-2.0",
+   "head": "16218bfc80d4ca2799734d045039f7ed1a5fa9fb",
+   "head_date": "2026-11-05T13:02:18Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.9.103",
+    "2026-11-05T16:35:13Z"
+   ],
+   "npm": null
+  },
+  "U-08": {
+   "repo": "headroomlabs-ai/headroom",
+   "full_name": "headroomlabs-ai/headroom",
+   "archived": false,
+   "stars": 78944,
+   "open_issues": 334,
+   "branch": "main",
+   "pushed": "2026-11-06T00:03:31Z",
+   "spdx": "Apache-2.0",
+   "head": "2d3ee51846435ef5b320eea4806af14e602b0d8c",
+   "head_date": "2026-11-05T19:33:39Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.43.1",
+    "2026-11-05T19:34:01Z"
+   ],
+   "npm": null
+  },
+  "U-09": {
+   "repo": "HeyCubit/effortless",
+   "full_name": "HeyCubit/effortless",
+   "archived": false,
+   "stars": 326,
+   "open_issues": 42,
+   "branch": "main",
+   "pushed": "2026-10-23T14:30:11Z",
+   "spdx": "MIT",
+   "head": "e5c590dfd9402244ea66a8bf795d1cb86d1df7b9",
+   "head_date": "2026-10-23T14:30:07Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-10": {
+   "repo": "mvschwarz/openrig",
+   "full_name": "mvschwarz/openrig",
+   "archived": false,
+   "stars": 8666,
+   "open_issues": 157,
+   "branch": "main",
+   "pushed": "2026-11-05T21:03:13Z",
+   "spdx": "Apache-2.0",
+   "head": "bd39da9872afc39cbe0c8e839a322b4cb8955cbe",
+   "head_date": "2026-11-05T21:03:09Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.7.8",
+    "2026-11-05T02:23:29Z"
+   ],
+   "npm": {
+    "name": "openrig",
+    "version": "0.7.1",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-11": {
+   "repo": "trailhq/Trail-Code",
+   "full_name": "trailhq/Trail-Code",
+   "archived": false,
+   "stars": 11110,
+   "open_issues": 288,
+   "branch": "main",
+   "pushed": "2026-11-05T13:41:54Z",
+   "spdx": "MIT",
+   "head": "ca20a67764e99531a1cf272eea8354e2c16f71d9",
+   "head_date": "2026-11-03T17:42:33Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": {
+    "name": "@nanonets/graft",
+    "version": "0.28.0",
+    "lifecycle": {
+     "prepare": "npm run build && node scripts/stamp-telemetry-key.mjs",
+     "postinstall": "node scripts/postinstall.mjs"
+    },
+    "deps": 10
+   }
+  },
+  "U-12": {
+   "repo": "msitarzewski/agency-agents",
+   "full_name": "msitarzewski/agency-agents",
+   "archived": false,
+   "stars": 166756,
+   "open_issues": 226,
+   "branch": "main",
+   "pushed": "2026-10-25T01:43:20Z",
+   "spdx": "MIT",
+   "head": "b37b5bb33b78f2c1d6567d98e25ca818e3259219",
+   "head_date": "2026-10-25T00:37:22Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-13": {
+   "repo": "DeusData/codebase-memory-mcp",
+   "full_name": "DeusData/codebase-memory-mcp",
+   "archived": false,
+   "stars": 48180,
+   "open_issues": 550,
+   "branch": "main",
+   "pushed": "2026-11-04T23:21:44Z",
+   "spdx": "MIT",
+   "head": "612eee2518ef84cc573e491fdee5fa5c90264cb5",
+   "head_date": "2026-11-04T23:21:43Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.12.1",
+    "2026-10-16T23:35:48Z"
+   ],
+   "npm": null
+  },
+  "U-14": {
+   "repo": "calesthio/OpenMontage",
+   "full_name": "calesthio/OpenMontage",
+   "archived": false,
+   "stars": 77185,
+   "open_issues": 445,
+   "branch": "main",
+   "pushed": "2026-11-03T17:42:02Z",
+   "spdx": "AGPL-3.0",
+   "head": "d21f5d4eaa08422b09c7091757a05affcbabb35b",
+   "head_date": "2026-11-03T17:41:59Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-15": {
+   "repo": "f/prompts.chat",
+   "full_name": "f/prompts.chat",
+   "archived": false,
+   "stars": 175908,
+   "open_issues": 79,
+   "branch": "main",
+   "pushed": "2026-11-05T07:16:47Z",
+   "spdx": "NOASSERTION",
+   "head": "06539cb86bd267f1bef8b66df320c03765f9faee",
+   "head_date": "2026-11-05T03:12:34Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": {
+    "name": "prompts.chat-v2",
+    "version": "0.1.0",
+    "lifecycle": {
+     "postinstall": "prisma generate"
+    },
+    "deps": 53
+   }
+  },
+  "U-16/U-32": {
+   "repo": "multica-ai/andrej-karpathy-skills",
+   "full_name": "multica-ai/andrej-karpathy-skills",
+   "archived": false,
+   "stars": 229896,
+   "open_issues": 138,
+   "branch": "main",
+   "pushed": "2026-04-20T10:05:04Z",
+   "spdx": null,
+   "head": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+   "head_date": "2026-04-20T10:05:04Z",
+   "license_path": null,
+   "release": null,
+   "npm": null
+  },
+  "U-17": {
+   "repo": "cloudflare/skills",
+   "full_name": "cloudflare/skills",
+   "archived": false,
+   "stars": 3286,
+   "open_issues": 34,
+   "branch": "main",
+   "pushed": "2026-11-06T00:35:22Z",
+   "spdx": "Apache-2.0",
+   "head": "1f2cd0a19588e2c6197c91dd7c71729df1fb6156",
+   "head_date": "2026-11-03T15:35:35Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-18": {
+   "repo": "charmbracelet/mods",
+   "full_name": "charmbracelet/mods",
+   "archived": true,
+   "stars": 4520,
+   "open_issues": 85,
+   "branch": "main",
+   "pushed": "2026-03-09T15:06:08Z",
+   "spdx": "MIT",
+   "head": "0425d0d7861e4bbc396200b3bd2eee1825715300",
+   "head_date": "2026-03-09T15:06:08Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v1.8.1",
+    "2025-07-10T17:39:47Z"
+   ],
+   "npm": null
+  },
+  "U-19": {
+   "repo": "mksglu/context-mode",
+   "full_name": "mksglu/context-mode",
+   "archived": false,
+   "stars": 33563,
+   "open_issues": 3,
+   "branch": "main",
+   "pushed": "2026-11-06T00:31:40Z",
+   "spdx": "NOASSERTION",
+   "head": "7bad9ac3501f34992bdef3d8d0da3f3334cc5325",
+   "head_date": "2026-11-06T00:31:36Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v2.1.4",
+    "2026-11-05T22:06:22Z"
+   ],
+   "npm": {
+    "name": "context-mode",
+    "version": "2.1.4",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-20": {
+   "repo": "rtk-ai/rtk",
+   "full_name": "rtk-ai/rtk",
+   "archived": false,
+   "stars": 85661,
+   "open_issues": 1711,
+   "branch": "develop",
+   "pushed": "2026-11-06T00:18:46Z",
+   "spdx": "Apache-2.0",
+   "head": "8268663fac0ba7e92e3a9e1f6e2cf943b659c07a",
+   "head_date": "2026-11-05T18:44:47Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v1.1.0",
+    "2026-10-25T18:00:11Z"
+   ],
+   "npm": null
+  },
+  "U-21": {
+   "repo": "vercel-labs/skills",
+   "full_name": "vercel-labs/skills",
+   "archived": false,
+   "stars": 38277,
+   "open_issues": 798,
+   "branch": "main",
+   "pushed": "2026-11-06T01:54:24Z",
+   "spdx": "MIT",
+   "head": "cad8cda44e8944316354d115eaac8b4485a5b211",
+   "head_date": "2026-11-06T01:51:11Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v1.7.6",
+    "2026-11-03T00:14:36Z"
+   ],
+   "npm": {
+    "name": "skills",
+    "version": "1.7.6",
+    "lifecycle": {
+     "prepare": "husky"
+    },
+    "deps": 3
+   }
+  },
+  "U-22": {
+   "repo": "affaan-m/ECC",
+   "full_name": "affaan-m/ECC",
+   "archived": false,
+   "stars": 297897,
+   "open_issues": 236,
+   "branch": "main",
+   "pushed": "2026-11-02T04:56:08Z",
+   "spdx": "MIT",
+   "head": "b38be6a7f6350964d59328b52f0624e1d1d552d1",
+   "head_date": "2026-10-30T03:06:32Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v2.2.3",
+    "2026-10-01T23:00:36Z"
+   ],
+   "npm": {
+    "name": "ecc-universal",
+    "version": "2.2.3",
+    "lifecycle": {},
+    "deps": 5
+   }
+  },
+  "U-23": {
+   "repo": "weave-os/router",
+   "full_name": "weave-os/router",
+   "archived": false,
+   "stars": 5615,
+   "open_issues": 212,
+   "branch": "main",
+   "pushed": "2026-11-06T01:37:50Z",
+   "spdx": "Apache-2.0",
+   "head": "58627c704b4afa87106f2dc6c048eb078541a41f",
+   "head_date": "2026-11-05T23:00:02Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-24": {
+   "repo": "NicholasSpisak/second-brain",
+   "full_name": "NicholasSpisak/second-brain",
+   "archived": false,
+   "stars": 771,
+   "open_issues": 1,
+   "branch": "main",
+   "pushed": "2026-04-07T03:16:20Z",
+   "spdx": null,
+   "head": "3e429c7ccd0a41617d0d3d782f681b7333f7ee0b",
+   "head_date": "2026-04-07T03:16:19Z",
+   "license_path": null,
+   "release": null,
+   "npm": null
+  },
+  "U-25": {
+   "repo": "google-research/harness2",
+   "full_name": "google-research/harness2",
+   "archived": false,
+   "stars": 22828,
+   "open_issues": 157,
+   "branch": "main",
+   "pushed": "2026-11-02T02:17:27Z",
+   "spdx": "Apache-2.0",
+   "head": "6868817518876de8fd170c6a8354daca273b6191",
+   "head_date": "2026-11-02T02:17:27Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-26": {
+   "repo": "danielrosehill/Claude-Code-Projects-Index",
+   "full_name": "danielrosehill/Claude-Code-Projects-Index",
+   "archived": false,
+   "stars": 577,
+   "open_issues": 1,
+   "branch": "main",
+   "pushed": "2026-11-05T20:17:31Z",
+   "spdx": null,
+   "head": "408b201d1510a1939a69fddad4e2d3578a649b30",
+   "head_date": "2026-11-05T20:17:29Z",
+   "license_path": null,
+   "release": null,
+   "npm": {
+    "name": "claude-code-repos-index",
+    "version": "1.0.0",
+    "lifecycle": {},
+    "deps": 2
+   }
+  },
+  "U-27": {
+   "repo": "JohnnyVizz/claude-kit",
+   "full_name": "JohnnyVizz/claude-kit",
+   "archived": false,
+   "stars": 353,
+   "open_issues": 26,
+   "branch": "main",
+   "pushed": "2026-10-12T21:28:42Z",
+   "spdx": "MIT",
+   "head": "c871c153ead54ad9547cc717d0f3e5a676c73986",
+   "head_date": "2026-10-12T21:28:38Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-28": {
+   "repo": "data-goblin/claude-code-filetree",
+   "full_name": "data-goblin/claude-code-filetree",
+   "archived": false,
+   "stars": 378,
+   "open_issues": 0,
+   "branch": "main",
+   "pushed": "2026-11-05T08:03:44Z",
+   "spdx": "MIT",
+   "head": "2b42d0faf7072a77055cb1fb930ed05f0639256d",
+   "head_date": "2026-11-05T06:06:10Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.8.0",
+    "2026-11-05T08:03:02Z"
+   ],
+   "npm": null
+  },
+  "U-29": {
+   "repo": "anthropics/claude-code-playground",
+   "full_name": "anthropics/claude-code-playground",
+   "archived": false,
+   "stars": 340,
+   "open_issues": 17,
+   "branch": "main",
+   "pushed": "2026-10-14T07:53:11Z",
+   "spdx": "Apache-2.0",
+   "head": "569c5283d9a0a7ee7938df85bb32e4f48cbb8c86",
+   "head_date": "2026-10-01T16:11:57Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-30": {
+   "repo": "JuliusBrussee/caveman",
+   "full_name": "JuliusBrussee/caveman",
+   "archived": false,
+   "stars": 117780,
+   "open_issues": 146,
+   "branch": "main",
+   "pushed": "2026-11-06T01:17:10Z",
+   "spdx": "Apache-2.0",
+   "head": "ca3a524022a9f31fb7ae46b66decf622080c2cfa",
+   "head_date": "2026-11-06T00:26:46Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v4.0.1",
+    "2026-10-13T18:34:04Z"
+   ],
+   "npm": {
+    "name": "caveman-installer",
+    "version": "4.0.1",
+    "lifecycle": {},
+    "deps": 1
+   }
+  },
+  "U-33": {
+   "repo": "mattpocock/skills",
+   "full_name": "mattpocock/skills",
+   "archived": false,
+   "stars": 315306,
+   "open_issues": 216,
+   "branch": "main",
+   "pushed": "2026-11-05T10:40:01Z",
+   "spdx": "MIT",
+   "head": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+   "head_date": "2026-10-31T14:23:30Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v1.3.2",
+    "2026-10-29T10:27:41Z"
+   ],
+   "npm": {
+    "name": "mattpocock-skills",
+    "version": "1.3.2",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-34": {
+   "repo": "morluto/rea",
+   "full_name": "morluto/rea",
+   "archived": false,
+   "stars": 434539,
+   "open_issues": 1621,
+   "branch": "main",
+   "pushed": "2026-11-06T00:00:37Z",
+   "spdx": "MIT",
+   "head": "a7574d4274728fcb0a13414d6ae43f1597864d94",
+   "head_date": "2026-11-05T23:57:14Z",
+   "license_path": "LICENSE",
+   "release": [
+    "rea-agents-6.8.0",
+    "2026-10-25T08:36:02Z"
+   ],
+   "npm": {
+    "name": "rea-agents",
+    "version": "6.8.0",
+    "lifecycle": {
+     "prepare": "node scripts/prepare.mjs"
+    },
+    "deps": 42
+   }
+  },
+  "U-39": {
+   "repo": "Nutlope/inspo",
+   "full_name": "Nutlope/inspo",
+   "archived": false,
+   "stars": 977,
+   "open_issues": 3,
+   "branch": "main",
+   "pushed": "2026-10-28T13:01:32Z",
+   "spdx": "MIT",
+   "head": "022f80977c1e84d86284b17c928ab4b29f37f3ed",
+   "head_date": "2026-10-28T13:01:30Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": {
+    "name": "inspo",
+    "version": "0.0.0",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-40": {
+   "repo": "K-Dense-AI/scientific-agent-skills",
+   "full_name": "K-Dense-AI/scientific-agent-skills",
+   "archived": false,
+   "stars": 56220,
+   "open_issues": 80,
+   "branch": "main",
+   "pushed": "2026-11-02T09:23:27Z",
+   "spdx": "MIT",
+   "head": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
+   "head_date": "2026-11-02T09:23:26Z",
+   "license_path": "LICENSE.md",
+   "release": [
+    "v2.72.0",
+    "2026-10-01T22:42:08Z"
+   ],
+   "npm": null
+  },
+  "U-41": {
+   "repo": "wheresryan22/anatomy",
+   "full_name": "wheresryan22/anatomy",
+   "archived": false,
+   "stars": 25260,
+   "open_issues": 72,
+   "branch": "main",
+   "pushed": "2026-10-18T20:20:24Z",
+   "spdx": "MIT",
+   "head": "1482e8469b0a9e0d8cc18ea2740a01423d29ae80",
+   "head_date": "2026-10-18T20:20:24Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v1.1.0",
+    "2026-10-12T18:43:35Z"
+   ],
+   "npm": null
+  },
+  "U-42": {
+   "repo": "thedotmack/claude-mem",
+   "full_name": "thedotmack/claude-mem",
+   "archived": false,
+   "stars": 113573,
+   "open_issues": 127,
+   "branch": "main",
+   "pushed": "2026-11-06T01:42:38Z",
+   "spdx": "Apache-2.0",
+   "head": "89b97644e39d75b395824a22be38150deba4b8cb",
+   "head_date": "2026-11-06T01:42:38Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v15.10.0",
+    "2026-11-05T19:57:39Z"
+   ],
+   "npm": {
+    "name": "claude-mem",
+    "version": "15.10.0",
+    "lifecycle": {},
+    "deps": 3
+   }
+  },
+  "U-43": {
+   "repo": "microsoft/markitdown",
+   "full_name": "microsoft/markitdown",
+   "archived": false,
+   "stars": 194073,
+   "open_issues": 802,
+   "branch": "main",
+   "pushed": "2026-10-28T15:33:14Z",
+   "spdx": "MIT",
+   "head": "7482c092d9c0074a89803c9fdb63a969e7fe17fc",
+   "head_date": "2026-10-22T22:31:47Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.1.9",
+    "2026-10-21T19:40:32Z"
+   ],
+   "npm": null
+  },
+  "U-44": {
+   "repo": "ruvnet/ruflo",
+   "full_name": "ruvnet/ruflo",
+   "archived": false,
+   "stars": 80995,
+   "open_issues": 639,
+   "branch": "main",
+   "pushed": "2026-11-06T01:40:31Z",
+   "spdx": "MIT",
+   "head": "722232566ad1fc4e73ba4fefc46d77d380ce61ba",
+   "head_date": "2026-11-06T01:27:51Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v3.72.0",
+    "2026-11-06T01:11:35Z"
+   ],
+   "npm": {
+    "name": "claude-flow",
+    "version": "3.72.0",
+    "lifecycle": {},
+    "deps": 26
+   }
+  },
+  "U-45": {
+   "repo": "devlikemasta/bureau-des-agents",
+   "full_name": "devlikemasta/bureau-des-agents",
+   "archived": false,
+   "stars": 60,
+   "open_issues": 2,
+   "branch": "main",
+   "pushed": "2026-10-14T20:13:59Z",
+   "spdx": "MIT",
+   "head": "184daa898cbb859cd8edc5aaa5fd55fdbc3861e8",
+   "head_date": "2026-10-14T20:13:15Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.1.0",
+    "2026-10-14T20:13:59Z"
+   ],
+   "npm": {
+    "name": "bureau-des-agents",
+    "version": "0.1.0",
+    "lifecycle": {},
+    "deps": 8
+   }
+  },
+  "U-46": {
+   "repo": "anthropics/claude-plugins-official",
+   "full_name": "anthropics/claude-plugins-official",
+   "archived": false,
+   "stars": 46231,
+   "open_issues": 1265,
+   "branch": "main",
+   "pushed": "2026-11-06T01:31:13Z",
+   "spdx": "Apache-2.0",
+   "head": "ff920a4094a341f282d5dee00daef2c3b8339c72",
+   "head_date": "2026-11-06T00:55:54Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-47": {
+   "repo": "D4Vinci/Scrapling",
+   "full_name": "D4Vinci/Scrapling",
+   "archived": false,
+   "stars": 98032,
+   "open_issues": 14,
+   "branch": "main",
+   "pushed": "2026-11-05T18:01:47Z",
+   "spdx": "BSD-3-Clause",
+   "head": "bc602488b44e978da3266841e913af17577ec0fd",
+   "head_date": "2026-11-05T18:01:44Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.5.1",
+    "2026-11-04T20:29:16Z"
+   ],
+   "npm": null
+  },
+  "U-48": {
+   "repo": "anthropics/knowledge-work-plugins",
+   "full_name": "anthropics/knowledge-work-plugins",
+   "archived": false,
+   "stars": 34875,
+   "open_issues": 159,
+   "branch": "main",
+   "pushed": "2026-11-04T07:26:14Z",
+   "spdx": "Apache-2.0",
+   "head": "d900840716eb262e1feb17c6f4406c9ce0e06bcf",
+   "head_date": "2026-11-04T02:50:55Z",
+   "license_path": "LICENSE",
+   "release": null,
+   "npm": null
+  },
+  "U-49": {
+   "repo": "obra/superpowers",
+   "full_name": "obra/superpowers",
+   "archived": false,
+   "stars": 313041,
+   "open_issues": 336,
+   "branch": "main",
+   "pushed": "2026-11-03T23:24:58Z",
+   "spdx": "MIT",
+   "head": "22f0b463e7a5e579904dd6211a520321035526f7",
+   "head_date": "2026-11-03T22:17:07Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v7.0.2",
+    "2026-11-03T22:17:54Z"
+   ],
+   "npm": {
+    "name": "superpowers",
+    "version": "7.0.2",
+    "lifecycle": {},
+    "deps": 0
+   }
+  },
+  "U-51": {
+   "repo": "Yeachan-Heo/oh-my-codex",
+   "full_name": "Yeachan-Heo/oh-my-codex",
+   "archived": false,
+   "stars": 33723,
+   "open_issues": 11,
+   "branch": "main",
+   "pushed": "2026-11-03T05:25:27Z",
+   "spdx": "MIT",
+   "head": "509a299d586b48f145c2c7a7baac8ce08d01a015",
+   "head_date": "2026-11-02T06:08:26Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.21.46",
+    "2026-11-02T05:34:01Z"
+   ],
+   "npm": {
+    "name": "oh-my-codex",
+    "version": "0.21.46",
+    "lifecycle": {
+     "postinstall": "node -e \"const fs=require('fs');const p='./dist/scripts/postinstall.js';if(fs.existsSync(p))import(p).then(m=>m.main?.()).catch(e=>console.warn('[omx] Postinstall skipped after a non-fatal error: '+(e?.message??e)))\"",
+     "prepare": "node src/scripts/prepare-build.js"
+    },
+    "deps": 6
+   }
+  },
+  "S-MCP": {
+   "repo": "modelcontextprotocol/servers",
+   "full_name": "modelcontextprotocol/servers",
+   "archived": false,
+   "stars": 91815,
+   "open_issues": 11,
+   "branch": "main",
+   "pushed": "2026-11-05T06:26:00Z",
+   "spdx": "NOASSERTION",
+   "head": "36380287ed3b15d115b55f546617d723072b1296",
+   "head_date": "2026-11-04T21:01:13Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v2.3.0",
+    "2026-11-04T21:28:41Z"
+   ],
+   "npm": {
+    "name": "@modelcontextprotocol/servers",
+    "version": "0.6.2",
+    "lifecycle": {},
+    "deps": 4
+   }
+  },
+  "S-OAI-SK": {
+   "repo": "openai/skills",
+   "full_name": "openai/skills",
+   "archived": false,
+   "stars": 28542,
+   "open_issues": 297,
+   "branch": "main",
+   "pushed": "2026-10-28T17:31:41Z",
+   "spdx": null,
+   "head": "49f948faa9258a0c61caceaf225e179651397431",
+   "head_date": "2026-06-24T02:36:12Z",
+   "license_path": null,
+   "release": null,
+   "npm": null
+  },
+  "S-OAI-PL": {
+   "repo": "openai/plugins",
+   "full_name": "openai/plugins",
+   "archived": false,
+   "stars": 7778,
+   "open_issues": 46,
+   "branch": "main",
+   "pushed": "2026-11-03T23:23:40Z",
+   "spdx": null,
+   "head": "b767f8fa3be1a22b093127dd59956c91ecffca9d",
+   "head_date": "2026-11-03T23:23:35Z",
+   "license_path": null,
+   "release": null,
+   "npm": null
+  },
+  "S-PW": {
+   "repo": "microsoft/playwright-mcp",
+   "full_name": "microsoft/playwright-mcp",
+   "archived": false,
+   "stars": 39235,
+   "open_issues": 2,
+   "branch": "main",
+   "pushed": "2026-11-05T18:38:45Z",
+   "spdx": "Apache-2.0",
+   "head": "3d49ff2615216fcef64fb7748d9f660d3c000ad7",
+   "head_date": "2026-11-05T18:38:45Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v0.0.84",
+    "2026-10-31T15:20:06Z"
+   ],
+   "npm": {
+    "name": "@playwright/mcp",
+    "version": "0.0.84",
+    "lifecycle": {},
+    "deps": 2
+   }
+  },
+  "S-GH": {
+   "repo": "github/github-mcp-server",
+   "full_name": "github/github-mcp-server",
+   "archived": false,
+   "stars": 34265,
+   "open_issues": 399,
+   "branch": "main",
+   "pushed": "2026-11-05T19:37:34Z",
+   "spdx": "MIT",
+   "head": "99d6d6503a7b2a133e2f8a595d6d0ba24b4086d3",
+   "head_date": "2026-11-04T13:23:03Z",
+   "license_path": "LICENSE",
+   "release": [
+    "v2.1.0",
+    "2026-11-03T11:11:41Z"
+   ],
+   "npm": null
+  }
+ }
+}
