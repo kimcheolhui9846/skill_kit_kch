@@ -1,0 +1,725 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "id": "superpowers-kit-adapted",
+      "kind": "skill",
+      "origin": "https://github.com/obra/superpowers",
+      "path": "skills/systematic-debugging/SKILL.md, skills/verification-before-completion/SKILL.md",
+      "ref": null,
+      "commit": "2ce8aa15d05bd57213e6f746f953aafb7ded7a8b",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/obra-superpowers/LICENSE",
+      "integration": "adapted",
+      "local_paths": [
+        ".agents/skills/submission-validator/SKILL.md",
+        ".agents/skills/systematic-debugging/SKILL.md",
+        "third_party/obra-superpowers/LICENSE"
+      ],
+      "files": {
+        ".agents/skills/systematic-debugging/SKILL.md": "e8b21523bad538ae42c03734d7cde25029e81506e8b4c68981741db34309efd3",
+        ".agents/skills/submission-validator/SKILL.md": "36c7ab71cbf4ce6db991798205bcea26068f7766e9dde6f71ec9968ff55c8fda",
+        "third_party/obra-superpowers/LICENSE": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400"
+      },
+      "content_sha256": "77b0462dffa334485cd599ae65a82426295ac1a4982d1ccf99b72111eef84edc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "core"
+      ],
+      "risk": "low",
+      "added": null,
+      "added_by": "migrated",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Migrated from THIRD_PARTY_NOTICES.md (v1). Shortened and adapted for the exam rules. Hashes are of the kit's adapted files; the MIT text (same holder) is the vendored LICENSE and THIRD_PARTY_NOTICES.md."
+      }
+    },
+    {
+      "id": "superpowers-core",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/obra/superpowers",
+      "path": "skills/",
+      "ref": "v7.0.2",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/obra-superpowers/LICENSE",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/obra-superpowers/LICENSE",
+        "third_party/obra-superpowers/skills/receiving-code-review",
+        "third_party/obra-superpowers/skills/requesting-code-review",
+        "third_party/obra-superpowers/skills/systematic-debugging",
+        "third_party/obra-superpowers/skills/test-driven-development",
+        "third_party/obra-superpowers/skills/verification-before-completion"
+      ],
+      "files": {
+        "third_party/obra-superpowers/LICENSE": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "third_party/obra-superpowers/skills/systematic-debugging/condition-based-waiting-example.ts": "40ae5ebe497fdf310200e43fe986552546d0a22837c0d39e855db1cfd33eb88e",
+        "third_party/obra-superpowers/skills/systematic-debugging/condition-based-waiting.md": "e89fec8400d6cd50f43407cec9fab50976ba4d55d0ec2eb51c0bd68036b54c26",
+        "third_party/obra-superpowers/skills/systematic-debugging/defense-in-depth.md": "1e175fb86fc357e58c6aebf5441e481e1b7868b4380c0456b63a17eefbd18ba7",
+        "third_party/obra-superpowers/skills/systematic-debugging/find-polluter.sh": "dd7b8f13c4cc2a24b33ff87b18da9248f3e1c80a085c3316224f69ff0fa5c43c",
+        "third_party/obra-superpowers/skills/systematic-debugging/root-cause-tracing.md": "75b933b6a8c40bdb2031b10f21654395b56ec6ab6bc7b018c18d3fe57aeb7fb8",
+        "third_party/obra-superpowers/skills/systematic-debugging/SKILL.md": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+        "third_party/obra-superpowers/skills/test-driven-development/SKILL.md": "64b03fce4aee5a97a93160cea8111f3ba13a17b7c001db4bd5836d67fd10705d",
+        "third_party/obra-superpowers/skills/test-driven-development/writing-good-tests.md": "51471c853306ff92ca8bb41dcaea05f31c0e46b03651f8f3c99754b7172f4ae1",
+        "third_party/obra-superpowers/skills/verification-before-completion/SKILL.md": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+        "third_party/obra-superpowers/skills/requesting-code-review/code-reviewer.md": "82e370be6b3447523816286195571e4216ba56ba1ad6ad0e87862294c4c78dcb",
+        "third_party/obra-superpowers/skills/requesting-code-review/SKILL.md": "2180e14a448e9410bec88e6646a2d1f0ce7fdd58de27388c1e052e929679d2bc",
+        "third_party/obra-superpowers/skills/receiving-code-review/SKILL.md": "091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438"
+      },
+      "content_sha256": "9ae1ca15ce10f63a83221fa3e7f4fa7b55ad45a6e5b3a731e1d59d79562ba7f0",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "core"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [
+        {
+          "with": "systematic-debugging",
+          "decision": "replace-in-standard"
+        },
+        {
+          "with": "tdd-automator",
+          "decision": "replace-in-standard"
+        },
+        {
+          "with": "submission-validator",
+          "decision": "replace-in-standard"
+        }
+      ],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. find-polluter.sh and condition-based-waiting-example.ts are reference files."
+      }
+    },
+    {
+      "id": "superpowers-workflow",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/obra/superpowers",
+      "path": "skills/",
+      "ref": "v7.0.2",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/obra-superpowers/LICENSE",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/obra-superpowers/LICENSE",
+        "third_party/obra-superpowers/skills/brainstorming",
+        "third_party/obra-superpowers/skills/executing-plans",
+        "third_party/obra-superpowers/skills/finishing-a-development-branch",
+        "third_party/obra-superpowers/skills/subagent-driven-development",
+        "third_party/obra-superpowers/skills/using-git-worktrees",
+        "third_party/obra-superpowers/skills/writing-plans"
+      ],
+      "files": {
+        "third_party/obra-superpowers/LICENSE": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+        "third_party/obra-superpowers/skills/brainstorming/builder-check-prompt.md": "36d51a4723d6f0a3ce5811a0ea3b3a8424f07533947e1355f5d8cb8cce40c55e",
+        "third_party/obra-superpowers/skills/brainstorming/scripts/frame-template.html": "6a8a4e58bd6a44b904e2e3c57de774481d909204597e1498de53f1b2fecc4c4e",
+        "third_party/obra-superpowers/skills/brainstorming/scripts/helper.js": "43c6d69954a46ec34a2a262bcc62a9a7e83e839c739f199cb72646d397c686e3",
+        "third_party/obra-superpowers/skills/brainstorming/scripts/server.cjs": "763abf96510e0b892a1141397b31aa82ef900cf87ed34dde94bc8782baf4a7ca",
+        "third_party/obra-superpowers/skills/brainstorming/scripts/start-server.sh": "314dd68dc00e8dd94c7491aca8a5f004c7fddffc161e2b07482f29f48d13659a",
+        "third_party/obra-superpowers/skills/brainstorming/scripts/stop-server.sh": "0b5ccbbd57f62d3ed88993f7940b5ee0e5c0fc9b21c550c623da4f6292e47daf",
+        "third_party/obra-superpowers/skills/brainstorming/SKILL.md": "2c9ca71f94886f9ca9f4aef055f7cafb3e1a9bdf3aeebf8f4cb547c69405d207",
+        "third_party/obra-superpowers/skills/brainstorming/visual-companion.md": "6ffcb038b53254bd31debaa15e12dcd4ff24bd63d690e0b644ac6396701cf2e2",
+        "third_party/obra-superpowers/skills/writing-plans/SKILL.md": "a6c67c1900064347c2a329990dd3c555657c51c3ec53b259a08aa01a2c26139a",
+        "third_party/obra-superpowers/skills/executing-plans/scripts/task-done": "ac0b5ebafc7d471507b7e94d88da77a11f187ba277c8d48fefaf8ff3e4fee50e",
+        "third_party/obra-superpowers/skills/executing-plans/scripts/task-start": "4ae7ce3b6777c3240af786197836a6b4bbf3b0ee831c25f147c149ea8db54a21",
+        "third_party/obra-superpowers/skills/executing-plans/SKILL.md": "deaf176fa179827e80f2ea3101db3ea90fdf562ebef340eba761e4687940f5f5",
+        "third_party/obra-superpowers/skills/subagent-driven-development/implementer-prompt.md": "81dd9d5a3fb0b09b96b5829f03b9796842f3199ef7591d1ba1c2db2a515f64d0",
+        "third_party/obra-superpowers/skills/subagent-driven-development/re-review-prompt.md": "ad54d0a10f1c2c8e656456e0a46e654af5dfe5ee6bcef63428cfd69b8dcd9311",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/batching.md": "b54dc7e23dbfb90db89bcb2fb3af591aabf6a271a165fbc0da4c6f9439980eac",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/cannot-verify.md": "e698713a15e0eabf1a2ab26ffe1bb04bf70c9d6d2e2060d44a0f9a1bdd4408bf",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/final-review.md": "6c9e12093e46c4ad0a203bc07709c17e3470f855f1b78e55c5e7b722a012a32c",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/fix-loop.md": "1938ce707915efc44021e563ebc29666329e20ad861b6c50b89f305b8f4e8d8b",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/handling-reports.md": "8f759cdd4936220c38aab05b6d6c48c6df8ac8f146b0f37a6d2facbf87133c67",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/preflight.md": "3ea21c5fc1af1a190ac8a9d19ceb0849b47bf2ffe27b87dffcc21b6a0539776c",
+        "third_party/obra-superpowers/skills/subagent-driven-development/references/resuming.md": "ff6e38bde2276faa2a7e93513086caded0ea10edbf2ec7f349a7e3b0d7c668c4",
+        "third_party/obra-superpowers/skills/subagent-driven-development/scripts/review-package": "aed7c6e09fc660417d28898ed975e84651cb9f18f4675141cd475edfb7037f3d",
+        "third_party/obra-superpowers/skills/subagent-driven-development/scripts/sdd-repo": "6f8256a776968d394bae679572e41ce572fd45c72074b98f9a8eb8b4f160e06f",
+        "third_party/obra-superpowers/skills/subagent-driven-development/scripts/sdd-workspace": "de3af5252fa595fc2000ba05cf69e06187d5c8aae9d283cced4c167ad1813061",
+        "third_party/obra-superpowers/skills/subagent-driven-development/scripts/task-brief": "0f244a12e146393c552ba62069d3eedcc85cb3f76de67b01f4e11219e5ebbcd8",
+        "third_party/obra-superpowers/skills/subagent-driven-development/SKILL.md": "1baf70e307bde682c462513c86116333f1f066168c6710f45145bf5f0b00828d",
+        "third_party/obra-superpowers/skills/subagent-driven-development/task-reviewer-prompt.md": "61a04c2fb29907887d8babee1594f5e35ae26d461e7e584f5b7c283215165e08",
+        "third_party/obra-superpowers/skills/using-git-worktrees/SKILL.md": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
+        "third_party/obra-superpowers/skills/finishing-a-development-branch/SKILL.md": "8db5a922b242dd4e1bf824cb91c13b3e8d8e8a86d6ceaf7f0774eb9cce909d65"
+      },
+      "content_sha256": "afa9c9d0f1a61e284b056164ac017f2e5b8ec186bc69b6677d1ea1c981a7bc5d",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "workflow"
+      ],
+      "risk": "medium",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [
+        {
+          "with": "task-router",
+          "decision": "keep-both"
+        }
+      ],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. Opt-in pack. The agent may run bundled bash scripts, a Node server on 127.0.0.1 (brainstorming) and git worktree commands; the kit runs none of them. Executable bits are not kept by the installer (run scripts with bash)."
+      }
+    },
+    {
+      "id": "anthropics-frontend-design",
+      "kind": "skill",
+      "origin": "https://github.com/anthropics/skills",
+      "path": "skills/frontend-design/",
+      "ref": "main",
+      "commit": "ca45fc496a3436251f191354091d557da31c15b5",
+      "version": null,
+      "license": "Apache-2.0",
+      "license_file": "third_party/anthropics-skills/skills/frontend-design/LICENSE.txt",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/anthropics-skills/skills/frontend-design"
+      ],
+      "files": {
+        "third_party/anthropics-skills/skills/frontend-design/LICENSE.txt": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "third_party/anthropics-skills/skills/frontend-design/SKILL.md": "d91970639e9f5c37682ac7ab60094d35f1c7c1f38d731bd56396563aee10c1d3"
+      },
+      "content_sha256": "8092c6f5e76848b122d36617dbb3af7141614a6cee73082e5b6184edd8e17467",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. The repository has no root LICENSE; this skill carries its own LICENSE.txt."
+      }
+    },
+    {
+      "id": "emil-design-eng",
+      "kind": "skill",
+      "origin": "https://github.com/emilkowalski/skills",
+      "path": "skills/emil-design-eng/SKILL.md",
+      "ref": "main",
+      "commit": "c8a79627b59d72d764d6ab6f2c87c09a48169833",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/emilkowalski-skills/LICENSE",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/emilkowalski-skills/LICENSE",
+        "third_party/emilkowalski-skills/skills/emil-design-eng"
+      ],
+      "files": {
+        "third_party/emilkowalski-skills/LICENSE": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
+        "third_party/emilkowalski-skills/skills/emil-design-eng/SKILL.md": "965cc3108047a1f68e504977ae7816c66115b202a32e7509c0b8305314839c54"
+      },
+      "content_sha256": "9c309ded1662113564a561d42b2b73b555393a81a15388a0395c34d736934dc9",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. SKILL.md has 677 lines (over the 500-line advice; warning only)."
+      }
+    },
+    {
+      "id": "web-interface-guidelines",
+      "kind": "reference",
+      "origin": "https://github.com/vercel-labs/web-interface-guidelines",
+      "path": "command.md",
+      "ref": "main",
+      "commit": "434b7f91364665f2f733b310ec54809bf8f37937",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/vercel-labs-web-interface-guidelines/LICENSE",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/vercel-labs-web-interface-guidelines/LICENSE",
+        "third_party/vercel-labs-web-interface-guidelines/command.md"
+      ],
+      "files": {
+        "third_party/vercel-labs-web-interface-guidelines/command.md": "d246b026f4f29b5823a9cc857f9edf3d2507002e055e32040cadeaf3b38e0234",
+        "third_party/vercel-labs-web-interface-guidelines/LICENSE": "6cd1609c9c12233507cdd2ce0d32e9a721e3c27494951be06b90090deeeb7af2"
+      },
+      "content_sha256": "d2021631ced84d1261dbc9469c75b42cb9e6bd1a81ebe40a4cb245b91c12b7ef",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "web",
+        "fullstack"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. Used as references/command.md of the kit-written skill shared/skills/web-design-guidelines (replaces vercel-labs/agent-skills web-design-guidelines, which fetched this file unpinned at run time)."
+      }
+    },
+    {
+      "id": "karpathy-guidelines",
+      "kind": "skill",
+      "origin": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "path": "skills/karpathy-guidelines/SKILL.md",
+      "ref": "main",
+      "commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/multica-ai-andrej-karpathy-skills/LICENSE-NOTE.md",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/multica-ai-andrej-karpathy-skills/LICENSE-NOTE.md",
+        "third_party/multica-ai-andrej-karpathy-skills/skills/karpathy-guidelines"
+      ],
+      "files": {
+        "third_party/multica-ai-andrej-karpathy-skills/LICENSE-NOTE.md": "473eb334688ff00e7ee20fba88b7d66056459341ca7e40692907e7bc2f507b67",
+        "third_party/multica-ai-andrej-karpathy-skills/skills/karpathy-guidelines/SKILL.md": "6e22cc54cb02a5e98ae42d06d9d7292db0c1b43894831b32879beb0166b2aea7"
+      },
+      "content_sha256": "6af0feb2e8b5ae9d0e2248d8aa6886993e508f0144911ffb8d22a3d45a8ae04a",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "core"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. No LICENSE file upstream: README and frontmatter say MIT, no copyright line. LICENSE-NOTE.md is written by the kit (reviewer decision Q2, 2026-11-06)."
+      }
+    },
+    {
+      "id": "oh-my-codex",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/Yeachan-Heo/oh-my-codex",
+      "path": "skills/, prompts/",
+      "ref": "v0.21.46",
+      "commit": "f7830d0ae1b5c39cb2a86937dabfc1bdd9b7f237",
+      "version": null,
+      "license": "MIT",
+      "license_file": "third_party/Yeachan-Heo-oh-my-codex/LICENSE",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/Yeachan-Heo-oh-my-codex/LICENSE",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/analyst.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/api-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/architect.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/build-fixer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/code-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/code-simplifier.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/critic.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/debugger.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/dependency-expert.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/designer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/executor.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/explore-harness.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/explore.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/git-master.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/information-architect.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/performance-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/planner.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/product-analyst.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/product-manager.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/qa-tester.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/quality-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/quality-strategist.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/researcher.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/security-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/style-reviewer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/team-executor.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/team-orchestrator.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/test-engineer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/ux-researcher.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/verifier.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/vision.md",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/writer.md",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ai-slop-cleaner",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/analyze",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ask",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autopilot",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autoresearch",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autoresearch-goal",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/best-practice-research",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/cancel",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/code-review",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/configure-notifications",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/deep-interview",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/design",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/doctor",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/git-master",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/hud",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/omx-setup",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/performance-goal",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/pipeline",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/plan",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ralph",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ralplan",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/skill",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/team",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultragoal",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultraqa",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultrawork",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/visual-ralph",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/wiki",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/worker"
+      ],
+      "files": {
+        "third_party/Yeachan-Heo-oh-my-codex/LICENSE": "4fd42de3188b327edb30d8997f8669b590ccfde847bb85af2e73a5c7161d4ec0",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/analyst.md": "c4f74fb651155bb39281ea97fb582d22b6d5e8b33b45073633ec11baf1baa7f9",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/api-reviewer.md": "ff3b4a765c7122189261407feb4683f79faad5b85994075af5e8afa5aa09b096",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/architect.md": "66ff411f4b4965819e076fe1e060874e95f74e63f526b1f03dec97038ac725da",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/build-fixer.md": "0a7f080af951632f77326cf0b1c83ea8c21d2cc62edb3f4c7cf73d9110e5012c",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/code-reviewer.md": "50106e0fbc2875785da8377626f3fcc13e8bc0b6fa04bbfc191bdcaf04dbe38c",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/code-simplifier.md": "6a8e22589056d797ebca9ca4f11d31c070ca7da1d37a60baf894df04944910dd",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/critic.md": "2fec72f4d448e37a4fe1ab71e20d2b40582052627009677aeda50eec787d0aaf",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/debugger.md": "9760e4089f99616c8963975ba4b7d75347c132cbcb62241e2b1927acba981dad",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/dependency-expert.md": "229b80af531227a0d99a4869a61e36b8533cdb68af1ec637c0607fb064fb1a49",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/designer.md": "70580763add7fbe729572f98a5471dc0926762dbd85e4c1b637d0cb199c028da",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/executor.md": "abd5be0de98713fb4ab072315b42f9e1f2adb6ce7c08ebbec642f38a3b59e44f",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/explore-harness.md": "5dd14215213fe6356b304b228328f9316a4c9747550f67585c77588b543fd117",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/explore.md": "38101af5220cc3f8ea01f9637bb3ef92092882dc9a2084193e26b84dc5883910",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/git-master.md": "808f9d7683aa843926754a64e57a2f0b2b6969d2d95f3446d056ceb05f35e6e7",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/information-architect.md": "1c070f8271f4ce62b288bc0aad2f9c9f48f80bf2c126f282d84193d9c349265c",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/performance-reviewer.md": "48a3a7bc7ea8ec69bf3d775ac6fa7be7840f58be2b973821a062b0adb5b290db",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/planner.md": "3b3ced06acf55d2255414fde4ba1c2ceab71759ace20edf60bccf2b7c72af959",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/product-analyst.md": "934b8361bc7f3eb5c8585210de9ccc10b4921f71995d0681f8a5014ab62ad63d",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/product-manager.md": "c5a596858ac01c16caa1e68e4ccd96bfe0063b437922fa5d4e7512de3e9c7d06",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/qa-tester.md": "cfff374f8a3406ffe01e4ecb01ede99e6ad3b2a9ad37926126ebee4af8d68b46",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/quality-reviewer.md": "f730b8a7cad4a9c1216b992eb0bc614a680115500c0d280df147e31f27a8c524",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/quality-strategist.md": "d84514395ae59ddaf196205d0aebfab9a5816f947d0fc5de035a41a018a3d8dd",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/researcher.md": "d2d2aa142eea5390d2d4cb617e0d1388280eff65d80f53024256fbea3e52719f",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/security-reviewer.md": "a6ab30fd26370e835f3d044c2ac0ad9ac97a8976b820eb455d0d2c0506204016",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/style-reviewer.md": "8dc0ea45e9edcc294487fa3f6c4988069b58692eee094329b1b454707a1e8b97",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/team-executor.md": "0e13c0e5a755881756476bc48ba5f38c6e02506d8db4d96cf543c96343336b62",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/team-orchestrator.md": "86dd2852fd5364cec32882409d1837bab239468754e360a84fd8325eb93c7d2a",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/test-engineer.md": "496f34a08398a9510317dd6a9076cda896cc0f20d105e6a59217611f5e1e86f8",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/ux-researcher.md": "e17e358c98b9592c3dc5f4d74001cd1c2b69edacb74057255a9701cc58bd5fd5",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/verifier.md": "fbcd52e789aa580b9f3b75cb46a6d4a48b3c79581551e5f6298bd92f57291bc0",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/vision.md": "357ce4f1c9b4b88bcd82ebde3b69f29899ddc4d4bf45398491c982cfec0e2bfb",
+        "third_party/Yeachan-Heo-oh-my-codex/prompts/writer.md": "20a40dd88fc1d8dbe3f088c50919598340336339ce9975dd9956eb604c3b4cac",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ai-slop-cleaner/SKILL.md": "d81095f3480b4d15dc8607d85c9dd5c872fe0786e29561a3d101a117f104e77b",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/analyze/SKILL.md": "1c29f556b4cd80eb92c625a3c29746586abd05ada191e1536aa39a2ac3a5aaea",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ask/SKILL.md": "5301bee75b021060a7021bb27782c904e4bebff1217e158a3107285e649c65ed",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autopilot/SKILL.md": "c26fc9f4742f6e9656df9f939d71d1cba20b2c26e3dc3057663403d41e47c583",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autoresearch/SKILL.md": "5620155f31222fc0b2b76fce133aa7a77ca7d6e89607c65495f9efbb48d53eb2",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/autoresearch-goal/SKILL.md": "76fc1ce7144bcb22e27888be368d9cdebac96e9f1e1db3970c14ec594c5675dc",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/best-practice-research/SKILL.md": "6f0525b364f03ea4ec991ceb1b77a5bf0674efc605bed5db5cb98ebfc09e7c5e",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/cancel/SKILL.md": "661a728669c3d92f1dfa08b5f00c07143fc07eebcd068b00d0fae8a069b33340",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/code-review/SKILL.md": "34afd0454a5fdda181237de8ee55cdbb8ee9b58f1829414a7c3da5968f8a5072",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/configure-notifications/SKILL.md": "21c3b775b84b791fad1c686fe9e85b9aab66eab7a6cbef8b519509d5f6e9ee87",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/deep-interview/SKILL.md": "1b5fd35fe1450bc5f5ee1fe0c59688a7fa335d76747a054fea144b532e54d014",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/design/SKILL.md": "51f13a8616043a18fdeb099a3d1725394cbfb576e6ff54b19bf77a3c399b5d0a",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/doctor/SKILL.md": "7c934251a6b56cdbcf0903f5cdc1420b53ee3515ebf9af046fc0350f27435dec",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/git-master/SKILL.md": "d917dbd61c1476133a6fa2e5c3ff3fbd4d56a458fea71aa0594c16b8d998f2b7",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/hud/SKILL.md": "a7d365daef2795f7b31ae748aa0991924e9cccfd8b1d4478a477b069e32d7294",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/omx-setup/SKILL.md": "872383065b3a82a26e971881772a51c5add149f34e2d1d1a14a100e3497d2f83",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/performance-goal/SKILL.md": "5adac796c4d807e4d30506a67dd9f39fc8812a0675536140e4566771e4806dfd",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/pipeline/SKILL.md": "8e914d9bc8fefc13bd68f24970d91d2aeb499a19405d76f9198b05576f9017d5",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/plan/SKILL.md": "4a2312fee52f4780338eccc217a9340300e03c8a3e8b0f8e8dde0a8239afd0b7",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ralph/SKILL.md": "1cc239daa9d1c034aa0cb4e4fd6246f1453128c57b3004963b63ba39083b58dd",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ralplan/SKILL.md": "d27b3be9ed5efba26b2772dc7efd0726df340cf7f7717f8d14a7ce594588571e",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/skill/SKILL.md": "bbd89ebc5adf8b478aa643dc6d086eb175e9899be20391a048be118803d65c07",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/team/SKILL.md": "f41bbba31e19ffe9c662310eb8d9ae8635052842ecff9122711fc6fa97e9d737",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultragoal/SKILL.md": "b9c194fb9ba4877c44add7e5c7df415341a91e5baddf24a1336ac49875804e46",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultraqa/SKILL.md": "803754526f0e77b8de39e2b8aa3fde2a262479169d72d34ba17ff578832c1694",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultrawork/references/agent-tiers.md": "b49c74eb3e77a0c9bc2d0c892fbfe2fa32de2f249aec8cd2e217d5692f44e0cb",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/ultrawork/SKILL.md": "42f490dc9e4e167a18817fc68d40a13b9e06379086f9db82b3c8a9f362047d3a",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/visual-ralph/SKILL.md": "f18a5a68667877e50d752782aba270aa776eef107971aaea270d5c9b6da2e1bd",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/wiki/SKILL.md": "94c4715d92451a6ae4281bc1690564a659ad68cb58b0938004a49b1079a14241",
+        "third_party/Yeachan-Heo-oh-my-codex/skills/worker/SKILL.md": "aa39e0088c9bbfced4121888cd64ee06f43bbefa2537c9ddbcef5ded35d4b84e"
+      },
+      "content_sha256": "4ee81b5fda4b1111dbb23121ebda42a3cb85d1bec0547739b7255f837774be1f",
+      "agents": [
+        "codex"
+      ],
+      "scope": [
+        "user"
+      ],
+      "packs": [],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T4 fetch",
+        "at": "2026-11-06",
+        "notes": "Fetched with `gh api repos/<repo>/git/blobs/<sha>` at the pinned commit; every blob matched its git SHA-1. Nothing was executed. Markdown only, for `install --scope user` (P4-T7). The npm package oh-my-codex has postinstall and prepare scripts; the kit never installs it."
+      }
+    },
+    {
+      "id": "playwright-mcp",
+      "kind": "mcp",
+      "origin": "https://github.com/microsoft/playwright-mcp",
+      "path": "npm package @playwright/mcp",
+      "ref": "v0.0.84",
+      "commit": "be26c080edfae7c761db1e757c4aff9f6453b4d7",
+      "version": "0.0.84",
+      "license": "Apache-2.0",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T5 npm view",
+        "at": "2026-11-06",
+        "notes": "Not copied. catalog/mcp.json 'playwright' runs `npx -y @playwright/mcp@0.0.84` (exact pin), off by default; opt in with --mcp playwright. Tag v0.0.84 resolves to the commit above. No install scripts in @playwright/mcp@0.0.84 or its playwright/playwright-core dependencies (npm view, 2026-11-06)."
+      }
+    },
+    {
+      "id": "context7-mcp",
+      "kind": "mcp",
+      "origin": "https://github.com/upstash/context7",
+      "path": "npm package @upstash/context7-mcp (packages/mcp)",
+      "ref": "@upstash/context7-mcp@4.5.1",
+      "commit": "5e4df8d22231d5ccd5f3e24a7c08ca7643f9fffb",
+      "version": "4.5.1",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-06",
+      "added_by": "P4-T9",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T9 npm view + gh api",
+        "at": "2026-11-06",
+        "notes": "Not copied. catalog/mcp.json 'context7' runs `npx -y @upstash/context7-mcp@4.5.1` (exact pin), off by default; opt in with --mcp context7 (reviewer approval 2026-11-06). Tag @upstash/context7-mcp@4.5.1 resolves to the commit above; LICENSE MIT. Optional CONTEXT7_API_KEY (src/index.ts reads --api-key or the env var and ignores an unset ${...} placeholder). No install scripts in the package or its 12 direct dependencies (npm view, 2026-11-06)."
+      }
+    },
+    {
+      "id": "security-guidance",
+      "kind": "plugin",
+      "origin": "https://github.com/anthropics/claude-plugins-official",
+      "path": "plugins/security-guidance",
+      "ref": "main",
+      "commit": "ff920a4094a341f282d5dee00daef2c3b8339c72",
+      "version": null,
+      "license": "Apache-2.0",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "high",
+      "added": "2026-11-06",
+      "added_by": "P4-T3",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "P4-T3 review",
+        "at": "2026-11-06",
+        "notes": "Not copied and not installed by the kit. catalog/plugins.json declares it in .claude/settings.json (git-subdir source pinned to the commit above) only with --plugin security-guidance. Its hooks pip-install the Agent SDK into ~/.claude/security/ and send git diffs to the Anthropic API, hence risk high and off by default."
+      }
+    },
+    {
+      "id": "k-dense-ai-scientific-agent-skills",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "path": "skills/experimental-design, skills/exploratory-data-analysis, skills/pytorch-lightning, skills/scientific-critical-thinking, skills/scikit-learn, skills/statistical-analysis, skills/statistical-power",
+      "paths": [
+        "skills/experimental-design",
+        "skills/exploratory-data-analysis",
+        "skills/pytorch-lightning",
+        "skills/scientific-critical-thinking",
+        "skills/scikit-learn",
+        "skills/statistical-analysis",
+        "skills/statistical-power"
+      ],
+      "ref": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
+      "commit": "a25cf9ec00e2745d03f8704acf6f6919694ccd9a",
+      "version": null,
+      "license": "MIT",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power"
+      ],
+      "files": {
+        "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design/SKILL.md": "db2de0f3d29b7729776a91e923c9c83801298f5ad8e88fe44570045fbefcc248",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design/references/design_types.md": "1f36f14160bc9895773a2922402869202866410c9130f2b32c5a54e5f5a6e71b",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design/references/factorial_and_doe.md": "a59fa2279c439c096a66955b4923ad68c00d6046570665e6f6d36e807fa1de63",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design/references/randomization_and_blocking.md": "fabcfae913397fb8c3018b959b67ddf8fe47322b40cbf4155d898fa11738e9ae",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/experimental-design/references/sequential_and_adaptive.md": "83085e2cde0942de23670d3aabb30768fb576a6aa99c2e4ac6f7790b00977051",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/SKILL.md": "955c4cefa49106dd03b55cbd62603bab2d2fb678e627dd452ba62040c7128484",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/assets/report_template.md": "c6cd0644dbefeb64c77e84935509f52a92d45256daf2cd4be84012e99e4d7d44",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/bioinformatics_genomics_formats.md": "b3594673cbe22e29fd5bc2681c1b53d4f8b02b48ff17fc9ffaf5a09d1d885be3",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/chemistry_molecular_formats.md": "3ff937541ebf0396d4c2304016cebc42d405110300df7379f59c40953fc8ed41",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/general_scientific_formats.md": "42bcf3389bbd78e426dd41139208517f3f78bdc17e068a1eb3a984d2f2487320",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/microscopy_imaging_formats.md": "c96bb7291ded320a106800c1132191683aa3028f2240c5fcf954079f1a26c382",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/proteomics_metabolomics_formats.md": "66d9493fe14c717f5e8e60500e8fa7bfe1f619084e23b643a767f0952a35efd7",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/exploratory-data-analysis/references/spectroscopy_analytical_formats.md": "102a68c212ef5447815c889cf06668f3cb5bd8644f018354d6e98d1a15101a0f",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/SKILL.md": "d8829e74e8a1d908f923cf0c0a850ecfdd9edcb004d2fa90ec32fb1ed0006ce8",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/best_practices.md": "e99b13ebdd43b702b6e1fc9732a85ea2ee153c16377c7f216a3433a0cd81d325",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/callbacks.md": "84801cfe2ba309afc8b5a3a13a2a752ae9b0cd98617771fe29551dd7201e21a3",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/data_module.md": "be42f4a16a8898257834cd893f61977a6f8270828e7cae1b67dbc23a01a15549",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/distributed_training.md": "0a8b2b4a9975b170750db85c334288bd48b46fd06eb5c00589b17a187d9e4591",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/lightning_module.md": "0e33e3f04f8c9e25a8c03b51ec8e3d9ad3b968b5789eb36341e2f3198535d35b",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/logging.md": "624f90f1d0aaf7143de4ba90b855cb541065dbec1d8ac2ca3fb766a91e2d07d4",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/references/trainer.md": "67eb14cbdd6ffd162264d5fa6c6ffecc63f55cfad75334f1bec90ed4c5b483f4",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/scripts/quick_trainer_setup.py": "1b700c1dde892042252cee202fa8bcfd26b035e73eb4617362bfaa6f891126e1",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/scripts/template_datamodule.py": "3febf10bab4bf537ea584c351181d092fcdbd1fb6914fd90bb5bd4cd80134ffe",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/pytorch-lightning/scripts/template_lightning_module.py": "2053136d3bc5523661dbbfce64c4b4506415e679cc34edc60ba9242c8d3dfb71",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/SKILL.md": "563af70571b7dcd6a96bf2e303bedfdcba623b4e9f082d58f04aacbc961fdae4",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/common_biases.md": "641e8e8e6dfadac1643ea8691b7d3e4e58cf013f134cd42c71301878096a5a39",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/core_capabilities.md": "0f337b96aa2d7453433a17824368fbd0638b9469d4f90a5fd23f4167c9dee180",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/evidence_hierarchy.md": "534fbe991ecfb2d162f755004dc528118ce74a78862917c2911595a522d76e6c",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/experimental_design.md": "eca7e42025393984c07676f3d4bc354d217e5604dc2209c76215d31953a7c74c",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/logical_fallacies.md": "becfc5bfac7b831dca67cc442cd0fcb42d8eea527a6fc2921c1b704e592ff593",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/review_sources.md": "71e75106f36f3e69b28959ad1fec503ccdb21b7f5361ab230173e4812accbf62",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/scientific_method.md": "5aa925b97c7a916f819dafc8b42a9c24e4bd3eb2836594e724f1e7f9ae75ea0f",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scientific-critical-thinking/references/statistical_pitfalls.md": "0c43204a0a81110cfeb7c982fa4caa89f274bdcebf096e09e5adfccf31241cb9",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/SKILL.md": "a1765797d072ab40094522abe68fb04505d0881f66b7dfceeb8582422dbe488d",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/common_workflows.md": "dfe19c80358acb5f418a21cea4de3b7e83733481441f3c76d0a2ead4420261de",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/core_capabilities.md": "c869d9c207fcfc345207d397021a289f3820492ddf0fcd0b3a56a336bd0e1453",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/model_evaluation.md": "e6f581c0ce2abffaac2f0bafc1a7bfbe86ec18f8969c6e9b91cc732a12a5fea5",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/pipelines_and_composition.md": "a1810cd67dc9141d962fa1972e11b06be6bd437213e10a563e5ec4256fb274a9",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/preprocessing.md": "098506f0ca83e57d0c7cccd166164d025552ad7310b79d1010f5ff34e1cc4818",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/quick_reference.md": "5401b75fdaa10bf393b024f3c559631011c7be233d2313da37a3f27d7389659a",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/supervised_learning.md": "d4e5911d175c3a349dd42e33c984b05cdafce230f264b6774996d0eeef36608a",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/scikit-learn/references/unsupervised_learning.md": "cb476ef499fe35ee2c0416fdc31abad42384ac0110f6d3932901e99b039ae1b1",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/SKILL.md": "e112848726b3713267cac65e4e2c15491a0a26ee1ed628db01195f7e43f97997",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/references/assumptions_and_diagnostics.md": "6e1ebc110c092845b93e5c6d28f38c8a990780105ba1865f0bd47c007620b073",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/references/bayesian_statistics.md": "34d62e1b20dd82a11497be40e07c93e4fdb555d56e4944e200f881c1b7629cbf",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/references/effect_sizes_and_power.md": "5e1321c9058b2931a1bd2a753c7a8f4295f58274412d62e99a34eabd478e42b2",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/references/reporting_standards.md": "0a30a1bec63231c94c9c285977acaa4218c50a34c8385857d18f62c61ac817b7",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-analysis/references/test_selection_guide.md": "e72e00b6ebe9450e5e84849503db223c4908a8d9a68c3b87cf0ab8ec3254fe83",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power/SKILL.md": "a969660eafdc3504ac36e49bd7ded00e18b00fe5cef5699940d5d8281e24dd3d",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power/references/closed_form_recipes.md": "c303aa5b5103077304254f48309169609a3b0537748c68e0df4abd33cb9d4384",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power/references/effect_sizes.md": "b2e3c9578dce59222797ea55e9bc2c3883764adfdfdc0eed3793fb4d71fbf0a7",
+        "third_party/K-Dense-AI-scientific-agent-skills/skills/statistical-power/references/simulation_based_power.md": "963fd56791e6db1bffb94efda7c9bef9c3195e3dec3e2a9918d17f3536ec150f"
+      },
+      "content_sha256": "eec6ecffb2de356303d590bff45e20cf80c34863abc38249c356fedfbc098a80",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "research"
+      ],
+      "risk": "low",
+      "added": "2026-11-06",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-06",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+    }
+  ]
+}
