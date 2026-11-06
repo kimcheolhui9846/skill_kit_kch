@@ -24,6 +24,8 @@ def apply_changes(
                 _write_atomic(safe_path(target, change.rel), change.data)
             if change.record is not None:
                 state.files[change.rel] = change.record
+            if change.extra_records:
+                state.files.update(change.extra_records)
     finally:
         state.save(target, profile_name)
     return backups
