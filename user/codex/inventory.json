@@ -1,0 +1,365 @@
+{
+  "schema": 1,
+  "skills": [
+    {
+      "name": "ai-slop-cleaner",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "analyze",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ask",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "autopilot",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "autoresearch",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "autoresearch-goal",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "best-practice-research",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "cancel",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "code-review",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "configure-notifications",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "deep-interview",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "design",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "doctor",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "hud",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "omx-setup",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "performance-goal",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "pipeline",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "plan",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "prometheus-strict",
+      "origin": "carried as your own (user/codex/own/skills)"
+    },
+    {
+      "name": "ralph",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ralplan",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "skill",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "superpowers",
+      "origin": "unknown origin (not carried)"
+    },
+    {
+      "name": "team",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ultragoal",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ultraqa",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ultrawork",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "visual-ralph",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "wiki",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "worker",
+      "origin": "omx (differs from v0.21.46)"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "analyst.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "api-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "architect.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "build-fixer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "code-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "code-simplifier.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "critic.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "debugger.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "dependency-expert.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "designer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "executor.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "explore-harness.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "explore.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "git-master.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "information-architect.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "performance-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "planner.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "product-analyst.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "product-manager.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "prometheus-strict-metis.md",
+      "origin": "carried as your own (user/codex/own/prompts)"
+    },
+    {
+      "name": "prometheus-strict-momus.md",
+      "origin": "carried as your own (user/codex/own/prompts)"
+    },
+    {
+      "name": "prometheus-strict-oracle.md",
+      "origin": "carried as your own (user/codex/own/prompts)"
+    },
+    {
+      "name": "qa-tester.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "quality-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "quality-strategist.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "researcher.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "scholastic.md",
+      "origin": "carried as your own (user/codex/own/prompts)"
+    },
+    {
+      "name": "security-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "sisyphus-lite.md",
+      "origin": "carried as your own (user/codex/own/prompts)"
+    },
+    {
+      "name": "style-reviewer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "team-executor.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "team-orchestrator.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "test-engineer.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "ux-researcher.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "verifier.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "vision.md",
+      "origin": "omx (differs from v0.21.46)"
+    },
+    {
+      "name": "writer.md",
+      "origin": "omx (differs from v0.21.46)"
+    }
+  ],
+  "agents": [
+    {
+      "name": "analyst.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "architect.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "code-reviewer.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "code-simplifier.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "critic.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "debugger.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "dependency-expert.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "designer.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "executor.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "explore.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "git-master.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "planner.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "prometheus-strict-metis.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "prometheus-strict-momus.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "prometheus-strict-oracle.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "researcher.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "scholastic.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "team-executor.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "test-engineer.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "verifier.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "vision.toml",
+      "origin": "generated by omx setup (not carried)"
+    },
+    {
+      "name": "writer.toml",
+      "origin": "generated by omx setup (not carried)"
+    }
+  ]
+}
