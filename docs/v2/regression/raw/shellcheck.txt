@@ -1,0 +1,8 @@
+== shellcheck bootstrap.sh
+exit=0
+== shellcheck third_party/obra-superpowers/skills/brainstorming/scripts/start-server.sh
+exit=0
+== shellcheck third_party/obra-superpowers/skills/brainstorming/scripts/stop-server.sh
+exit=0
+== shellcheck third_party/obra-superpowers/skills/systematic-debugging/find-polluter.sh
+exit=0
