@@ -43,11 +43,21 @@ find_python() {
   return 1
 }
 
-for arg in "$@"; do
-  case "$arg" in
-    -h|--help) usage; exit 0 ;;
+SUBCOMMANDS=" install plan verify doctor update uninstall restore profiles source capture task req trace report recover help version "
+IS_SUBCOMMAND=0
+if [ $# -gt 0 ]; then
+  case "$SUBCOMMANDS" in
+    *" $1 "*) IS_SUBCOMMAND=1 ;;
   esac
-done
+fi
+
+if [ "$IS_SUBCOMMAND" -eq 0 ]; then
+  for arg in "$@"; do
+    case "$arg" in
+      -h|--help) usage; exit 0 ;;
+    esac
+  done
+fi
 
 if PY="$(find_python)"; then
   export KIT_SHELL=bash
@@ -55,6 +65,10 @@ if PY="$(find_python)"; then
 fi
 
 # ---- shell-only mode -------------------------------------------------------
+if [ "$IS_SUBCOMMAND" -eq 1 ]; then
+  echo "error: '$1' requires Python 3.9+ (shell-only mode supports only the legacy install)" >&2
+  exit 64
+fi
 TARGET="$PWD"
 DRY_RUN=0
 while [ $# -gt 0 ]; do

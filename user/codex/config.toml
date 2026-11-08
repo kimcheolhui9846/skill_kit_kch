@@ -1,0 +1,31 @@
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[features]
+
+
+goals = true
+hooks = true
+child_agents_md = true
+js_repl = false

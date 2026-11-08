@@ -1,0 +1,13 @@
+
+## Kit additions: tests from a task statement
+
+When the work comes from a task statement or `TASK_BRIEF.md`:
+
+- Turn every example in the statement into a test first. These are the most valuable tests.
+- Add boundary cases only where the input definition allows them: empty or single-element
+  input, minimum and maximum sizes and values, duplicates, sorted or reverse-sorted input,
+  negative numbers, zero. Skip cases the statement rules out.
+- Keep the suite fast (about 10 s). Large-input timing belongs to the benchmark skill.
+- Test commands per language: [references/languages.md](references/languages.md).
+- Report the exact command and its result. A test that could not run is NOT RUN, with the
+  reason; never report it as passing.

@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "note": "Claude Code plugins, off by default; opt in with --plugin NAME. The kit declares them in .claude/settings.json (kit-owned keys extraKnownMarketplaces/<marketplace>, an inline 'settings' marketplace whose plugin sources are pinned to a commit sha, and enabledPlugins/<plugin>@<marketplace>) and, behind the network gate, installs them on this PC with the claude CLI (kit/plugin_install.py). Codex plugins (agents: codex, source url or git-subdir) go into the kit-owned .agents/plugins/marketplace.json and, behind the same gate, are installed with the codex CLI; Codex has no install scope, so the plugin is enabled in every project (~/.codex/config.toml). Sources must be full https:// URLs.",
+  "marketplace": "hackathon-kit",
+  "plugins": {
+    "security-guidance": {
+      "agents": [
+        "claude"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "license": "Apache-2.0",
+      "origin": "https://github.com/anthropics/claude-plugins-official",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-plugins-official",
+        "path": "plugins/security-guidance",
+        "sha": "ff920a4094a341f282d5dee00daef2c3b8339c72"
+      },
+      "risk": "high",
+      "enabled_by_default": false,
+      "disabled_reason": "its hooks create ~/.claude/security/agent-sdk-venv and pip-install the Agent SDK at session start, and send git diffs to the Anthropic API on stop (ANTHROPIC_API_KEY or your Claude Code sign-in). Opt in with --plugin security-guidance",
+      "network_egress": "PyPI at session start; git diffs to the Anthropic API",
+      "file_access": "the repository diff; writes a venv and state under ~/.claude/security/",
+      "credentials": [
+        {
+          "env": "ANTHROPIC_API_KEY",
+          "required": false,
+          "purpose": "LLM review of git diffs on stop; without it the plugin uses your Claude Code sign-in (/login), else runs only its pattern warnings",
+          "get_it": "https://platform.claude.com/settings/keys",
+          "cost": "pay per use"
+        }
+      ],
+      "pin_note": "kept at ff920a4094a3 (plugin 2.0.17). Upstream 2.0.18 changes its hooks; review that diff before moving the pin (2026-11-08)"
+    },
+    "filetree": {
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "license": "MIT",
+      "version": "0.8.2",
+      "origin": "https://github.com/data-goblin/claude-code-filetree",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/data-goblin/claude-code-filetree.git",
+        "sha": "a3d36b1a56c0d982b307a58ef88fd3e857c977e6"
+      },
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "Claude Code mod (IDE-style file tree pane) that runs its own code in every session; v0.8.2 needs Claude Code 2.1.306 or later. Opt in with --plugin filetree",
+      "network_egress": "none found when its code was read (2026-11-08)",
+      "file_access": "reads the workspace file tree and git status; no writes to home settings found",
+      "category": "mod"
+    },
+    "replay-theater": {
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "license": "Apache-2.0",
+      "version": "0.1.0",
+      "origin": "https://github.com/anthropics/claude-code-playground",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-code-playground",
+        "path": "claude-code/mods/replay-theater",
+        "sha": "569c5283d9a0a7ee7938df85bb32e4f48cbb8c86"
+      },
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "Claude Code mod with hooks (hooks/hooks.json, replay-theater.mjs) that steps through the last turn's edits; needs Claude Code 2.1.287 or later. Opt in with --plugin replay-theater",
+      "network_egress": "none expected (not verified at runtime)",
+      "file_access": "reads the edits of the last turn",
+      "category": "mod"
+    },
+    "savvy-progress": {
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "license": "MIT",
+      "version": "1.2.1",
+      "origin": "https://github.com/JohnnyVizz/claude-kit",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/JohnnyVizz/claude-kit",
+        "path": "plugins/savvy-progress",
+        "sha": "c871c153ead54ad9547cc717d0f3e5a676c73986"
+      },
+      "risk": "medium",
+      "enabled_by_default": false,
+      "disabled_reason": "Claude Code mod (progress bar and agents panel) that runs its own code in every session. Opt in with --plugin savvy-progress",
+      "network_egress": "none found when its code was read (2026-11-08)",
+      "file_access": "reads session and subagent state; no writes to home settings found",
+      "category": "mod"
+    },
+    "effortless": {
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "license": "MIT",
+      "version": "1.72.0",
+      "origin": "https://github.com/HeyCubit/effortless",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/HeyCubit/effortless.git",
+        "sha": "7912a6ccdf0a562274a74f1f06f1306722c163db"
+      },
+      "risk": "high",
+      "enabled_by_default": false,
+      "disabled_reason": "calls Haiku on every prompt (and for every compaction) on your Claude login; its in-app Update button copies a newer version over the pinned one, bypassing the pin; a key pasted into its setup guide is stored in plain text in ~/.config/jev/.env; it needs CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 in your user settings, which the kit does not set. Opt in with --plugin effortless",
+      "network_egress": "Anthropic API (Haiku) for every prompt; TypeSafe (Jev) when a key is set; git checks for new versions",
+      "file_access": "reads the conversation to judge effort; may write ~/.config/jev/.env (plain text key) when a key is pasted in its setup guide",
+      "category": "mod",
+      "credentials": [
+        {
+          "env": "TYPESAFE_API_KEY",
+          "required": false,
+          "purpose": "optional faster effort judge (Jev); without it Haiku judges on your Claude login. Prefer `/plugin configure` in Claude Code (secure storage) over pasting it into the setup guide",
+          "get_it": "https://typesafe.ai"
+        }
+      ]
+    }
+  }
+}

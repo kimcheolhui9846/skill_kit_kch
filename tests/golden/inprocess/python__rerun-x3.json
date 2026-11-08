@@ -1,0 +1,66 @@
+{
+  "runs": [
+    {
+      "args": [
+        "--profile",
+        "python",
+        "--offline"
+      ],
+      "exit": 0,
+      "stdout": "Environment:  <ENV>\nTools:        git OK, uv OK, node OK, npx OK, codex OK, python OK\nTarget:       <TARGET>\nProfile:      python\nAGENTS.md:    INSTALLED\nSkills:       11 expected / 11 verified\nCodex load:   UNVERIFIED (open Codex and run /skills)\nMCP:          sequential-thinking SKIPPED\nNetwork:      not used (--offline)\nStatus:       READY\nNext action:\n  - Open Codex in <TARGET> and run /skills to confirm the kit skills load.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--profile",
+        "python",
+        "--offline"
+      ],
+      "exit": 0,
+      "stdout": "Environment:  <ENV>\nTools:        git OK, uv OK, node OK, npx OK, codex OK, python OK\nTarget:       <TARGET>\nProfile:      python\nAGENTS.md:    INSTALLED\nSkills:       11 expected / 11 verified\nCodex load:   UNVERIFIED (open Codex and run /skills)\nMCP:          sequential-thinking SKIPPED\nNetwork:      not used (--offline)\nStatus:       READY\nNext action:\n  - Open Codex in <TARGET> and run /skills to confirm the kit skills load.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "--profile",
+        "python",
+        "--offline"
+      ],
+      "exit": 0,
+      "stdout": "Environment:  <ENV>\nTools:        git OK, uv OK, node OK, npx OK, codex OK, python OK\nTarget:       <TARGET>\nProfile:      python\nAGENTS.md:    INSTALLED\nSkills:       11 expected / 11 verified\nCodex load:   UNVERIFIED (open Codex and run /skills)\nMCP:          sequential-thinking SKIPPED\nNetwork:      not used (--offline)\nStatus:       READY\nNext action:\n  - Open Codex in <TARGET> and run /skills to confirm the kit skills load.\n",
+      "stderr": ""
+    }
+  ],
+  "tree": {
+    ".agents/skills/algorithm-optimizer/examples/example.md": "a4fd2270ea4fc51949d7081e9e837b297bba0e036844d4aa26ca139316fe7b1a",
+    ".agents/skills/algorithm-optimizer/references/languages.md": "1b48ebcf40885e38b507d346bb199e19637f28a33cf468988ea898eadd6b767c",
+    ".agents/skills/algorithm-optimizer/SKILL.md": "8a00f8edd70c93188164a6a7a930446354e10ded74a40dd63224da7f2ef00d2a",
+    ".agents/skills/algorithm-options/examples/example.md": "6616028d53c7fa81851a86f13493a4c4795a06c7cf632063a6dcc0fc1a46fa05",
+    ".agents/skills/algorithm-options/SKILL.md": "f74d0b6aa271261321f036717539750305c1bac273a815b6b0750a658087c290",
+    ".agents/skills/benchmark/examples/example.md": "7caaa29f59d6270ff6283aa4181a30036dc55ea3d85339684c6658e24d7cdb33",
+    ".agents/skills/benchmark/references/languages.md": "ea01a92869d3bd090d673bc79351a8cec30587f7476a3f436c072460e56866f5",
+    ".agents/skills/benchmark/SKILL.md": "7d1d646c0138cdf458abea51c8282056ee82ffdabc81a12e8dcfea9136499bf4",
+    ".agents/skills/codebase-explorer/examples/example.md": "28cddccd42786c9183cbe88c1d86bfe822d95be5ab7a8ee04fdfe278b7d47ee1",
+    ".agents/skills/codebase-explorer/SKILL.md": "e4c9fa7786e9f0f878ad469e776df858f425f36d8f0c6eb076b69cee3c980ad9",
+    ".agents/skills/counterexample-hunter/examples/example.md": "e88b561b67eb35cabdaddc283cdd877616c8daa1beb6a6047a76147951309cdc",
+    ".agents/skills/counterexample-hunter/SKILL.md": "9914086a03e834702149732bfde0e246e7cdfce8b282065e71252819139a2e34",
+    ".agents/skills/design-review/examples/example.md": "9a40783239b0ea745a5cffefde3ffd4176911822bbdde23549f3d8d543065ee4",
+    ".agents/skills/design-review/SKILL.md": "04a28a4a1a10327c7e36582abe05fd20ba1d4df3d7560b349ac0fab337a386bd",
+    ".agents/skills/implementation-review/examples/example.md": "a62ee3fd9a1fec179ccced7f881c968b4f4b457584ff62709be88b7421a37872",
+    ".agents/skills/implementation-review/SKILL.md": "26ccfe6e0ac45dcf98ae5bcfd568d89d11eb0fe8c855fe8ac3b6528f3872141c",
+    ".agents/skills/submission-validator/examples/example.md": "f9031265e66d5f1163e4deb75241059322858cdad6d1c4f95ad4fe734d859e0f",
+    ".agents/skills/submission-validator/references/languages.md": "24ab692b73ad69f6fff4fe93b9c7970234dc93339be718adeeb8c30c25dd3231",
+    ".agents/skills/submission-validator/SKILL.md": "36c7ab71cbf4ce6db991798205bcea26068f7766e9dde6f71ec9968ff55c8fda",
+    ".agents/skills/systematic-debugging/examples/example.md": "8224e8fa9e01ef31c7735422e617119fa3d50079be6330894ae77ed85661b8a4",
+    ".agents/skills/systematic-debugging/SKILL.md": "e8b21523bad538ae42c03734d7cde25029e81506e8b4c68981741db34309efd3",
+    ".agents/skills/task-router/examples/example.md": "8f0f0c4034b412072a51c591956793775c21173a032ac12dcddf6e22f0af8686",
+    ".agents/skills/task-router/SKILL.md": "4c83a19a83c228943d77407777fff9d2c0f5cbcb141b06747c61d173bb8fe386",
+    ".agents/skills/tdd-automator/examples/example.md": "fbe0477cb5952ae9aff3d3b6d8bfb5e8242031d777471adf7b07d7f0e097a84a",
+    ".agents/skills/tdd-automator/references/languages.md": "fce2ba29368d9c44501777464c574c71d5e183a60647a89c150d5a561dea8fd4",
+    ".agents/skills/tdd-automator/SKILL.md": "043edb4d2c54f5004b9e71a2fb20019d17d37f84c9ec9d59822509279e8239d2",
+    ".codex/config.toml": "5188c77374a8e7113eafd2e1d3a5ae6da41684e32ed7ea43ff5f88e75f0b0677",
+    ".kit/state.json": "769113e242833b5d0a301da53119cdf2dccd4ef76ab919cc97affaaae6c8776c",
+    "AGENTS.md": "ff1905fcb23dd81c82162a6f4be01adb4b1f7590e4a26f8822cbb87230c11d11"
+  },
+  "home_untouched": true
+}

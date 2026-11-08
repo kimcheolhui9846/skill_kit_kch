@@ -1,0 +1,15 @@
+$ kit verify --agent both --offline
+Environment:  Windows 11 AMD64, shell=windows, python 3.12.10
+Target:       <target>
+Scope:        project
+Profiles:     core, hitl   Policy: standard
+Agent codex:  AGENTS.md INSTALLED | Skills 17/17 verified in .agents/skills/ | MCP none | Load UNVERIFIED (run /skills in Codex)
+              replaced skills: tdd-automator -> test-driven-development, submission-validator -> verification-before-completion
+Agent claude: CLAUDE.md INSTALLED | Skills 17/17 verified in .claude/skills/ | MCP none | Load UNVERIFIED (run /skills in Claude Code)
+              replaced skills: tdd-automator -> test-driven-development, submission-validator -> verification-before-completion
+Network:      not used (--offline)
+Status:       READY
+Next action:
+  - Open Codex in <target> and run /skills to confirm the kit skills load.
+  - Open Claude Code in <target> and run /skills to confirm the kit skills load.
+(exit 0)

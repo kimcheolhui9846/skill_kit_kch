@@ -51,8 +51,14 @@ function Stop-Blocked([string]$Message, [string]$Action) {
     exit 2
 }
 
-foreach ($arg in $args) {
-    if ($arg -eq '--help' -or $arg -eq '-h') { Write-Output $Usage; exit 0 }
+$Subcommands = @('install', 'plan', 'verify', 'doctor', 'update', 'uninstall', 'restore',
+    'profiles', 'source', 'capture', 'task', 'req', 'trace', 'report', 'recover', 'help', 'version')
+$IsSubcommand = ($args.Count -gt 0) -and ($Subcommands -contains [string]$args[0])
+
+if (-not $IsSubcommand) {
+    foreach ($arg in $args) {
+        if ($arg -eq '--help' -or $arg -eq '-h') { Write-Output $Usage; exit 0 }
+    }
 }
 
 $Python = $null
@@ -74,6 +80,10 @@ if ($null -ne $Python) {
 }
 
 # ---- shell-only mode -------------------------------------------------------
+if ($IsSubcommand) {
+    Write-Err "error: '$($args[0])' requires Python 3.9+ (shell-only mode supports only the legacy install)"
+    exit 64
+}
 $Target = (Get-Location).Path
 $DryRun = $false
 $i = 0

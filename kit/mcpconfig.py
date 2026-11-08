@@ -6,11 +6,11 @@ import json
 import re
 from pathlib import Path
 
-from .agentsmd import MarkerError, extract_block
 from .model import CONFLICT, FAIL, PASS, UNVERIFIED, ItemResult, UsageError
+from .writers.markdown_block import MarkerError, extract_block
+from .writers.toml_block import BEGIN, END, parse_toml
+from .writers.toml_block import without_block as _without_block
 
-BEGIN = "# hackathon-kit:begin"
-END = "# hackathon-kit:end"
 CONFIG_REL = ".codex/config.toml"
 TRUST_NOTE = "Codex loads .codex/config.toml only for trusted projects"
 STALE_DETAIL = (
@@ -35,7 +35,26 @@ def load_allowlist(kit_root: Path) -> dict:
     return _load(kit_root, "allowlist.json")
 
 
+class McpSelection(list):
+    """Server names already chosen from catalog/mcp.json (new path, kit.mcp_catalog).
+
+    A plain list of names everywhere a profile's mcp list is used; the catalog entries travel
+    with it so select_servers() does not fall back to mcp/manifest.json.
+    """
+
+    def __init__(self, items=()):
+        items = list(items)
+        super().__init__(name for name, _ in items)
+        self.entries = dict(items)
+
+    def merged(self, other: "McpSelection") -> "McpSelection":
+        extra = [(n, other.entries[n]) for n in other if n not in self.entries]
+        return McpSelection([(n, self.entries[n]) for n in self] + extra)
+
+
 def select_servers(kit_root: Path, names: list[str]) -> list[tuple[str, dict]]:
+    if isinstance(names, McpSelection):
+        return [(name, names.entries[name]) for name in names]
     if not names:
         return []
     servers = load_manifest(kit_root)["servers"]
@@ -51,6 +70,12 @@ def select_servers(kit_root: Path, names: list[str]) -> list[tuple[str, dict]]:
     return selected
 
 
+def _env_vars(entry: dict) -> list:
+    """P4-T9: API keys are passed through from the shell by name; no value is written."""
+    names = [c["env"] for c in entry.get("credentials") or []]
+    return [f"env_vars = [{', '.join(json.dumps(n) for n in names)}]"] if names else []
+
+
 def render_servers(servers: list[tuple[str, dict]]) -> str:
     blocks = []
     for name, entry in servers:
@@ -63,26 +88,10 @@ def render_servers(servers: list[tuple[str, dict]]) -> str:
                     f"args = [{args}]",
                     f"startup_timeout_sec = {int(entry.get('startup_timeout_sec', 30))}",
                 ]
+                + _env_vars(entry)
             )
         )
     return "\n\n".join(blocks)
-
-
-def parse_toml(text: str) -> tuple[bool | None, dict | None, str]:
-    """(True, data, "") parsed; (False, None, error) invalid; (None, None, "") no tomllib."""
-    try:
-        import tomllib
-    except ImportError:
-        return None, None, ""
-    try:
-        return True, tomllib.loads(text), ""
-    except tomllib.TOMLDecodeError as exc:
-        return False, None, str(exc)
-
-
-def _without_block(text: str) -> str:
-    found = extract_block(text, BEGIN, END)
-    return text if found is None else text[: found[0]] + text[found[1] :]
 
 
 def _preserved(old: dict, new: dict) -> bool:

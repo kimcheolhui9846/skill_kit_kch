@@ -1,0 +1,49 @@
+1. frontend-design
+2. ui-ux-pro-max
+3. hallmark
+4. emil-design-eng
+5. web-design-guidenlines
+6. ponytail
+7. graphify
+8. headroom
+9. effortless
+10. openRig
+11. graft
+12. agency agents
+13. codebase Memory MCP
+14. openMontage
+15. prompts.chat
+16. 카파시 CLAUDE.md
+17. 클라우드플레어
+18. mods
+19. context-mode
+20. RTK
+21. find-skills
+22. ECC
+23. ROUTER
+24. 세컨드브레인
+25. 구글 하네스2
+26. claude code projects
+27. Savvy progress
+28. File Tree
+29. repaly theater
+20. Caveman
+21. Anthropic skills
+22. karpathy skills
+23. matt pocock skills
+24. REA
+25. mobbin mcp
+26. nicelydone mcp
+27. refero mcp
+28. lazyweb mcp
+29. inspoai mcp
+30. scientific-agnet-skills
+31. anatomy
+32. thdotmack/claude-mem
+33. markitdown
+34. Ruflo
+35. le bureau des agents
+36. security-guidance
+37. Scrapling
+38. knowledge-work-plugins
+39. superpowers

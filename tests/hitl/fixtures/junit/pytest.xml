@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="1" skipped="1" tests="7" time="0.053" timestamp="2026-11-07T12:00:00+09:00" hostname="host"><testcase classname="tests.test_csv" name="test_empty_file" time="0.000" /><testcase classname="tests.test_csv" name="test_field_count[a,b-2]" time="0.000" /><testcase classname="tests.test_csv" name="test_field_count[a-1]" time="0.000" /><testcase classname="tests.test_csv" name="test_field_count[&quot;a,b&quot;-1]" time="0.001"><failure message="assert 2 == 1&#10; +  where 2 = len(['&quot;a', 'b&quot;'])">text = '"a,b"', n = 1
+
+    @pytest.mark.parametrize("text,n", [("a,b", 2), ("a", 1), ('"a,b"', 1)])
+    def test_field_count(text, n):
+&gt;       assert len(parse(text)[0]) == n
+E       assert 2 == 1
+E        +  where 2 = len(['"a', 'b"'])
+
+tests\test_csv.py:14: AssertionError</failure></testcase><testcase classname="tests.test_csv" name="test_uses_broken" time="0.000"><error message="failed on setup with &quot;RuntimeError: fixture broke&quot;">@pytest.fixture
+    def broken():
+&gt;       raise RuntimeError("fixture broke")
+E       RuntimeError: fixture broke
+
+tests\test_csv.py:19: RuntimeError</error></testcase><testcase classname="tests.test_csv" name="test_large_file" time="0.000"><skipped type="pytest.skip" message="needs a large file">tests\test_csv.py:26: needs a large file</skipped></testcase><testcase classname="tests.test_csv.TestQuoted" name="test_keeps_quotes" time="0.000" /></testsuite></testsuites>

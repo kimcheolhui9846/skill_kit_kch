@@ -34,13 +34,24 @@ class Profile:
     report_only: bool = False
 
 
+def _is_v2(path: Path) -> bool:
+    """Profile v2 files (P4-T6: fullstack, ai-research, hackathon) belong to the new path only."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError):
+        return False
+    return isinstance(data, dict) and "schema" in data
+
+
 def available_profiles(kit_root: Path) -> list[str]:
-    return sorted(path.stem for path in (kit_root / "profiles").glob("*.json"))
+    """The legacy path's profiles: v1 files only, so its choices and messages stay as before."""
+    paths = (kit_root / "profiles").glob("*.json")
+    return sorted(path.stem for path in paths if not _is_v2(path))
 
 
 def _read(kit_root: Path, name: str) -> dict:
     path = kit_root / "profiles" / f"{name}.json"
-    if not path.is_file():
+    if not path.is_file() or _is_v2(path):
         available = ", ".join(available_profiles(kit_root))
         raise UsageError(f"unknown profile '{name}' (available: {available})")
     try:

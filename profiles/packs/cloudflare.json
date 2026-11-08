@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "cloudflare",
+  "kind": "pack",
+  "description": "Opt-in Cloudflare platform skills from cloudflare/skills (standard policy only, never restricted): agents-sdk, cloudflare-app-bootstrap, cloudflare-one-migrations, durable-objects, frameworks-on-cloudflare, k2, sandbox-next, sandbox-stable, sandbox-migrate-to-next, workers-best-practices, workers-development, workers-profiling, wrangler. Deploy and resource-creating commands touch your Cloudflare account and may cost money; the skills tell the agent to confirm the account, environment and your intent first. Each can draft a public GitHub issue as skill feedback only after you approve the text. Left out: basin, cf-cli, turnstile-spin, web-perf, nextjs-on-cloudflare, cloudflare-email-service, and cloudflare, cloudflare-one, gateway-workers (they link to left-out skills).",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

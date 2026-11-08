@@ -6,12 +6,13 @@ import sys
 from pathlib import Path
 from typing import TextIO
 
-from . import audit, mcpcheck, mcpconfig, tools, webcheck
+from . import audit, commands, mcpcheck, mcpconfig, tools, webcheck
+from .adapters import registry
 from .cli import Options, parse_args
 from .fsops import PathEscapeError, State, timestamp
 from .logs import write_log
 from .model import EXIT_BLOCKED, EXIT_READY, EXIT_TARGET, EXIT_USAGE, TargetError, UsageError
-from .plan import FileChange, format_plan, plan_changes
+from .plan import FileChange, format_plan
 from .preflight import EnvReport, run_preflight
 from .profiles import available_profiles, load_profile
 from .register import apply_changes
@@ -32,6 +33,9 @@ def run(
 ) -> int:
     out = out or sys.stdout
     cwd = cwd or Path.cwd()
+    if argv and argv[0] in commands.SUBCOMMANDS:  # new path (ADR-002); anything else is legacy
+        ask = commands.terminal_ask() if out is sys.stdout else None
+        return commands.run(argv, cwd, kit_root, out, ask)
     try:
         opts = parse_args(argv, cwd, available_profiles(kit_root))
         profile = load_profile(kit_root, opts.profile)
@@ -45,10 +49,11 @@ def run(
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_TARGET
 
+    adapter = registry.get("codex")  # the legacy invocation is always Codex (ADR-002)
     env = run_preflight(opts.target)
     state = State.load(opts.target)
     include_mcp = bool(profile.mcp) and not opts.no_mcp
-    changes = plan_changes(opts.target, kit_root, profile, state, include_mcp)
+    changes = adapter.plan(opts.target, kit_root, profile, state, include_mcp)
     actions = tools.plan_tools(profile, env, opts.offline, opts.verify_only)
 
     if opts.dry_run:
@@ -72,6 +77,8 @@ def run(
         check_writable=not opts.verify_only,
         writable=env.target_writable,
         include_mcp=include_mcp,
+        policy_rel=adapter.policy.rel,
+        skill_root=adapter.skill_root,
     )
     if not include_mcp:
         stale = mcpconfig.stale_block_item(opts.target)
@@ -104,8 +111,17 @@ def run(
 
 def main(argv: list[str]) -> int:
     """Entry-point wrapper: any unexpected error is BLOCKED, never a bare traceback."""
+    for stream in (sys.stdout, sys.stderr):  # a cp949/cp1252 console must not crash the run
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError):
+            pass
     try:
         return run(argv)
+    except PathEscapeError as exc:  # a safety refusal, not a crash (P7-T1 wording)
+        print("Status:       BLOCKED", file=sys.stderr)
+        print(f"error: {exc}; a link or path leads outside the target", file=sys.stderr)
+        return EXIT_BLOCKED
     except Exception as exc:
         print("Status:       BLOCKED", file=sys.stderr)
         print(f"error: unexpected {type(exc).__name__}: {exc}", file=sys.stderr)

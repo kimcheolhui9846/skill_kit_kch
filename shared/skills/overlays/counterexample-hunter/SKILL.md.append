@@ -1,0 +1,45 @@
+
+## Kit additions: counterexample review (requirements first)
+
+The aim is to expose wrong assumptions in the implementation, not to add tests. Run this for
+every important function, and before submitting a C-grade task (`kit task submit` refuses a
+C task without a record for its requirements, or with one still PROPOSED).
+
+1. **Black box first.** Before reading the implementation, derive counterexamples from the
+   requirements only (`TASK_BRIEF.md` `## Requirements`, `kit req list`).
+   - Claude Code: delegate to the `counterexample-blackbox` subagent
+     (`.claude/agents/counterexample-blackbox.md`; it has no file tools). Put only the
+     requirements and the signature in its prompt, never source code.
+   - Codex: no subagent here. Start a separate session that is given only the requirements,
+     or do an explicit black-box pass before opening any source file. Record that its
+     independence is weaker.
+2. **White box.** Read the implementation, list what it relies on (sorted, unique keys, not
+   empty, fixed types, fits in memory, ...) and build one input that breaks each assumption.
+3. **Drop duplicates.** An input an existing test already covers is rejected with the reason:
+   `kit ce reject CE-007 --reason "covered by TC-012"`.
+4. **Select.** Keep 5 to 10 high-value items per important function. An item whose
+   `--would-catch` (the wrong implementation it exposes) you cannot write is not recorded.
+5. **Ask, do not guess.** If the requirements do not decide the expected result, mark it
+   `kit ce needs-spec CE-004 --question "..."` and ask the reviewer. Only the reviewer's
+   answer resolves it: `kit ce resolve CE-004 --expected "..." --quote "<their words>"`.
+6. **Convert and run.** Turn each ACCEPTED item into a test, link it with
+   `kit trace link TC-031 --req REQ-004 --locator <file>::<test> --case counterexample`, then
+   `kit ce convert CE-004 --test TC-031`. Run it, record `kit ce result CE-004 --result
+   "FAIL -> fixed -> PASS"`, and include it in `kit report tests`.
+
+Record every item with `kit ce add`:
+
+```text
+kit ce add CE-004 --function "dedupe_records()" --req REQ-004 --category duplicate
+  --origin black-box|white-box --assumption "keys compare case-insensitively"
+  --input "[{'id':'A1'},{'id':'a1'}]" --expected "kept as two records (REQ-004)"
+  --would-catch "an implementation that merges after lower()" --rationale "REQ-004: compare IDs as given"
+```
+
+Leave out `--expected` when the requirements do not decide it; such an item can only go to
+NEEDS_SPEC or be rejected. States: PROPOSED -> ACCEPTED | REJECTED | NEEDS_SPEC;
+NEEDS_SPEC -> ACCEPTED (reviewer quote) | REJECTED; ACCEPTED -> CONVERTED.
+
+For a C-grade task also flip one key condition in a scratch copy of the implementation and
+check that the counterexample tests fail; report the result only and keep no mutant in the
+repository.

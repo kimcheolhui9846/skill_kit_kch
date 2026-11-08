@@ -1,6 +1,8 @@
+from pathlib import PurePosixPath, PureWindowsPath
+
 import pytest
 
-from kit.fsops import PathEscapeError, State, backup_file, safe_path, sha256
+from kit.fsops import PathEscapeError, State, backup_file, path_order, safe_path, sha256
 
 
 def test_safe_path_inside(tmp_path):
@@ -60,3 +62,27 @@ def test_backup_copies_into_stamp_dir(tmp_path):
 
 def test_sha256_known_value():
     assert sha256(b"") == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+
+def test_path_order_is_the_windows_order_on_every_system():
+    """P6-T4: Path comparison is case-insensitive on Windows only; the key is not."""
+    names = ["examples/example.md", "SKILL.md", "agents/openai.yaml", "Zeta.md", "alpha.md"]
+    expected = ["agents/openai.yaml", "alpha.md", "examples/example.md", "SKILL.md", "Zeta.md"]
+    assert sorted(names, key=path_order) == expected
+    assert sorted(map(PurePosixPath, names), key=path_order) == list(map(PurePosixPath, expected))
+    assert sorted(PureWindowsPath(n) for n in names) == list(map(PureWindowsPath, expected))
+
+
+def test_path_order_keeps_names_that_differ_only_in_case_in_a_fixed_order():
+    assert sorted(["b.md", "B.md", "a.md"], key=path_order) == ["a.md", "B.md", "b.md"]
+    assert sorted(["B.md", "b.md", "a.md"], key=path_order) == ["a.md", "B.md", "b.md"]
+
+
+def test_skill_files_are_listed_in_the_same_order_everywhere(kit_root):
+    from kit.plan import iter_skill_files
+
+    rels = [rel for rel, _ in iter_skill_files(kit_root, "task-router")]
+    assert rels == sorted(rels, key=path_order)
+    assert rels.index(".agents/skills/task-router/examples/example.md") < rels.index(
+        ".agents/skills/task-router/SKILL.md"
+    )

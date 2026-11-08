@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "planning-extras",
+  "kind": "pack",
+  "description": "Opt-in planning skills from mattpocock/skills (standard policy only, never restricted): domain-modeling (GLOSSARY.md and ADRs), to-spec (user-invoked; publishes a spec to the project's issue tracker) and handoff (user-invoked; writes a handoff note to the OS temp folder). The setup-matt-pocock-skills skill they mention is not included.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

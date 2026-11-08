@@ -1,0 +1,16 @@
+
+## Kit additions: final check against the task
+
+Before saying a task with a deliverable is finished, build one row per requirement from
+`TASK_BRIEF.md` (or the statement) and check each with a command run now:
+
+- required files exist at the required paths with the exact names
+- the program runs with the stated command, and its output on the statement's examples matches
+  the stated format exactly (whitespace, line endings, ordering)
+- tests pass; the linter passes if one is available
+- no leftover debug output or markers (search commands:
+  [references/languages.md](references/languages.md))
+- no hard-coded absolute paths from this machine
+
+List checks only a human can do as MANUAL. Print `Requirement | Check | Evidence | Result`
+with Result one of PASS, FAIL, MANUAL, NOT RUN.

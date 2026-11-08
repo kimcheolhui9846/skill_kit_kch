@@ -1,5 +1,83 @@
 # 아키텍처
 
+이 문서는 두 부분이다. 1부는 v2(명령이 있는 호출, Codex와 Claude Code)이고, 2부는 그대로 남아 있는 v1 설치기(명령 없는 호출)다. 설계의 근거는 `docs/v2/04_DESIGN.md`와 `docs/v2/adr/`에 있다.
+
+# 1부. v2
+
+## 1. 진입과 분기
+
+```text
+bootstrap.sh / bootstrap.ps1 / python run_kit.py
+        -> kit.app.run(argv)
+             argv[0]이 명령 이름(install, plan, verify, task, ...) -> kit.commands.run   (v2)
+             그 밖의 모든 입력(빈 입력, --옵션)                  -> v1 설치기(2부)    (ADR-002)
+```
+
+- 이 규칙 덕분에 v1 사용법은 바뀌지 않는다. v1 파서에는 위치 인수가 없었으므로, 첫 토큰이 단어인 입력은 원래 오류(64)였다.
+- `kit.app.main`은 예상하지 못한 예외를 BLOCKED(2)로 바꾼다. 대상 밖으로 쓰려는 경로(`PathEscapeError`)는 안전 거부로 따로 알린다.
+
+## 2. 설치 계열의 흐름
+
+```text
+commands.run
+  -> 프로필 해석 (profile_resolver: 프로필 + 팩, extends, 순환 거부)
+  -> 정책 적용 (catalog: 스킬 카탈로그, standard/restricted, 대체 스킬, 오버레이 층)
+  -> Adapter별 plan (adapters/codex.py, claude.py, user.py): 쓰기 없는 계획
+  -> 확인 (네트워크 또는 user 범위면 터미널에서 묻거나 --yes)
+  -> transaction.apply_all: 백업 -> 원자적 쓰기 -> 실패하면 이번 실행이 쓴 것을 모두 되돌림
+  -> manifest: 에이전트별 소유 기록 (.kit/state/install-manifest.json)
+  -> Adapter별 verify + audit (TOML과 JSON 같은 규칙) -> 보고서
+```
+
+- `--agent both`는 두 Adapter의 계획을 합쳐 한 트랜잭션으로 쓴다. 한쪽이 실패하면 둘 다 되돌린다.
+- `update`와 `uninstall`은 `lifecycle.py`가 계획한다. 소유 기록의 해시와 지금 내용이 같은 것만 바꾸거나 지운다.
+
+## 3. Adapter
+
+| Adapter | 정책 파일 | 스킬 | MCP | 그 밖 |
+|---|---|---|---|---|
+| `codex` (project) | `AGENTS.md` 구간 | `.agents/skills/` | `.codex/config.toml` 구간 | 훅 `.codex/hooks.json` |
+| `claude` (project) | `CLAUDE.md` 구간 | `.claude/skills/` | `.mcp.json`의 키트 소유 키 | 훅·플러그인 `.claude/settings.json`, 서브에이전트 `.claude/agents/` |
+| `user` (`--scope user`) | `~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md` 구간(이 PC에서 capture한 지침) | `~/.codex/skills/`, `~/.claude/skills/` | `~/.codex/config.toml` 구간. Claude는 `claude mcp add` 명령 출력 | OMX(Codex) |
+
+- Adapter는 "어디에 무엇을"만 안다. 쓰기, 백업, 되돌리기는 공통 실행기(`transaction.py`, `register.py`)가 맡는다. 그래서 에이전트를 추가해도 실행기는 바뀌지 않는다.
+- 설정 파일 쓰기는 `writers/`의 세 방식뿐이다: `markdown_block`(마커 구간), `toml_block`(마커 구간), `json_keys`(JSON 포인터로 고른 키만).
+
+**새 에이전트 추가:**
+1. `kit/adapters/`에 Adapter를 만들고 `registry.py`에 등록한다.
+2. `catalog/*.json`의 `agents`에 이름을 더한다.
+3. 위 표와 `docs/v2/02_COMPATIBILITY_MATRIX.md`에 열을 더한다. 경로는 공식 문서로 확인한다.
+4. `tests/adapters/`와 골든 테스트를 더한다.
+
+## 4. 데이터
+
+| 파일 | 내용 | 모듈 |
+|---|---|---|
+| `profiles/*.json`, `profiles/packs/*.json` | 프로필과 팩(스키마 2) | `profile_resolver.py` |
+| `catalog/skills.json` | 스킬마다 위치, 출처, 에이전트, 팩, 정책 | `catalog.py` |
+| `catalog/mcp.json`, `plugins.json`, `manual.json` | MCP 서버, 플러그인, 수동 도구(위험도, 기본 꺼짐 여부) | `mcp_catalog.py` |
+| `sources.lock.json` | 외부 파일의 고정 커밋과 sha256 | `sources.py` |
+| `user/` | 이 PC에서 capture한 개인 전역 설정 스냅숏 | `capture.py`, `userscope.py` |
+| `<target>/.kit/state/install-manifest.json` | 에이전트별 소유 항목(파일, 구간, JSON 키)과 해시 | `manifest.py` |
+| `<target>/.kit/work/*` | Task, 추적, 반례, 보고서, HANDOFF, WIP | `tasks.py`, `trace.py`, `counterexamples.py`, `recover.py` |
+
+## 5. 모듈 (v2에서 더해진 것)
+
+| 무리 | 모듈 |
+|---|---|
+| 명령 | `commands.py`(설치 계열과 분기), `task_cli.py`, `trace_cli.py`, `evidence_cli.py`, `ce_cli.py`, `recover_cli.py`, `source_cli.py` |
+| 설치 | `adapters/`, `writers/`, `profile_resolver.py`, `catalog.py`, `policy_render.py`, `subagents.py`, `transaction.py`, `manifest.py`, `lifecycle.py`, `userscope.py`, `credentials.py` |
+| MCP·플러그인 | `mcp_catalog.py`, `mcpjson.py`, `mcpconfig.py`, `audit.py`, `plugin_install.py` |
+| 외부 스킬 | `sources.py`, `source_add.py`, `github_fetch.py`(키트의 유일한 네트워크 코드), `source_scan.py`, `skill_check.py` |
+| 개인 설정 | `capture.py`, `secrets_scan.py` |
+| HITL | `tasks.py`, `trace.py`, `junit.py`, `evidence.py`, `counterexamples.py`, `recover.py`, `approval_hooks.py`(훅 설치), `shared/hooks/kit_approval.py`(훅 본체) |
+
+모두 Python 3.9 표준 라이브러리만 쓴다.
+
+# 2부. v1 설치기 (명령 없는 호출)
+
+아래는 v1 문서 그대로다. 이 경로의 결과는 v1과 바이트 단위로 같아야 하고, `tests/golden/`이 이를 확인한다.
+
 ## 왜 `kit/`인가
 
 지시서는 `scripts/*.py`를 가정했지만 이 저장소는 `kit/` 패키지를 쓴다. import와 테스트가 단순해지기 때문이다. 대응은 1:1이다.

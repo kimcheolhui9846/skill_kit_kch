@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "note": "What `kit capture` may copy from this PC into user/ (ADR-019, 04_DESIGN §3.8). Anything not listed is never read into the repo. Home paths become ${HOME}; env and header values become ${ENV:NAME}. A final secret scan stops the whole capture on any hit.",
+  "codex": {
+    "policy": {
+      "from": "AGENTS.md",
+      "to": "user/codex/AGENTS.block.md",
+      "mode": "sections",
+      "sections_exclude": ["Project Workspace Registry", "Project:*"]
+    },
+    "toml_tables": ["features", "plugins.*"],
+    "toml_tables_exclude": [
+      "plugins.\"computer-use@openai-bundled\"",
+      "plugins.\"unified-computer-use@openai-bundled\""
+    ],
+    "mcp_names": true,
+    "inventory": ["skills", "prompts", "agents"],
+    "inventory_exclude": [".system"],
+    "copy": {
+      "note": "Q4 (reviewer 2026-11-06): copied as the user's own into user/codex/own/. Origin: Yeachan-Heo/oh-my-codex (MIT, third_party/Yeachan-Heo-oh-my-codex/LICENSE), removed upstream in b6b9141eb678 (2026-08-12).",
+      "skills": ["prometheus-strict"],
+      "prompts": [
+        "prometheus-strict-metis.md",
+        "prometheus-strict-momus.md",
+        "prometheus-strict-oracle.md",
+        "scholastic.md",
+        "sisyphus-lite.md"
+      ]
+    }
+  },
+  "claude": {
+    "policy": {
+      "from": "CLAUDE.md",
+      "to": "user/claude/CLAUDE.block.md",
+      "mode": "whole"
+    },
+    "settings_pointers": ["/enabledPlugins", "/extraKnownMarketplaces", "/attribution", "/model"],
+    "mcp_names": true
+  }
+}

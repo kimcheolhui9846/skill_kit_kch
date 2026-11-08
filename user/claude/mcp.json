@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "servers": [
+    {
+      "name": "context7",
+      "transport": "http"
+    },
+    {
+      "name": "playwright",
+      "transport": "stdio"
+    }
+  ]
+}

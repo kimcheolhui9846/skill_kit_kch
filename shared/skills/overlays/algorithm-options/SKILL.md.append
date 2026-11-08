@@ -1,0 +1,40 @@
+
+## Kit additions: decision review before code
+
+Before step 6 (waiting for the choice), check the recommendation against these eight items
+(REQ-ALGO-001). Selection belongs here; speeding up code that already works belongs to
+`algorithm-optimizer`, measuring it to `benchmark`.
+
+1. **Problem and objective.** What exactly is computed or optimised: exact answer, best score,
+   or good enough within a budget. Write the objective function when there is one.
+2. **Constraints.** Input sizes, value ranges, time and memory limits, allowed language and
+   libraries, online or offline input. A missing limit is an ASSUMPTION.
+3. **Reason for the choice.** Why this candidate and not the others, tied to items 1 and 2.
+   "It is the standard one" is not a reason.
+4. **Time and space complexity** of the recommendation, with the operation count at the
+   largest allowed input (n = ..., about ... operations, about ... MB).
+5. **Two alternatives or more**, compared in the step 4 table. The brute force counts as one.
+6. **Expected failure conditions.** Inputs or situations where it breaks or slows down: worst
+   cases, degenerate input (all equal, sorted, empty), recursion depth, float precision,
+   overflow in fixed-width languages, hash collisions.
+7. **How correctness will be checked.** Normally: compare with the brute force on many small
+   inputs (`counterexample-hunter`), plus hand-worked edge cases. Say what is checked and how.
+8. **Trade-offs of any optimisation.** What a faster or leaner variant costs: code size, risk
+   of bugs, readability, precision, memory.
+
+Report the review with this template, after the step 4 table:
+
+```markdown
+### Algorithm decision review
+- Problem / objective:
+- Constraints (and ASSUMPTIONs):
+- Recommendation and why:
+- Complexity at the largest input:
+- Alternatives compared: (see table)
+- Expected failure conditions:
+- Correctness check:
+- Optimisation trade-offs:
+- Open question for the user: (or "none")
+```
+
+An item you cannot fill is a reason to ask the user, not to guess.
