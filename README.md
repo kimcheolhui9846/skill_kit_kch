@@ -2,13 +2,18 @@
 
 > **Claude Code 사전 개발 전용 / 시험 중 사용 불가.** 이 저장소는 시험 전에 Claude Code로 개발했다. 시험 중에는 운영 환경이 제공하는 에이전트만 사용한다. 키트는 에이전트가 읽을 정책 파일과 Skill 파일을 작업 공간에 배치할 뿐이며, 외부 모델을 호출하지 않는다. `--offline`이면 네트워크도 쓰지 않는다.
 
-작업 공간에 **Codex**와 **Claude Code**용 정책 파일, Skill, MCP 설정을 안전하게 설치한다. 설치 결과는 READY / PARTIAL / BLOCKED로 보고한다. 사람이 Task마다 승인하는 작업 흐름(HITL)도 함께 제공한다.
+작업 공간에 **Codex**와 **Claude Code**용 정책 파일, Skill, MCP 설정을 안전하게 설치한다. 결과는 READY / PARTIAL / BLOCKED로 보고한다. 사람이 Task마다 승인하는 작업 흐름(HITL)도 함께 제공한다.
 
 - **두 에이전트:** `--agent codex`, `--agent claude`, `--agent both`.
-- **수명 주기:** 설치, 미리 보기(`plan`), 검증, 업데이트, 제거, 백업 복원, 진단.
-- **안전 장치:** 사용자 파일은 덮어쓰지 않는다. 대상 밖에는 쓰지 않는다. MCP와 플러그인은 카탈로그에서 고정 버전만, 기본은 꺼져 있다. 네트워크는 확인을 받은 뒤에만 쓴다.
+- **수명 주기:** 미리 보기(`plan`), 설치, 검증, 업데이트, 제거, 백업 복원, 진단.
+- **고르는 설치:** 프로필 8개와 팩 9개를 조합한다. 외부 스킬 팩은 고를 때만 설치된다.
+- **안전 장치:**
+  - 사용자 파일은 덮어쓰지 않고, 대상 밖에는 쓰지 않는다.
+  - MCP 설정 감사를 쓰기 **전에** 한다. 막히면 아무것도 쓰지 않는다.
+  - MCP·플러그인은 카탈로그의 고정 버전만 쓰고, 기본은 꺼져 있다.
+  - 네트워크는 확인을 받은 뒤에만 쓴다.
 - **HITL:** Task 상태 기계와 승인 기록, 요구사항 추적, JUnit 기반 테스트 보고, 반례 기록, 세션 복구.
-- **기존 사용법 유지:** 명령 없이 부르는 v1 사용법(`bootstrap.sh`, `bootstrap.ps1 --profile python` 등)은 v1과 똑같이 동작한다.
+- **기존 사용법 유지:** 명령 없이 부르는 v1 사용법(`bootstrap.sh`, `bootstrap.ps1 --profile python` 등)은 v1과 똑같이 동작한다. 시험 당일 안내는 아래 "기존 사용자 안내"에 있다.
 
 ## 빠른 시작
 
@@ -18,7 +23,7 @@
 git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch
 ```
 
-**미검증:** v2는 아직 `main`에 병합되지 않아서, 이 clone 명령으로는 v1을 받는다. 병합 전에는 `feat/v2-multi-agent` 브랜치를 받는다. clone 명령 자체는 v1에서 실행해 확인했다.
+이 clone 명령은 네트워크가 필요해서 자동 문서 명령 기록에는 들어 있지 않다(미검증 목록). 대신 v2를 `main`에 병합한 뒤(2026-11-09) 직접 clone해서 `install --agent both`와 `verify`가 READY인 것을 확인했다.
 
 ### Codex
 
@@ -50,8 +55,8 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 **설치 뒤 확인:**
 1. 출력 끝의 `Status:`가 `READY`인지 본다. 예시: `docs/examples/v2-install-both.log`.
 2. 에이전트를 **설치한 작업 폴더에서** 새로 연다.
-3. Codex는 `/skills`, Claude Code는 `/skills`로 키트 Skill이 보이는지 확인한다.
-4. 보고서의 `Load UNVERIFIED`는 정상이다. 에이전트가 실제로 읽었는지는 에이전트 안에서만 볼 수 있다.
+3. Codex와 Claude Code 모두 `/skills`로 키트 Skill이 보이는지 확인한다.
+4. 보고서의 `Load UNVERIFIED`는 정상이다. 에이전트가 실제로 읽었는지는 에이전트 안에서만 볼 수 있다. 검토자 점검표는 `docs/v2/AGENT_LOAD_CHECK.md`다.
 
 ## 설치되는 것 (기본: 프로필 `core,hitl`, 정책 `standard`)
 
@@ -62,8 +67,49 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 | MCP(프로필이나 `--mcp`로 고른 것만) | `.codex/config.toml`의 키트 구간 | `.mcp.json`의 키트 소유 키 |
 | 기타 | 승인 훅(`--hooks`) | 승인 훅(`--hooks`), 반례용 서브에이전트, 플러그인 선언(`--plugin`) |
 
-- `--policy restricted`는 v1과 같은 Skill 11개만 설치한다(시험용).
-- 프로필별 Skill과 MCP·플러그인 목록은 `docs/CATALOG.md`에 있다. 프로필 목록은 `kit profiles list`로 본다.
+- `--policy restricted`는 v1과 같은 Skill 11개만 설치한다(시험용). 외부 스킬 팩은 restricted에서 설치되지 않는다.
+- 상태와 백업은 대상의 `.kit/`에 남는다. 제거(`uninstall`)는 키트가 쓴 것 중 내용이 그대로인 것만 지운다.
+
+## 프로필과 팩
+
+`--profile`에 쉼표로 여러 개를 준다. 예: `--profile core,motion`은 기본 Skill 17개에 motion 팩 16개를 더해 33개를 설치한다. 설치 전에 `kit profiles show core,motion`으로 실제로 들어갈 Skill을 볼 수 있다.
+
+| 종류 | 이름 | 내용 |
+|---|---|---|
+| 프로필 | `core` | 정책과 키트 Skill. 도구와 MCP 없음 |
+| 프로필 | `python`, `data`, `web`, `full` | v1 프로필. 도구 확인과 `sequential-thinking` MCP |
+| 프로필 | `hackathon`, `fullstack`, `ai-research` | 시간 제한 대회, 프런트·백엔드, 실험·연구용 조합 |
+| 팩 | `hitl`, `workflow`, `research`, `launch` | 승인 흐름, 계획 체인(superpowers), 실험·통계, 출시 전 점검 |
+| opt-in 팩 | `eng-patterns`, `lean`, `cloudflare`, `motion`, `planning-extras` | 외부 스킬 44개. standard 정책에서 고를 때만 설치된다 |
+
+- 외부 스킬은 커밋을 고정해 `third_party/`에 그대로 복사했고, 라이선스는 `THIRD_PARTY_NOTICES.md`에 있다.
+- 전역 설치나 토큰 저장을 지시하는 스킬 등 위험한 것은 팩에서 뺐다. 이유는 팩 설명(`kit profiles list`)과 `docs/v2/07_SOURCES_EVALUATION.md`에 있다.
+- 프로필별 Skill 전체 목록은 `docs/CATALOG.md`에 있다.
+
+## MCP, 플러그인, 수동 도구
+
+| 종류 | 고르는 법 | 키트가 하는 일 |
+|---|---|---|
+| MCP 서버(stdio) | 프로필 또는 `--mcp <이름>` | 고정 버전의 `npx`/`uvx` 명령을 작업 공간 설정에 쓴다. 위험도가 높거나 키가 필요한 서버는 기본으로 꺼져 있다 |
+| Claude 플러그인 | `--plugin <이름>` | 고정 커밋의 설치 명령을 선언·출력한다 |
+| 수동 도구 | `--manual <이름>` | 설치 단계, 위험, 되돌리는 법을 출력만 한다. 실행하지 않는다 |
+| 원격 MCP | 수동 안내만 | 카탈로그에 등록하지 않는다. 연결 명령은 사용자가 직접 실행한다 |
+
+- API 키 값은 설정 파일에 쓰지 않고 환경 변수 이름만 참조한다.
+- 전체 목록, 위험도, 고정 버전은 `docs/CATALOG.md`와 `sources.lock.json`에 있다.
+
+## 외부 스킬 추가
+
+GitHub 주소에서 Skill을 받아 키트에 더한다. 먼저 계획만 보여 주고, `--yes`를 줘야 쓴다.
+
+| 단계 | 명령 |
+|---|---|
+| 계획 보기 | `kit source add <owner/repo> [--path P]... [--pack K]` |
+| 반영 | 같은 명령에 `--yes` |
+| 확인 | `kit source check`, `kit source list` |
+
+- 고정 커밋으로 메모리에서 받고, 라이선스, 비밀값, 형식을 검사한다. 저장소의 코드는 실행하지 않는다.
+- 새 출처는 standard 정책에만 쓰인다. 자세한 절차는 `docs/v2/adr/ADR-021-source-add-pipeline.md`에 있다.
 
 ## 자주 쓰는 명령
 
@@ -74,6 +120,8 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 | 쓰기 전에 미리 보기 | `kit plan --agent both` |
 | 설치 | `kit install --agent both` |
 | 네트워크 없이 | `kit install --agent both --offline` |
+| 팩을 더해 설치 | `kit install --agent both --profile core,motion` |
+| 프로필·팩 보기 | `kit profiles list`, `kit profiles show <이름> --policy standard` |
 | 검증 | `kit verify --agent both` |
 | 키트 업데이트 뒤 다시 맞추기 | `kit update --agent both` |
 | 제거 | `kit uninstall --agent both` |
@@ -93,11 +141,11 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 | `docs/guides/CLAUDE_CODE.md` | Claude Code 전용: 프로젝트/사용자 설정, 플러그인, 훅 |
 | `docs/guides/HITL_WORKFLOW.md` | Task 승인, 테스트 보고, 추적, 반례, 세션 복구 |
 | `docs/guides/MIGRATION_V1_TO_V2.md` | v1과의 호환, 달라진 점, 옮기는 절차, 되돌리기 |
-| `docs/CATALOG.md` | Skill, MCP, 플러그인, 수동 도구 목록(생성 문서) |
+| `docs/CATALOG.md` | Skill, 팩, MCP, 플러그인, 수동 도구 목록(생성 문서) |
 | `docs/ARCHITECTURE.md`, `docs/SECURITY.md`, `docs/COMPATIBILITY.md` | 구조, 보안과 네트워크, 지원 환경 |
-| `docs/TEST_REPORT.md` | 테스트 결과 |
+| `docs/TEST_REPORT.md`, `docs/v2/FINAL_REPORT.md` | 테스트 결과와 최종 검증 보고서 |
 | `docs/examples/` | 실제 실행 로그(v1: `install.log` 등, v2: `v2-*.log`) |
-| `docs/v2/` | v2 설계, ADR, 회귀 기록, 검토자 점검표 |
+| `docs/v2/` | v2 설계, ADR, 출처 평가, 회귀 기록, 검토자 점검표 |
 
 # 기존 사용자 안내 (v1 사용법)
 
@@ -284,7 +332,7 @@ Python 3.9+가 없으면 `bootstrap.sh`/`bootstrap.ps1`이 `AGENTS.md`와 Skill�
 
 ```bash
 uv sync
-uv run pytest -q
+uv run pytest -q                             # 약 7분
 uv run ruff check . && uv run ruff format --check .
 uv run python devtools/make_examples.py      # docs/examples/*.log 재생성
 uv run python devtools/make_catalog_doc.py   # docs/CATALOG.md 재생성
@@ -296,6 +344,6 @@ shellcheck bootstrap.sh
 
 - [ ] `LICENSE`(MIT) 저자·연도 확인
 - [x] README의 저장소 주소를 실제 주소로 교체
-- [ ] 시험 전에 PR을 `main`에 병합 (한 줄 설치는 `main`을 받는다)
+- [x] 시험 전에 PR을 `main`에 병합 (한 줄 설치는 `main`을 받는다). PR #10, 2026-11-09
 - [ ] 저장소에 토큰·개인 경로·시험 관련 비공개 자료가 없는지 확인
 - [ ] `docs/TEST_REPORT.md`가 최신인지 확인

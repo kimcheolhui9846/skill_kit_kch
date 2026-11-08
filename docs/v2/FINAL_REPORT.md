@@ -253,7 +253,7 @@ PASS 81, 문서 3
 | user 범위 실제 적용(`install --scope user --yes`, M-06) | NOT RUN | 실제 홈에 쓰는 동작이라 검토자가 한다. dry-run과 비대화형 거부(64)는 실행했다 | `install --scope user --dry-run`의 diff를 검토한 뒤 적용 |
 | `--plugin` 실제 설치 | NOT RUN(이번) | 네트워크와 사용자 설정이 필요하다. P4-T5에서 격리된 설정 폴더로 확인한 기록이 있다 | `docs/guides/CLAUDE_CODE.md` |
 | 실제 `npx` MCP 핸드셰이크 | NOT RUN(v2) | 네트워크 동작이다. 테스트는 가짜 서버만 쓴다 | `kit install --profile python`을 네트워크와 함께 실행 |
-| `git clone`으로 받은 v2 | NOT RUN | `main`에 병합하기 전이다 | 병합한 뒤 README의 명령 |
+| `git clone`으로 받은 v2 | 수동 확인(2026-11-09) | PR #10 병합 뒤 `main`을 새로 clone해서 `install --agent both`·`verify` READY, Skill 17개씩, `source check` READY를 확인했다. 네트워크 명령이라 자동 문서 명령 기록에는 없다 | README의 명령 |
 | 2026-11-08 이전 키트로 v1 위에 standard를 설치한 작업 공간 | 자동 정리 불가 | 남은 v1 파일이 기록 밖에 있다 | `MIGRATION_V1_TO_V2.md` 3절대로 직접 지운다 |
 
 ## 8. 보안·호환성 주의사항
@@ -325,4 +325,4 @@ PASS 81, 문서 3
 | 2 | 검토자 수동 확인: `AGENT_LOAD_CHECK.md`, `WINDOWS_MANUAL_CHECK.md`, M-06 | - | 7절의 NOT RUN 해소 |
 | 3 | 결정 대기 항목 정리: 끝남. 감사 순서는 B-3에서 쓰기 전으로 바꿈(새 경로만), `hitl` 팩 소속은 ADR-008 개정, `profiles show` 출력은 B-1에서 해결 | - | 8절 |
 | 4 | `docs/EXTENDING.md` (새 에이전트 Adapter 추가 안내) | L | 06_TEST_PLAN DOC-001 행 |
-| 5 | 비밀값 감사 → 커밋(후속 A~B-3) → PR → `main` 병합 뒤 `git clone` 설치 확인 | - | 7절. 커밋과 푸시는 요청이 있을 때만 한다 |
+| 5 | 비밀값 감사 → 커밋(후속 A~B-3) → PR → `main` 병합 뒤 `git clone` 설치 확인: 끝남(2026-11-09, PR #10) | - | 7절 |
