@@ -1,4 +1,12 @@
-
 ## Approval
 - End each S or C task with a report: what changed, the tests run and their results (NOT RUN with a reason), risks, and the decisions needed.
 - Only an explicit approval of that task counts; a conditional or ambiguous reply is not approval, so ask.
+- Stop and ask before going on, even mid-task, when the work would:
+  - change an existing interface, option, exit code, output format, or where files are placed;
+  - move, rename, or delete existing files;
+  - change what an existing test expects;
+  - add a dependency, or outside code, a skill, an MCP server, or a plugin;
+  - add network use or change it;
+  - change the meaning of a policy file;
+  - depart from an approved design;
+  - or when the same failure survives two fixes without a confirmed cause.

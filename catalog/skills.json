@@ -15,6 +15,10 @@
       "policies": [
         "restricted",
         "standard"
+      ],
+      "overlay": "shared/skills/overlays/task-router",
+      "overlay_policies": [
+        "standard"
       ]
     },
     {
@@ -140,6 +144,10 @@
       "policies": [
         "restricted",
         "standard"
+      ],
+      "overlay": "shared/skills/overlays/counterexample-hunter",
+      "overlay_policies": [
+        "standard"
       ]
     },
     {
@@ -155,6 +163,10 @@
       ],
       "policies": [
         "restricted",
+        "standard"
+      ],
+      "overlay": "shared/skills/overlays/algorithm-options",
+      "overlay_policies": [
         "standard"
       ]
     },
@@ -469,6 +481,23 @@
       }
     },
     {
+      "name": "launch-compliance-check",
+      "location": "shared/skills/launch-compliance-check",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "web",
+        "fullstack",
+        "launch"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
       "name": "add-skill-source",
       "location": "shared/skills/add-skill-source",
       "origin": "kit",
@@ -484,6 +513,36 @@
     {
       "name": "task-approval",
       "location": "shared/skills/task-approval",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "session-recovery",
+      "location": "shared/skills/session-recovery",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
+      "name": "data-quality-validator",
+      "location": "shared/skills/data-quality-validator",
       "origin": "kit",
       "agents": [
         "codex",

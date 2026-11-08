@@ -14,7 +14,7 @@ from kit.fsops import State
 from kit.model import CONFLICT, FAIL, PASS, Outcome, UsageError
 from kit.profiles import Profile, load_profile
 from kit.register import apply_changes
-from tests.conftest import tree_digest
+from tests.conftest import TOML_PASS, tree_digest
 
 SEQ_PTR = "/mcpServers/sequential-thinking"
 
@@ -107,7 +107,9 @@ def test_codex_files_untouched_by_claude_install(kit_root, workspace):
     replan = CodexAdapter().plan(workspace, kit_root, profile, State.load(workspace), True)
     assert {c.outcome for c in replan} == {Outcome.UNCHANGED}
     items = CodexAdapter().verify(workspace, kit_root, profile, replan, True, True, True)
-    assert {i.verified for i in items} == {PASS}
+    # Python 3.9/3.10: the TOML checks say "... needs Python 3.11+" (UNVERIFIED by design)
+    assert {i.verified for i in items if "3.11+" not in i.detail} == {PASS}
+    assert {i.verified for i in items if "3.11+" in i.detail} <= {TOML_PASS}
 
 
 def test_mcp_outside_allowlist_is_rejected(kit_root, workspace):

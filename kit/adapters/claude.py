@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 from typing import List, Optional
 
-from .. import mcp_catalog, plugin_install
+from .. import approval_hooks, mcp_catalog, plugin_install, subagents
 from ..audit import audit_mcp_json
 from ..fsops import State
 from ..mcpjson import plan_mcp_json, plan_owned_keys, verify_mcp_json, verify_owned_keys
@@ -77,6 +77,11 @@ def declared_plugins(target: Path) -> List[str]:
     return sorted(k for k, v in enabled.items() if v is True and k.split("@")[-1] in known)
 
 
+def _subagents(profile: Profile, skill_source) -> List[str]:
+    policy = getattr(skill_source, "policy", None)
+    return subagents.wanted(profile.skills, policy)
+
+
 class ClaudeAdapter:
     name = "claude"
     display_name = "Claude Code"
@@ -97,6 +102,7 @@ class ClaudeAdapter:
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[FileChange]:
         changes = plan_changes(
             target,
@@ -112,11 +118,18 @@ class ClaudeAdapter:
         if include_mcp and profile.mcp:
             changes.append(plan_mcp_json(target, kit_root, profile.mcp, state))
         keys = _plugin_keys(kit_root, plugins)
+        hook_keys = approval_hooks.keys(self.name) if hooks else {}
+        if keys or hook_keys:  # one change per file: plugin and hook keys share settings.json
+            owner = PLUGIN_OWNER if keys else approval_hooks.OWNER
+            merged = {**keys, **hook_keys}
+            changes.append(plan_owned_keys(target, SETTINGS_REL, owner, merged, state))
         if keys:
-            changes.append(plan_owned_keys(target, SETTINGS_REL, PLUGIN_OWNER, keys, state))
             data = _marketplace_file(kit_root, plugins)
             rel = plugin_install.MARKETPLACE_REL
             changes.append(plan_file(target, rel, PLUGIN_OWNER, data, state))
+        if hooks and approval_hooks.conflict_in(changes, SETTINGS_REL) is None:
+            changes.append(approval_hooks.plan_script(target, kit_root, self.name, state))
+        changes += subagents.plan(target, kit_root, _subagents(profile, skill_source), state)
         return changes
 
     def verify(
@@ -131,6 +144,7 @@ class ClaudeAdapter:
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[ItemResult]:
         items = verify_target(
             target,
@@ -149,13 +163,18 @@ class ClaudeAdapter:
             conflict = _mcp_conflict(changes)
             items.append(verify_mcp_json(target, kit_root, profile.mcp, conflict))
         keys = _plugin_keys(kit_root, plugins)
+        if hooks:
+            items += approval_hooks.verify(target, kit_root, self.name, changes)
         if keys:
-            conflict = _mcp_conflict(changes, PLUGIN_OWNER)
+            conflict = approval_hooks.conflict_in(changes, SETTINGS_REL) or _mcp_conflict(
+                changes, PLUGIN_OWNER
+            )
             items.append(
                 verify_owned_keys(target, SETTINGS_REL, PLUGIN_OWNER, keys, conflict, PLUGIN_NOTE)
             )
             items.append(_verify_marketplace(target, kit_root, plugins))
-        return items
+        names = _subagents(profile, skill_source)
+        return items + subagents.verify(target, kit_root, names, changes)
 
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None) -> ItemResult:
         return audit_mcp_json(target, kit_root, allowlist)
@@ -174,4 +193,4 @@ class ClaudeAdapter:
                 f"Trust this folder in Claude Code and check /plugin for {plugin}. "
                 f"Teammates who clone the project install it with /plugin install {plugin}."
             )
-        return steps
+        return steps + approval_hooks.manual_step(self.name, target)

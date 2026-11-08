@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from kit import userscope
+from kit.adapters import user as user_adapters
 from kit.model import EXIT_BLOCKED, EXIT_PARTIAL, EXIT_READY, EXIT_TARGET, EXIT_USAGE
 from kit.writers.markdown_block import extract_block
 from tests.conftest import tree_digest
@@ -15,7 +16,9 @@ from tests.userscope.pc_fixture import USER, kit_run, make_pc, put
 
 OMX_SKILLS = 29
 OMX_PROMPTS = 32
-STANDARD_CORE = 15  # +task-approval (P5-T2)
+STANDARD_CORE = (
+    17  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7)
+)
 CODEX_BLOCK = "## Rules\n- Work from `${HOME}\\work`.\n"
 CLAUDE_BLOCK = "# Global\n- Commit as the user.\n"
 TABLES = '[features]\ngoals = true\n\n[plugins."browser@openai-bundled"]\nenabled = true\n'
@@ -279,6 +282,25 @@ def test_captured_table_set_the_same_way_is_left_out(ready, home, workspace):
     assert "already set the same way" in items(out, "codex")[".codex/config.toml"]["detail"]
 
 
+def test_captured_table_set_the_same_way_without_tomllib(ready, home, workspace, monkeypatch):
+    """P6-T4 (found on a real Python 3.9.25): the same lines are the same values, so no
+    tomllib is needed to leave the table out."""
+    monkeypatch.setattr(user_adapters, "parse_toml", lambda text: (None, None, ""))
+    put(home, ".codex/config.toml", "[features]\ngoals = true\n")
+    code, out = user(ready, workspace, "install", "--agent", "codex", "--yes", "--json")
+    assert code == EXIT_READY, out
+    assert "already set the same way" in items(out, "codex")[".codex/config.toml"]["detail"]
+
+
+def test_a_captured_table_that_cannot_be_compared_says_why(ready, home, workspace, monkeypatch):
+    monkeypatch.setattr(user_adapters, "parse_toml", lambda text: (None, None, ""))
+    put(home, ".codex/config.toml", "[features]\ngoals = false\n")
+    code, out = user(ready, workspace, "install", "--agent", "codex", "--yes", "--json")
+    detail = items(out, "codex")[".codex/config.toml"]["detail"]
+    assert "comparing the values needs Python 3.11+ (tomllib)" in detail
+    assert (home / ".codex/config.toml").read_text(encoding="utf-8").count("[features]") == 1
+
+
 def test_large_agents_md_warns(ready, home, workspace):
     """TC-USR-06."""
     put(home, ".codex/AGENTS.md", "# Mine\n" + "x" * (29 * 1024) + "\n")
@@ -344,3 +366,17 @@ def test_catalog_server_defined_outside_the_block_is_a_conflict(ready, home, wor
     item = items(out, "codex")[".codex/config.toml"]
     assert item["verified"] == "CONFLICT" and "[mcp_servers.playwright]" in item["detail"]
     assert (home / ".codex/config.toml").read_text(encoding="utf-8") == mine
+
+
+def test_a_key_dropped_from_the_snapshot_is_removed_on_reinstall(ready, home, workspace):
+    """Follow-up 3: install over an earlier user install removes what the snapshot dropped."""
+    code, out = user(ready, workspace, "install", "--agent", "claude", "--yes")
+    assert code == EXIT_READY, out
+    assert json.loads((home / ".claude/settings.json").read_text(encoding="utf-8"))["model"]
+    smaller = {k: v for k, v in KEYS.items() if k != "/model"}
+    put(ready, "user/claude/settings.json", json.dumps({"schema": 1, "keys": smaller}))
+    code, out = user(ready, workspace, "install", "--agent", "claude", "--yes")
+    assert code == EXIT_READY, out
+    settings = json.loads((home / ".claude/settings.json").read_text(encoding="utf-8"))
+    assert "model" not in settings
+    assert settings["theme"] == "dark" and settings["attribution"] == {"commit": ""}

@@ -69,6 +69,21 @@ def _owned_items(changes: List[FileChange], owner: str, label: str, what: str) -
     return ItemResult(label, False, True, True, PASS, f"{len(mine)} {what}")
 
 
+def _table_lines(text: str) -> List[str]:
+    return [s for s in (line.strip() for line in text.splitlines()) if s and not s.startswith("#")]
+
+
+def _same_table(outside: str, captured: str) -> Optional[bool]:
+    """True: same values. False: different. None: no tomllib (Python 3.9/3.10) and the text
+    differs, so the values cannot be compared (P6-T4: was reported as "set differently")."""
+    a, b = parse_toml(outside), parse_toml(captured)
+    if a[0] and b[0]:
+        return a[1] == b[1]
+    if _table_lines(outside) == _table_lines(captured):
+        return True  # the same lines are the same values
+    return None if a[0] is None else False
+
+
 def _server_of(table: str) -> Optional[str]:
     """'mcp_servers.x' or 'mcp_servers.x.env' -> 'x'."""
     parts = userscope.split_name(table)
@@ -124,11 +139,19 @@ class CodexUserAdapter(_UserBase):
                 if name is None:
                     continue
                 if name in outside_tables:
-                    a = parse_toml(outside_tables[name])
-                    b = parse_toml(text)
-                    if a[0] and b[0] and a[1] == b[1]:
+                    same = _same_table(outside_tables[name], text)
+                    if same:
                         notes.append(f"[{name}] already set the same way")
                         continue
+                    if same is None:
+                        return (
+                            "",
+                            notes,
+                            (
+                                f"[{name}] is already set outside the kit block with other text; "
+                                "comparing the values needs Python 3.11+ (tomllib)"
+                            ),
+                        )
                     return "", notes, f"[{name}] is already set differently outside the kit block"
                 keep.append(text.strip())
             if keep:
@@ -175,6 +198,7 @@ class CodexUserAdapter(_UserBase):
         policy_body=None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[FileChange]:
         changes: List[FileChange] = []
         body = userscope.policy_block(kit_root, "codex", self.home)
@@ -223,6 +247,7 @@ class CodexUserAdapter(_UserBase):
         policy_body=None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ):
         conflicts = {
             c.owner: f"{c.rel}: {c.detail}" for c in changes if c.outcome == Outcome.CONFLICT
@@ -364,6 +389,7 @@ class ClaudeUserAdapter(_UserBase):
         policy_body=None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[FileChange]:
         changes: List[FileChange] = []
         body = userscope.policy_block(kit_root, "claude", self.home)
@@ -419,6 +445,7 @@ class ClaudeUserAdapter(_UserBase):
         policy_body=None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ):
         conflicts = {
             c.owner: f"{c.rel}: {c.detail}" for c in changes if c.outcome == Outcome.CONFLICT

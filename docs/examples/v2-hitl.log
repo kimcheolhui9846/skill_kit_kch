@@ -1,0 +1,81 @@
+$ kit req add REQ-001 --text parse a CSV line
+Added:        REQ-001 (must) r1 parse a CSV line
+Status:       DONE
+(exit 0)
+
+$ kit task add T-1 --title csv parser --requires REQ-001
+Added:        T-1 csv parser (grade S)
+Status:       DONE
+(exit 0)
+
+$ kit task add T-2 --title report --depends-on T-1
+Added:        T-2 report (grade S)
+Status:       DONE
+(exit 0)
+
+$ kit task start T-1
+Started:      T-1 -> IN_PROGRESS
+Status:       DONE
+(exit 0)
+
+$ kit task submit T-1
+Refused:      cannot submit T-1: report .kit/work/reports/T-1.md does not exist (kit task report T-1 makes one)
+Status:       BLOCKED
+(exit 2)
+
+$ kit task report T-1
+Report:       .kit/work/reports/T-1.md (00_PROMPT 5.6 template; fill it in, then submit)
+Status:       DONE
+(exit 0)
+
+$ kit task submit T-1
+Submitted:    T-1 with .kit/work/reports/T-1.md
+Next:         wait for the reviewer's approval
+Status:       DONE
+(exit 0)
+
+$ kit task start T-2
+Refused:      cannot start T-2: T-1 is SUBMITTED, not APPROVED
+Status:       BLOCKED
+(exit 2)
+
+$ kit task approve T-1 --by agent-recorded --evidence 승인
+Approved:     T-1 by agent-recorded (report sha256 b5fe6e1c828e)
+Handoff:      .kit/work/HANDOFF.md updated (approved state only)
+Status:       DONE
+(exit 0)
+
+$ kit task status
+Tasks:
+  T-1          APPROVED           by agent-recorded   csv parser
+  T-2          TODO                                   report
+Can start:    T-2
+Status:       READY
+(exit 0)
+
+$ kit task start T-2
+Started:      T-2 -> IN_PROGRESS
+Status:       DONE
+(exit 0)
+
+$ kit recover save --note report layout half done
+Saved:        .kit/work/wip.json (temporary, not approved; task T-2)
+Status:       DONE
+(exit 0)
+
+$ kit recover
+Approved state (from .kit/work/tasks.json):
+  Current task:   T-2 IN_PROGRESS - report
+  Last approved:  T-1 at 2026-11-08T01:57:19+00:00 by agent-recorded - csv parser
+  Approved:       1: T-1
+  Changed since T-1 submit (no git commit, by files): 0
+  Last tests:     PASS 1 (approved report, section 4)
+  Next plan:
+    승인하시면 다음으로 <Task ID: 내용>을 진행합니다.
+  Can start:      none
+  Handoff:        .kit/work/HANDOFF.md (current)
+Temporary (not approved, .kit/work/wip.json, saved 2026-11-08T01:57:19+00:00):
+  Task:           T-2
+  Note:           report layout half done
+Status:       READY
+(exit 0)

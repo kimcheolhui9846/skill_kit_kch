@@ -46,7 +46,7 @@ argv[0]이 아래 서브커맨드 이름 중 하나  → 새 경로(kit/commands
 | `--yes` | 확인을 생략한다. 비대화형에서 네트워크·user 범위 작업에 필요(ADR-014) | 끔 |
 | `--no-mcp` | MCP 항목 제외 | 끔 |
 | `--mcp NAME` | `catalog/mcp.json`에서 기본으로 꺼진 서버를 켠다. 반복 가능. `--no-mcp`와 같이 쓰면 64. 목록만 있는 서버(버전 고정 없음)·모르는 이름·정책 밖·어느 에이전트에도 맞지 않는 이름은 64(P4-T5) | 없음 |
-| `--hooks` | 승인 기록 훅 등록(ADR-011, opt-in) | 끔 |
+| `--hooks` | 승인 기록 훅 등록(ADR-011, opt-in). **P5-T2b: project 범위만**(`--scope user`와 같이 쓰면 64). 에이전트마다 `.claude/hooks/kit_approval.py`·`.codex/hooks/kit_approval.py`를 쓰고, `.claude/settings.json`·`.codex/hooks.json`의 `/hooks/UserPromptSubmit`·`/hooks/PreToolUse`를 키트 소유 키로 등록한다. 그 이벤트에 사용자 훅이 이미 있으면 CONFLICT이고 스크립트도 쓰지 않는다. 선택은 매니페스트 `opt_in.hooks`에 남아 verify·update가 이어 받는다 | 끔 |
 | `--plugin ID` | 고위험 플러그인 선언을 명시적으로 켠다. 반복 가능(ADR-010). P4-T5: `catalog/plugins.json`의 이름이고, 항목의 `agents`에 든 에이전트에만 간다. Claude: `.claude/settings.json`에 선언하고, 네트워크 허용(`--yes` 또는 확인) 시 `claude` CLI로 이 PC에 설치한다(`~/.claude/plugins/`, `.claude/settings.local.json`에 씀). Codex: `.agents/plugins/marketplace.json`을 쓰고, 네트워크 허용 시 `codex` CLI로 설치한다(`~/.codex/plugins/`, `~/.codex/config.toml`에 씀, 모든 프로젝트에서 켜짐). `uninstall`이 각 CLI로 되돌린다 | 없음 |
 | `--verbose` | 파일별 세부 표시 | 끔 |
 | `--json` | 기계가 읽는 결과를 stdout에 출력한다(보고서 대신) | 끔 |
@@ -133,9 +133,9 @@ kit capture [--agent codex|claude|both] [--write] [--json]
 
 ```text
 kit task    add | list | start | submit | approve | request-changes | status
-kit req     add | list | impact <REQ-ID>
-kit trace   check
-kit report  tests --junit FILE [--out FILE]
+kit req     add | list | impact <REQ-ID>      (P5-T3: + edit, sync)
+kit trace   check                          (P5-T3: + link)
+kit report  tests --junit FILE [--out FILE]   (P5-T4: --junit 반복 가능)
 kit recover
 ```
 
@@ -160,7 +160,64 @@ kit task status [<ID>]
 - 종료 코드: 0 완료, 1 `status`에 경고(승인 뒤 보고서 변경·삭제), 2 규칙이 거부함(`Refused:` 뒤에 이유, `Status: BLOCKED`), 64 인수 오류, 65 `tasks.json`·`trace.json` 손상.
 - 2가 되는 경우: 선행 Task가 APPROVED가 아님, 다른 Task가 IN_PROGRESS, 상태가 맞지 않는 전이, 끝나지 않은 Subtask, 보고서 검사 실패, submit 뒤 바뀐 보고서, TTY 없는 human-cli, 다시 입력한 ID 불일치, 작업 공간 밖 보고서 경로.
 - 64가 되는 경우: `--by human-hook`(훅만 쓴다), human-cli에 `--quote`, agent-recorded에 `--quote` 없음, id·REQ·grade 형식.
+- **P5-T2b.** 승인 훅이 설치된 작업 공간에서는 `--by agent-recorded`가 2로 거부된다. 사용자가 프롬프트에 승인 단어만(`승인`, `승인합니다`, `approve`, `approved` 등, 선택적으로 Task ID) 입력하면 훅이 `by: human-hook`으로 기록한다. 다른 말이 섞이면 기록하지 않고 에이전트에게 확인하라고 알린다. Codex 훅이 남긴 승인은 `status`에 `(codex hook: guardrail only)`로 표시된다. 두 에이전트에서 실제로 확인했다(M-05, 2026-11-07).
 - 보고서 테스트 표: 요구사항 열에 must REQ가 있는 행이 하나 이상 있어야 한다. 실행하지 않은 테스트는 `NOT RUN: <이유>`로 쓴다. 이유 없는 `NOT RUN`은 거부된다.
+
+**P5-T3 구현(추적).** 모든 동작은 `--target DIR`과 `--json`을 받는다. 원문의 `add|list|impact`, `check`에 `edit`, `sync`, `link`를 더했다(검토자 결정 2026-11-07).
+
+```text
+kit req add <REQ-ID> --text T [--priority must|should|could] [--source S]
+kit req edit <REQ-ID> [--text T] [--priority P] [--status not-started|partial|implemented]
+kit req list
+kit req impact <REQ-ID>                 # 테스트마다 REVIEW(개정 뒤 미검토) 또는 ok
+kit req sync [--brief TASK_BRIEF.md]    # '## Requirements' 절에서 가져옴
+kit trace link <TEST-ID> --req <REQ-ID>... [--locator FILE::TEST] [--case normal|boundary|error|counterexample] [--kind unit|integration|counterexample] [--purpose P]
+kit trace check
+```
+
+- 종료 코드: 0 완료(`trace check`는 찾은 것 없음), 1 `trace check`가 무엇인가 찾음(`Status: GAPS`), 2 규칙이 거부함(`Refused:`, `Status: BLOCKED`), 64 인수 오류, 65 `trace.json`·brief 손상.
+- 2가 되는 경우: 이미 있는 REQ ID로 `req add`, 없는 REQ로 `req edit`·`trace link`, brief가 없음·작업 공간 밖·`## Requirements` 줄 없음·ID 중복·틀린 우선순위.
+- 64가 되는 경우: REQ·테스트 ID 형식, 빈 `--text`, 틀린 `--priority`·`--status`·`--case`·`--kind`, 아무 필드도 없는 `req edit`, `--req` 없는 `trace link`, `--locator` 없는 새 테스트, `req impact`의 없는 REQ.
+- `req edit`·`req sync`가 revision을 올리면 다시 볼 테스트를 `Review:` 줄로 보여 준다. `trace link`를 다시 하면 요구사항이 추가되고(기존 연결은 유지) 현재 revision으로 갱신된다. 주지 않은 `--case`·`--locator`는 그대로다. `--input`, `--expected`는 보고서 표의 Input/Condition, Expected 열이 된다(P5-T4).
+
+**P5-T4 구현(테스트 보고서).**
+
+```text
+kit report tests --junit FILE [--junit FILE]... [--out FILE] [--target DIR] [--json]
+```
+
+- `--junit`과 `--out`은 작업 공간(`--target`) 기준 경로다. 작업 공간 밖 JUnit은 읽을 수 있고 보고서에는 `~/…`나 절대경로로 적힌다.
+- `--out`이 없으면 Markdown만 표준 출력에 쓴다(리다이렉트용). `--out`이 있으면 `Report:`, `Tests:`, `Untracked:`, `Problem:`, `Status:` 줄을 쓴다. `--json`은 `totals`, `tests`, `requirements`, `untracked`, `sources`, `report`(없으면 `markdown`)를 낸다.
+- 종료 코드: 0 모든 추적 테스트가 PASS이고 모든 요구사항에 테스트가 있음, 1 그 밖(보고서는 씀), 2 JUnit 파일이 없거나 XML이 깨짐·DOCTYPE·루트가 testsuites/testsuite가 아님·이름 없는 testcase, `--out`이 작업 공간 밖·`.kit/` 안(`.kit/work/reports/` 제외)·입력 JUnit 파일·폴더(아무것도 쓰지 않음), 64 종류나 `--junit` 없음, 65 `trace.json` 손상.
+
+**P5-T5 구현(반례 기록, `kit ce`).** 원문 §4.4 목록에 없는 명령이다(검토자 결정 2026-11-07). 모든 동작은 `--target DIR`(작업 공간)과 `--json`을 받는다. 기록의 `target` 필드(검사 대상 함수)는 `--function`으로 준다.
+
+```text
+kit ce add CE-ID --function F --req REQ-ID... --category C --origin black-box|white-box
+           --assumption A --input I --would-catch W [--expected E] [--rationale R]
+kit ce list
+kit ce accept CE-ID
+kit ce reject CE-ID --reason R
+kit ce needs-spec CE-ID --question Q
+kit ce resolve CE-ID --expected E --quote "<검토자 발화 원문>"
+kit ce convert CE-ID --test TEST-ID
+kit ce result CE-ID --result R
+```
+
+- 종료 코드: 0 완료, 2 규칙이 거부함(같은 ID, trace.json에 없는 REQ, 허용되지 않은 전이, expected 없는 accept, NEEDS_SPEC의 accept·convert, 없는 테스트나 요구사항을 가리키지 않는 테스트로 convert, CONVERTED가 아닌 항목의 result), 64 인수 오류(ID·범주·origin·REQ 형식, 빠진 필수 값, 2000자 초과), 65 `counterexamples.json`·`trace.json` 손상.
+- `task submit`(P5-T2)은 C 등급 Task에서 Task 요구사항에 연결된 기록이 없거나(요구사항이 없는 Task는 기록이 하나도 없거나) PROPOSED가 남아 있으면 2로 거부한다. NEEDS_SPEC은 막지 않는다(보고서 8절로 묻는다).
+
+**P5-T7 구현(세션 복구).** 모든 형태가 `--target DIR`과 `--json`을 받는다(검토자 결정 2026-11-07).
+
+```text
+kit recover                                   승인 상태, 그 다음 임시(미승인) 상태
+kit recover save [--task ID] [--subtask ID] [--note T] [--command C] [--tests T] [--error E]...
+kit recover decide "TEXT" [--task ID]
+```
+
+- 종료 코드: 0 완료, 1 경고가 있는 복원(깨진 `wip.json`, 승인 뒤 바뀐 보고서, 스냅숏 없음, 2만 개 초과, 표식 없는 `.kit/work/HANDOFF.md`), 2 없는 `--task`, 64 인수 오류(`save`에 값 없음, `decide`에 내용 없음, `recover`에 인수), 65 `tasks.json` 손상.
+- `save`의 `--task`를 빼면 진행 중인 Task(IN_PROGRESS, 없으면 SUBMITTED, CHANGES_REQUESTED)를 쓴다.
+- `task submit`은 스냅숏을 남기고, `task approve`는 `.kit/work/HANDOFF.md`를 다시 쓰며 `Handoff:` 줄을 더 낸다. 다른 `task` 동작과 `recover`는 훅 승인이 HANDOFF에 아직 없으면 다시 쓴다.
 
 ### 4.5 기타
 

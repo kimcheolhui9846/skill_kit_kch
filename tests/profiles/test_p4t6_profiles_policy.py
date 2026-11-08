@@ -32,9 +32,12 @@ STANDARD_CORE = sorted(
         "receiving-code-review",
         "karpathy-guidelines",
         "task-approval",  # P5-T2
+        "data-quality-validator",  # P5-T6
+        "session-recovery",  # P5-T7
     }
 )
 WEB_DESIGN = ["emil-design-eng", "frontend-design", "web-design-guidelines"]
+LAUNCH = ["launch-compliance-check"]  # REQ-SKILL-001 (follow-up 4): web and fullstack, standard
 # U-40 research pack (K-Dense-AI/scientific-agent-skills, reviewer approval 2026-11-06)
 RESEARCH = [
     "experimental-design",
@@ -69,7 +72,7 @@ SNAPSHOT = {
 }
 # skill folders installed per (profile, policy), after the catalog (packs, replaces, policies)
 INSTALLED = {
-    ("fullstack", "standard"): sorted(STANDARD_CORE + WEB_DESIGN),
+    ("fullstack", "standard"): sorted(STANDARD_CORE + WEB_DESIGN + LAUNCH),
     ("fullstack", "restricted"): LEGACY_11,
     ("ai-research", "standard"): sorted(STANDARD_CORE + RESEARCH),
     ("ai-research", "restricted"): LEGACY_11,
@@ -243,6 +246,37 @@ def test_light_path_is_rendered(kit_root):
         text = standard(kit_root, agent)
         assert "\n## Light path\n" in text
         assert all(f"\n- {grade}: " in text for grade in ("L", "S", "C"))
+
+
+# 00_PROMPT 5.3: the nine triggers that stop a task for approval before it ends (REQ-HITL-004)
+MID_TASK_TRIGGERS = (
+    "change an existing interface, option, exit code, output format, or where files are placed",
+    "move, rename, or delete existing files",
+    "change what an existing test expects",
+    "add a dependency",
+    "outside code, a skill, an MCP server, or a plugin",
+    "add network use or change it",
+    "change the meaning of a policy file",
+    "depart from an approved design",
+    "the same failure survives two fixes",
+)
+
+
+def test_mid_task_approval_triggers_are_rendered_once_for_each_agent(kit_root):
+    """TC-HTL-04: the 5.3 list sits under Approval, once, in AGENTS.md and CLAUDE.md alike."""
+    sections = []
+    for agent in ("codex", "claude"):
+        text = standard(kit_root, agent)
+        approval = text[text.index("\n## Approval\n") :]
+        approval = approval[: approval.find("\n## ", 1)]
+        assert "Stop and ask before going on, even mid-task" in approval
+        for trigger in MID_TASK_TRIGGERS:
+            assert text.count(trigger) == 1, trigger
+            assert trigger in approval, trigger
+        sections.append(approval)
+    assert sections[0] == sections[1]
+    restricted = policy_render.render(kit_root, "restricted", registry.get("codex"))
+    assert "mid-task" not in restricted
 
 
 def test_restricted_render_is_the_legacy_text_for_every_agent(kit_root):

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="5" failures="2">
+	<testsuite name="example.com/calc" tests="5" failures="2" errors="0" id="0" hostname="host" time="0.003" timestamp="2026-11-07T12:00:00+09:00">
+		<properties>
+			<property name="go.version" value="go1.22.1 linux/amd64"></property>
+		</properties>
+		<testcase name="TestAdd" classname="example.com/calc" time="0.000"></testcase>
+		<testcase name="TestDiv" classname="example.com/calc" time="0.000">
+			<failure message="Failed"><![CDATA[    calc_test.go:14: division by zero was not reported]]></failure>
+		</testcase>
+		<testcase name="TestDiv/negative" classname="example.com/calc" time="0.000">
+			<failure message="Failed"><![CDATA[    calc_test.go:18: got 2, want -2]]></failure>
+		</testcase>
+		<testcase name="TestDiv/positive" classname="example.com/calc" time="0.000"></testcase>
+		<testcase name="TestBig" classname="example.com/calc" time="0.000">
+			<skipped message="Skipped"><![CDATA[    calc_test.go:22: slow]]></skipped>
+		</testcase>
+	</testsuite>
+</testsuites>

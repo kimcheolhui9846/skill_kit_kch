@@ -1,0 +1,8 @@
+$ kit uninstall --agent both
+Target:       <target>
+Scope:        project
+Agent codex:  removed 44 file(s), edited 0; 0 left in place
+Agent claude: removed 45 file(s), edited 0; 0 left in place
+Backups:      .kit/backups/20261108-105719/ (kept; kit restore --backup 20261108-105719)
+Status:       READY
+(exit 0)

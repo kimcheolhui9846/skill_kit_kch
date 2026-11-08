@@ -22,7 +22,9 @@ from pathlib import Path
 
 import pytest
 
+from kit import tools
 from kit.app import run
+from tests.conftest import HAS_TOMLLIB
 from tests.golden.cases import KIT_ROOT, all_cases, expand, normalize, tree
 
 HERE = Path(__file__).resolve().parent
@@ -87,11 +89,24 @@ def test_matches_inprocess_golden(name, steps, setup, tmp_path, monkeypatch, no_
     home = tmp_path / "golden-home"
     monkeypatch.setenv("HOME", str(home))
     monkeypatch.setenv("USERPROFILE", str(home))
+    # P6-T4: the goldens were recorded on a PC with numpy and pandas importable; without this
+    # the data/full dry runs say ADVICE instead of PRESENT on any machine that lacks them.
+    monkeypatch.setattr(tools, "_importable", lambda package: True)
     actual = _run_inprocess(steps, setup, tmp_path)
     path = INPROCESS / f"{name}.json"
     if os.environ.get("UPDATE_GOLDEN") == "1":
         path.write_text(json.dumps(actual, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     expected = json.loads(path.read_text(encoding="utf-8"))
+    if not HAS_TOMLLIB:
+        # Python 3.9/3.10: the security audit is UNVERIFIED by design (no tomllib); the goldens
+        # were recorded with it. Everything else must still match.
+        for doc in (actual, expected):
+            for r in doc["runs"]:
+                r["stdout"] = "\n".join(
+                    line
+                    for line in r["stdout"].split("\n")
+                    if "security audit" not in line and not line.startswith(("Status:", "Items:"))
+                )
     assert actual == expected
     # The in-process run must agree with the P1 baseline on everything machine-independent.
     baseline = json.loads((BASELINE / f"{name}.json").read_text(encoding="utf-8"))

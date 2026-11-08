@@ -24,3 +24,9 @@ pytest, jest/vitest, go 모두 JUnit 리포터가 있다.
 
 ## 되돌리는 방법
 리포트 생성 모듈만 바꾸면 된다.
+
+## 구현(P5-T4, 2026-11-07)
+- `kit report tests --junit FILE... [--out FILE]`(`kit/junit.py`, `kit/evidence.py`, `kit/evidence_cli.py`).
+- 태그 스캔은 하지 않는다. 연결은 `kit trace link`로만 한다(검토자 결정 2026-11-07, P5-T3).
+- 짝짓기는 정규화 후 정확 일치(검토자 결정 2026-11-07). 이름만 같은 다른 파일의 테스트는 짝짓지 않으므로 잘못된 PASS가 나오지 않는다. 짝이 없는 추적 테스트는 NOT RUN, 짝이 없는 testcase는 "추적되지 않은 테스트"로 따로 보인다.
+- fixture: pytest 출력은 실제로 생성했다. vitest와 go-junit-report는 이 PC에 없어 공개된 형식대로 작성했다(실제 도구 출력으로 다시 확인하는 것은 남은 일).

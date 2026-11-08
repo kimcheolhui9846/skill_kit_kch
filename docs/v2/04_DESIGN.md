@@ -226,6 +226,7 @@ project 범위는 `.kit/state/install-manifest.json`, user 범위는 `~/.kit-sta
 원문 §7.4의 스키마와 규칙을 따르되, 다음을 조정한다.
 - 스킬 참조는 **카탈로그 이름**(§3.6)으로 한다. 실제 위치는 카탈로그가 정한다.
 - `algorithm-decision-reviewer` 대신 `algorithm-options`의 standard overlay를 쓴다(Q7). 원문 표의 core "기존 8개 스킬"은 11개로 읽는다(Q1).
+- **P5-T6.** `algorithm-options` overlay: 목적함수, 제약, 선택 근거, 최대 입력의 복잡도, 대안 2개 이상, 예상 실패 조건, 정확성 검증 방법, 최적화 트레이드오프와 `### Algorithm decision review` 템플릿. `data-quality-validator`(`shared/skills/`, core 팩, standard 전용, standard core 15 → 16개): 8단계(프로필, 결측, 이상치, 중복, 타입, 누수, 처리 가정, 정제 전후)와 보고 표. "무조건 삭제 금지"를 맨 앞에 둔다. `scripts/profile_csv.py`는 표준 라이브러리만 쓰고(UTF-8, 실패하면 cp949), 행 수, 필드 수가 틀린 행, 완전 중복 행, `--key` 중복, 열별 결측·타입 추정·불일치·고유값·최소/최대·IQR 이상치 후보를 Markdown 또는 JSON으로 보고만 한다. 정책 `skills.md`에 사용 시점 한 줄. 스킬 파일을 모을 때 `__pycache__/`와 `.pyc`·`.pyo`는 설치·검증에서 뺀다(키트 폴더에서 스크립트를 실행하면 남는 바이트코드가 작업 공간으로 복사되던 문제, P5-T6 반례 검토).
 - 새 경로의 기본값은 `--profile core,hitl`이다(ADR-008).
 - 기존 v1 파일 5개는 읽을 때 정규화한다.
   - `extends: "x"` → `["x"]`
@@ -257,19 +258,49 @@ project 범위는 `.kit/state/install-manifest.json`, user 범위는 `~/.kit-sta
   - 읽을 때 검사한다: schema 1, 중복 id, 알 수 없는 상태, 없는 선행 Task, 의존 순환, 형식이 틀린 승인 기록 → 65. 저장은 임시 파일 뒤 `os.replace`.
   - submit 검사: 보고서 §5.6의 1~9절이 모두 있음, must 요구사항마다 테스트 표 행이 있음, `NOT RUN`은 `NOT RUN: <이유>`. must 판정은 `trace.json`이 있으면 그 `priority`, 없으면 Task의 요구사항 전부(검토자 결정 2026-11-07).
   - approve는 SUBMITTED에서만, 보고서가 submit 뒤 바뀌지 않았을 때만 된다. 승인 뒤 보고서가 바뀌거나 없어지면 `task status`가 경고하고 1을 낸다.
+  - **P5-T2b(L2, `shared/hooks/kit_approval.py`, `kit/approval_hooks.py`).** 같은 스크립트를 에이전트별 위치에 복사한다(에이전트별 소유, 한쪽 uninstall이 다른 쪽을 지우지 않게). 표준 라이브러리만 쓰고 작업 공간 위치는 스크립트 경로에서 찾는다. 훅이 남기는 승인 기록에는 `agent`(`claude`|`codex`)가 더해진다. PreToolUse는 파일 도구(Write/Edit/NotebookEdit/apply_patch)를 대상 경로로, 셸 명령(Bash/PowerShell)을 명령 문자열로 판정한다. 막는 것: `.kit/work/tasks.json` 쓰기, `task approve` 실행, 훅 스크립트·`.codex/hooks.json` 변경, 훅이 든 `.claude/settings.json` 변경. 막을 때는 JSON `hookSpecificOutput.permissionDecision: "deny"`를 쓰고 exit 0으로 끝낸다(Codex 0.166은 exit 2로 막지 않았다, M-05). 같은 프롬프트가 10분 안에 다시 오면 같은 성공 안내를 돌려준다(Codex가 UserPromptSubmit을 두 번 실행함). 훅 오류·시간 초과는 도구를 막지 않는다(fail-open).
   - **정직성 한계.** L1은 기록과 탐지다. 에이전트가 `--by agent-recorded`로 사용자 발화를 지어내거나 `tasks.json`을 직접 고치는 것을 막지 못한다. 그래서 `by`를 모든 출력에 드러내고, 막는 장치는 L2 훅(P5-T2b)으로 나눴다(검토자 결정 2026-11-07).
 
 ### 3.4 요구사항·추적 `.kit/work/trace.json`
 
-- 원문 형식을 그대로 쓴다.
+- 원문 형식(P2-T4)을 그대로 쓰고, 테스트에 `case`(`normal`|`boundary`|`error`|`counterexample`, 기본 normal)를 더한다(P5-T3, `kit/trace.py`).
+- 요구사항: `id`(`REQ-…`), `text`, `source`(brief에서 왔으면 `TASK_BRIEF.md#REQ-001`), `priority`(must·should·could), `revision`(1부터), `status`(not-started·partial·implemented).
+- `revision`은 `text`나 `priority`가 바뀔 때만 1 오른다(`kit req edit`, `kit req sync`). `status`만 바뀌면 그대로다.
+- 테스트의 `requirements[]`는 `{id, revision}`이다. `kit trace link`가 연결할 때 그 요구사항의 현재 revision을 적는다. 이 값이 요구사항의 revision보다 작으면 다시 검토해야 하는 테스트(`STALE`, `req impact`의 `REVIEW`)다. 검토한 뒤 다시 link하면 풀린다.
+- `TASK_BRIEF.md` 동기화: `## Requirements` 절 안의 `- REQ-001 (must): 문장` 줄만 읽는다(우선순위를 생략하면 must). 새 ID는 추가, 문장·우선순위가 바뀐 ID는 개정, brief에서 사라진 ID는 지우지 않고 경고한다. 절이 없거나 ID가 겹치거나 우선순위가 틀리면 아무것도 쓰지 않고 거부한다.
+- `trace check`가 보고하는 것(순서대로): `UNTESTED`(테스트 없음), `WEAK`(must인데 normal 테스트만), `UNKNOWN_REQ`(없는 요구사항을 가리킴), `STALE`(개정 뒤 미검토), `NO_REQUIREMENTS`(요구사항을 하나도 가리키지 않는 테스트).
+- 읽을 때 검사한다: schema 1, 목록 형식, 요구사항·테스트 id 중복, 우선순위, revision ≥ 1, `requirements` 형식, `case` 값 → 65. 파일이 없거나 비어 있으면 빈 추적으로 본다.
 - 테스트 상태는 저장하지 않고, JUnit XML과 합칠 때 계산한다.
 - JUnit XML에 없는 locator는 `NOT RUN`으로 표시한다(ADR-012).
+- **P5-T4 보고서(`kit/junit.py`, `kit/evidence.py`).**
+  - 짝짓기: locator의 첫 `::` 앞(파일)과 testcase의 classname(없으면 `file`, 그다음 testsuite 이름)에서 확장자를 떼고 `/`·`.`·`\`를 `/`로 맞춘 뒤, 나머지 `::` 부분과 testcase 이름을 `/`로 잇는다. 정확히 같거나 `이름[` 로 시작하는 매개변수화 경우만 짝짓는다. pytest(`tests.test_x.TestA`), vitest(`src/a.test.ts`, 이름 `묶음 > 테스트`), go-junit-report(`example.com/pkg`, 하위 테스트 `TestA/sub`는 따로)를 같은 규칙으로 처리한다.
+  - 결과: failure·error → FAIL(Actual에 `error`로 구분), skipped → SKIPPED, 없음 → PASS. 여러 경우는 FAIL > 모두 SKIPPED > PASS. 요구사항 상태는 테스트 중 가장 나쁜 것(FAIL > NOT RUN > SKIPPED > PASS), 테스트가 없으면 NO TEST.
+  - 보고서: `## 구현 정확성`(요구사항별 상태 표, §5.6 4절 표, 추적되지 않은 testcase), `## 테스트 설계 타당성`(요구사항별 case 분포, 반례 테스트 유무, 위험: UNTESTED·WEAK·STALE·must가 PASS 아님), `## 질문 6개에 대한 답`(§16의 1~6). 제목에 번호를 달지 않아 Task 보고서에 붙여도 절 번호 검사를 흐리지 않는다. 4절 표의 NOT RUN 행은 `NOT RUN: not in the JUnit XML`이라 `kit task submit` 검사를 통과한다. 셀 안의 `|`와 줄바꿈은 `/`와 공백으로 바꾼다.
+  - DOCTYPE이 있는 XML은 거부한다(엔터티 확장 차단). 메시지는 첫 줄 160자까지, 보고서 전체와 JSON을 마스킹한다(V-17).
 
 ### 3.5 반례 `.kit/work/counterexamples.json`
 
 - 형식은 `{"schema": 1, "items": [ … ]}`이다.
 - 각 항목은 원문 §10.5.3 형식이고, `status`에 `NEEDS_SPEC`이 포함된다.
 - 확장된 `counterexample-hunter`의 standard overlay가 이 형식으로 기록하도록 지시한다(Q7).
+- **P5-T5(`kit/counterexamples.py`, `kit/ce_cli.py`).** 원문 필드에 `question`(NEEDS_SPEC 질문), `decision`(`{at, by: agent-recorded, quote}`), `rejected_because`, `history[]`를 더한다.
+  - 상태: PROPOSED → ACCEPTED | REJECTED | NEEDS_SPEC, NEEDS_SPEC → ACCEPTED(`resolve`, 검토자 발화 필수) | REJECTED, ACCEPTED → CONVERTED | REJECTED. REJECTED·CONVERTED는 끝.
+  - `expected`가 없는 항목은 accept할 수 없다(요구사항이 정하지 못함 → NEEDS_SPEC). NEEDS_SPEC은 accept·convert 모두 거부된다.
+  - convert는 `trace.json`에 그 테스트가 있고 항목의 요구사항을 모두 가리킬 때만 된다.
+  - 읽을 때 검사: schema 1, 필수 필드(target, assumption_challenged, category, origin, input, would_catch), 범주(§10.5.2의 11개), origin, 상태, ACCEPTED·CONVERTED의 expected, CONVERTED의 test_id, 결정 없이 NEEDS_SPEC을 벗어난 항목 → 65.
+  - 발화와 결과는 마스킹한다. C 등급 `task submit`은 `counterexamples.submit_problems`를 함께 본다.
+  - `kit report tests`의 "반례 검토" 열은 요구사항별 기록 수와 상태(`CE 2: PROPOSED 1, NEEDS_SPEC 1`), 기록이 없으면 `기록 없음`(반례 케이스 테스트가 있으면 덧붙임). 열린 NEEDS_SPEC은 위험으로 올린다.
+- **블랙박스 서브에이전트(`kit/subagents.py`).** `shared/agents/counterexample-blackbox.md`를 Claude standard 설치에서 `counterexample-hunter`가 있을 때 `.claude/agents/`에 키트 소유(owner `subagent`)로 쓴다. 같은 경로에 사용자 파일이 있으면 CONFLICT. verify 항목 `subagent:counterexample-blackbox`. restricted·Codex·user 범위에는 없다.
+
+### 3.5a 세션 복구 `.kit/work/` (P5-T7)
+
+- `kit/recover.py`, `kit/recover_cli.py`. 키트는 작업 공간 루트에 아무것도 쓰지 않는다. 루트 `HANDOFF.md`는 있다는 사실만 알리고 읽지 않는다(TC-HTL-18).
+- `HANDOFF.md`: 첫 줄이 `<!-- kit:handoff approvals=N last=<Task>@<시각> -->`인 표식이다. 표식이 없는 파일은 키트 것이 아니므로 두고 경고한다. 승인 기록만으로 만든다(부록 A.2의 절 + 승인 이력 표). 보고서 1·2·7·9절과 4절 상태 개수는 보고서 해시가 승인 때와 같을 때만 옮긴다. `kit task approve`는 즉시, 훅 승인은 다음 `kit task …`·`kit recover`에서 표식이 다르면 다시 쓴다.
+- `snapshots/<Task>.json` `{schema, task, at, commit, method: git|files, truncated, files: {경로: sha256}}`: `task submit` 직후. git 작업 트리면 `git ls-files -co --exclude-standard`(.gitignore 따름)와 HEAD, 아니면 `.git .kit node_modules .venv venv __pycache__` 등을 뺀 전체 파일. 2만 개 초과는 잘리고 경고, 32 MiB 초과 파일은 크기만 비교. 승인 전 커밋하지 않은 변경은 "승인 이후 변경"에 나오지 않는다.
+- `wip.json` `{schema, status: UNAPPROVED, saved_at, task, subtask, note, last_command, last_tests, errors[≤20]}`: `recover save`가 임시 파일 + `os.replace`로 통째로 덮어쓴다. 값은 공백을 하나로 접고 마스킹, 2000자. 깨진 파일은 무시하고 경고(종료 코드 1)하며 승인 상태만 보여 준다. 그 Task가 이미 APPROVED면 "Out of date?".
+- `decisions.md`: `- <시각> [<Task 또는 ->] <내용>` 줄을 덧붙이기만 한다(500자, 마스킹).
+- `kit recover` 출력은 "Approved state"(현재 Task, 마지막 승인 Task·시각·by, 승인 Task 목록, 변경 파일, 마지막 테스트, 열린 위험, 다음 계획, 시작 가능 Task, 최근 결정 5개, HANDOFF 상태) 다음에 "Temporary (not approved)"를 따로 낸다. `--json`은 문자열 값마다 마스킹한다(JSON 문자열 전체를 마스킹하면 닫는 따옴표가 지워지던 문제, P5-T7 반례 검토).
+- 스킬 `session-recovery`(`shared/skills/`, core 팩, standard 전용, standard core 16 → 17개)와 정책 한 줄.
 
 ### 3.6 스킬 카탈로그 `catalog/skills.json` (신규)
 
@@ -323,6 +354,7 @@ project 범위는 `.kit/state/install-manifest.json`, user 범위는 `~/.kit-sta
   - 키가 필요한 서버·플러그인은 기본으로 켤 수 없다. 키가 필요한 스킬은 기본 팩(`core`, `hitl`)에 넣을 수 없다(검토자 결정 "기본 비활성 유지").
   - 설정 파일에는 참조만 쓴다. Codex는 `env_vars = ["NAME"]`(셸에서 그대로 넘김), Claude `.mcp.json`은 `"env": {"NAME": "${NAME}"}`, Claude user 범위 수동 명령은 `claude mcp add … -e 'NAME=${NAME}'`이다(작은따옴표라 셸이 펼치지 않음). 키 값은 묻지도, 읽어 보여 주지도, 쓰지도 않는다.
   - 감사: 새 경로 허용 목록(`mcp_catalog.allowlist`)에 `declared_env = {서버: [이름]}`을 더한다. 그 서버가 선언한 이름이 **참조로만** 있으면(`env_vars` 원소, 또는 값이 정확히 `${NAME}`) 비밀형 이름 규칙의 예외다. 값이 쓰였거나, 다른 이름을 참조하거나, 선언하지 않았거나, 다른 서버가 선언한 이름이면 그대로 FAIL이다. 기존 경로 허용 목록에는 예외가 없다.
+  - P6-T3: tomllib이 없는 Python 3.9/3.10의 줄 단위 검사(`audit.scan_lines`)도 같은 규칙을 따른다. 명령 규칙(`command = "…"`), `[mcp_servers]` 아래 인라인 서버(`name = { … }`)의 이름, `declared_env` 참조 예외(`env_vars` 줄, `NAME = "${NAME}"` 줄)를 더했다. 줄 단위 검사는 규칙 위반이 없어도 PASS가 아니라 UNVERIFIED다. 주석 줄 안의 URL·비밀형 이름도 FAIL로 보는 보수적 동작은 그대로 둔다.
   - 설정 여부는 키트 프로세스의 환경 변수 이름으로만 본다(값이 비어 있지 않으면 `set`). 필수 키가 없어도 종료 코드는 그대로이고 `Next action`에 한 줄이 생긴다.
   - 실제 항목: `security-guidance` 플러그인의 `ANTHROPIC_API_KEY`(선택). 고정한 커밋의 README에 따르면 키가 없으면 Claude Code 로그인(`/login`)을 쓰고, 그것도 없으면 패턴 경고만 실행한다. MCP `context7`(`@upstash/context7-mcp@4.5.1`, MIT, 기본 꺼짐, 검토자 승인 2026-11-06)의 `CONTEXT7_API_KEY`(선택).
   - **실제 CLI 확인(2026-11-06, codex-cli 0.166.0, Claude Code 2.1.319, 격리한 `CODEX_HOME`/`CLAUDE_CONFIG_DIR`, 가짜 값, 시험용 stdio 서버).** 세 형식 모두 값이 있으면 서버가 실제 값을 받았다. Codex `env_vars`는 값이 없으면 변수를 넘기지 않는다(그 줄이 없으면 값이 있어도 넘기지 않음). Claude `.mcp.json`의 `${NAME}`과 `claude mcp add -e 'NAME=${NAME}'`(user 설정에 글자 그대로 저장되고 시작할 때 펼침)는 값이 없으면 **`${NAME}` 글자를 그대로** 넘기고 `claude mcp list`에 경고를 낸다(Claude 문서와 같음). 서버가 그 글자를 키로 오해할 수 있으므로 키트 안내는 키를 설정하고 새 터미널에서 에이전트를 다시 켜라고 한다. `context7` 4.5.1은 이 글자를 키로 쓰지 않고 무시한다(소스 확인). 프로젝트 `.mcp.json` 서버는 Claude가 처음에 승인을 받아야 시작한다.

@@ -23,6 +23,9 @@ visible; it cannot stop an agent that ignores it. Follow it because the user rel
    - The user may run `kit task approve T-001` at a terminal (recorded as `human-cli`).
    - If the user approves in chat, record it with their exact words:
      `kit task approve T-001 --by agent-recorded --quote "<the user's message>"`.
+   - With the approval hook installed (`kit install --hooks`), never record an approval:
+     the user replies only `승인` (or `승인 T-001`) and the hook records it as
+     `human-hook`; `--by agent-recorded` is refused there.
    - A conditional, partial or unclear reply is not approval: ask. Feedback instead of
      approval: `kit task request-changes T-001 --reason "..."`, then start it again.
 7. `kit task status` before each new Task. Exit 1 means an approved report changed after

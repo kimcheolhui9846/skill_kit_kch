@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from . import agentsmd, mcpconfig
-from .fsops import PathEscapeError, State, safe_path, sha256
+from .fsops import PathEscapeError, State, path_order, safe_path, sha256
 from .model import Outcome
 from .profiles import Profile
 
@@ -43,7 +43,7 @@ def iter_skill_files(
     src = kit_root / SKILL_SOURCE / name
     return [
         (f"{skill_root}/{name}/{path.relative_to(src).as_posix()}", path.read_bytes())
-        for path in sorted(src.rglob("*"))
+        for path in sorted(src.rglob("*"), key=path_order)
         if path.is_file()
     ]
 

@@ -2,8 +2,9 @@
 
 Implemented here: install, plan, verify, doctor, profiles, help, version (P3-T6),
 update/uninstall/restore (P3-T7), capture and --scope user (P4-T7, ADR-018/019),
-source (P4-T8, ADR-021; kit.source_cli), task (P5-T2; kit.task_cli). Recognised but
-later: req/trace/report/recover (P5). They exit 64 with the Task that adds them.
+source (P4-T8, ADR-021; kit.source_cli), task (P5-T2; kit.task_cli), req and trace (P5-T3;
+kit.trace_cli), report tests (P5-T4; kit.evidence_cli), ce (P5-T5; kit.ce_cli), recover
+(P5-T7; kit.recover_cli). A command listed in LATER exits 64 with the Task that adds it.
 
 --scope user: the target is the home folder (kit.userscope); writes need --yes or a yes at
 a terminal, and paths are shown as ~.
@@ -28,7 +29,9 @@ from typing import Callable, Dict, List, Optional, TextIO, Tuple
 from . import (
     capture,
     catalog,
+    ce_cli,
     credentials,
+    evidence_cli,
     lifecycle,
     mcp_catalog,
     mcpcheck,
@@ -36,9 +39,11 @@ from . import (
     plugin_install,
     policy_render,
     profile_resolver,
+    recover_cli,
     source_cli,
     task_cli,
     tools,
+    trace_cli,
     userscope,
     webcheck,
 )
@@ -52,10 +57,11 @@ from .fsops import (
     State,
     backups_rel,
     own_files,
+    path_order,
     safe_path,
     user_scope,
 )
-from .logs import mask, write_log
+from .logs import mask, mask_tree, write_log
 from .model import (
     CONFLICT,
     EXIT_BLOCKED,
@@ -80,6 +86,8 @@ from .transaction import TransactionError, apply_all, fresh_stamp
 
 DEFAULT_PROFILE = "core,hitl"  # ADR-008
 DEFAULT_POLICY = "standard"  # ADR-015
+# commands that remove what an earlier install recorded and this plan drops (follow-up 3)
+STALE_CLEANUP = ("install", "plan", "update")
 IMPLEMENTED = (
     "install",
     "plan",
@@ -92,15 +100,15 @@ IMPLEMENTED = (
     "capture",
     "source",
     "task",
+    "req",
+    "trace",
+    "report",
+    "ce",
+    "recover",
     "help",
     "version",
 )
-LATER = {
-    "req": "P5",
-    "trace": "P5",
-    "report": "P5",
-    "recover": "P5",
-}
+LATER: Dict[str, str] = {}
 SUBCOMMANDS = IMPLEMENTED + tuple(LATER)
 BAD = (FAIL, CONFLICT)
 SELF_TARGET_MSG = (
@@ -116,7 +124,7 @@ Install for one agent:
 Commands:
   install   --agent codex|claude|both [--profile a,b] [--policy standard|restricted]
             [--target DIR] [--dry-run] [--offline] [--yes] [--no-mcp] [--verbose]
-            [--mcp NAME]... [--plugin NAME]... [--manual NAME]...
+            [--mcp NAME]... [--plugin NAME]... [--manual NAME]... [--hooks]
             [--json | --report-json FILE]
   plan      same arguments as install; never writes
   verify    --agent codex|claude|both [--target DIR] [--offline] [--yes] [--no-mcp]
@@ -133,6 +141,21 @@ Commands:
             | list | start ID | subtask add ID TITLE | subtask done SUB-ID | report ID
             | submit ID [--report FILE] | approve ID [--by agent-recorded --quote TEXT]
             | request-changes ID --reason TEXT | status [ID]     (.kit/work/tasks.json)
+  req       add REQ-ID --text T [--priority must|should|could] | edit REQ-ID [--text T]
+            [--priority P] [--status S] | list | impact REQ-ID | sync [--brief FILE]
+  trace     link TEST-ID --req REQ-ID... [--locator PATH::NAME] [--case normal|boundary|
+            error|counterexample] [--input I] [--expected E] | check
+                                     (.kit/work/trace.json; check: 1 = gaps)
+  report    tests --junit FILE... [--out FILE]   trace.json + JUnit XML -> test report
+                                     (1 = a test not PASS or a requirement untested)
+  ce        add CE-ID --function F --req REQ... --category C --origin black-box|white-box
+            --assumption A --input I --would-catch W [--expected E] | list | accept ID
+            | reject ID --reason R | needs-spec ID --question Q | resolve ID --expected E
+            --quote TEXT | convert ID --test TEST-ID | result ID --result R
+                                     (.kit/work/counterexamples.json)
+  recover   [save [--note T] [--command C] [--tests T] [--error E]... | decide TEXT]
+            approved state (HANDOFF.md, tasks.json) and the temporary state apart
+                                     (.kit/work/wip.json, decisions.md; 1 = warnings)
   doctor    [--target DIR]           which agents are on this PC, what the kit installed
   profiles  list | show a[,b] [--agent codex|claude|both]
   help, version
@@ -143,6 +166,8 @@ Defaults: --profile core,hitl  --policy standard  --scope project
 --mcp / --plugin opt in to entries of catalog/mcp.json / catalog/plugins.json that are off
 by default (verify and update keep what install chose).
 --manual prints the steps and risks of a tool in catalog/manual.json; the kit never runs it.
+--hooks (project scope) adds the approval hook: a reply that is only an approval word
+    records the SUBMITTED task as approved (by human-hook); the agent cannot approve.
 --yes allows network use (installing missing tools, MCP handshake).
 Without a command, the legacy installer runs (Codex, restricted policy); see --help.
 
@@ -179,6 +204,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--mcp", action="append", default=[], metavar="NAME")
         p.add_argument("--plugin", action="append", default=[], metavar="NAME")
         p.add_argument("--manual", action="append", default=[], metavar="NAME")
+        p.add_argument("--hooks", action="store_true")
     _common(sub.add_parser("verify", add_help=False), profile=False)
     for name in ("update", "uninstall", "restore"):
         p = sub.add_parser(name, add_help=False)
@@ -199,6 +225,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true")
     source_cli.add_parser(sub)
     task_cli.add_parser(sub)
+    trace_cli.add_parsers(sub)
+    evidence_cli.add_parser(sub)
+    ce_cli.add_parser(sub)
+    recover_cli.add_parser(sub)
     p = sub.add_parser("help", add_help=False)
     p.add_argument("topic", nargs="?")
     sub.add_parser("version", add_help=False)
@@ -221,6 +251,7 @@ class Ctx:
     mcp_opt_in: List[str] = field(default_factory=list)  # --mcp
     plugin_opt_in: List[str] = field(default_factory=list)  # --plugin
     manual: List[str] = field(default_factory=list)  # --manual: guides only (U-23)
+    hooks: bool = False  # --hooks: approval hook, project scope (P5-T2b, ADR-011 L2)
     verbose: bool = False
     json: bool = False
     report_json: Optional[Path] = None
@@ -277,6 +308,8 @@ def _ctx(ns: argparse.Namespace, cwd: Path, kit_root: Path) -> Ctx:
             raise UsageError(
                 "--plugin is for --scope project; user plugins come from the captured settings"
             )
+        if getattr(ns, "hooks", False):
+            raise UsageError("--hooks is for --scope project (reviewer decision 2026-11-07)")
     if ns.offline and ns.yes:
         raise UsageError("--offline and --yes cannot be combined")
     mcp_opt_in = _unique(getattr(ns, "mcp", []))
@@ -317,6 +350,7 @@ def _ctx(ns: argparse.Namespace, cwd: Path, kit_root: Path) -> Ctx:
         mcp_opt_in=mcp_opt_in,
         plugin_opt_in=_unique(getattr(ns, "plugin", [])),
         manual=_unique(getattr(ns, "manual", [])),
+        hooks=getattr(ns, "hooks", False),
         verbose=ns.verbose,
         json=ns.json,
         report_json=report_json,
@@ -355,6 +389,7 @@ class AgentPlan:
     items: List[ItemResult] = field(default_factory=list)
     backups: List[Path] = field(default_factory=list)
     stale: lifecycle.RemovalPlan = field(default_factory=lifecycle.RemovalPlan)
+    stale_removed: bool = False  # the stale ops were applied (not rolled back)
     skill_source: Optional[catalog.SkillSource] = None
     skipped_skills: List[str] = field(default_factory=list)  # "name (why)"
     replaced_skills: List[str] = field(default_factory=list)  # "old -> new"
@@ -463,6 +498,7 @@ def _plan_agents(
             policy_body=body,
             skill_source=source,
             plugins=plugins.items,
+            hooks=ctx.hooks,
         )
         plan = AgentPlan(adapter, view, body, include_mcp, changes)
         plan.skipped_mcp = servers.skipped
@@ -621,6 +657,9 @@ def _entry(
             blocks.append({"path": change.rel, "marker": "hackathon-kit", "sha256": change.record})
         else:
             files.append({"path": change.rel, "sha256": change.record})
+    choices = {"mcp": list(opt_in[0]), "plugins": list(opt_in[1])}
+    if len(opt_in) > 2 and opt_in[2]:
+        choices["hooks"] = True
     return {
         "agent": adapter.name,
         "profiles": names,
@@ -633,13 +672,16 @@ def _entry(
         "backups": [f"{backups_rel(target)}/{stamp}/"] if plan.backups else [],
         # the install's --mcp/--plugin flags, the same for every agent so verify and update
         # check agents installed together as one group
-        "opt_in": {"mcp": list(opt_in[0]), "plugins": list(opt_in[1])},
+        "opt_in": choices,
         "plugin_installs": plan.plugin_record,  # what the claude CLI installed (uninstall)
     }
 
 
 def _manifest_path(ctx: Ctx) -> Path:
-    return manifest_mod.manifest_path(ctx.target, ctx.scope)
+    # P6-T3: confined like every other kit write. A .kit/state link that leads outside the
+    # target raises PathEscapeError here, at the first load, before anything is written.
+    rel = manifest_mod.USER_REL if ctx.scope == "user" else manifest_mod.PROJECT_REL
+    return safe_path(ctx.target, rel)
 
 
 def _load_manifest(ctx: Ctx) -> manifest_mod.Manifest:
@@ -654,7 +696,7 @@ def _load_manifest(ctx: Ctx) -> manifest_mod.Manifest:
 
 
 def _installed_spec(ctx: Ctx, man: manifest_mod.Manifest, agent: str) -> Optional[tuple]:
-    """(profile spec, policy, mcp opt-ins, plugin opt-ins) recorded for an agent.
+    """(profile spec, policy, mcp opt-ins, plugin opt-ins, hooks) recorded for an agent.
 
     v1 state counts for codex.
     """
@@ -666,13 +708,14 @@ def _installed_spec(ctx: Ctx, man: manifest_mod.Manifest, agent: str) -> Optiona
             entry.get("policy") or DEFAULT_POLICY,
             tuple(opt.get("mcp") or ()),
             tuple(opt.get("plugins") or ()),
+            opt.get("hooks") is True,
         )
     if agent == "codex" and not ctx.user:
         try:
             data = json.loads((ctx.target / STATE_REL).read_text(encoding="utf-8"))
             if isinstance(data.get("profile"), str):
                 # legacy path = restricted (ADR-015)
-                return data["profile"], "restricted", (), ()
+                return data["profile"], "restricted", (), (), False
         except (OSError, ValueError, AttributeError):
             pass
     return None
@@ -721,9 +764,9 @@ def _run_verify(ctx: Ctx, man: manifest_mod.Manifest, out: TextIO) -> int:
     for agent, spec in specs.items():
         groups.setdefault(spec, []).append(agent)
     codes = []
-    for (spec, policy, mcp, plugins), agents in groups.items():
+    for (spec, policy, mcp, plugins, hooks), agents in groups.items():
         resolved = profile_resolver.resolve(ctx.kit_root, spec, policy_override=policy)
-        group = replace(ctx, mcp_opt_in=list(mcp), plugin_opt_in=list(plugins))
+        group = replace(ctx, mcp_opt_in=list(mcp), plugin_opt_in=list(plugins), hooks=hooks)
         codes.append(_execute(group, man, resolved, policy, missing, out, plans_for=agents))
         missing = {}
     return max(codes)
@@ -742,7 +785,7 @@ def _execute(
     state = State.load(ctx.target)
     plan_ctx = ctx if plans_for is None else Ctx(**{**ctx.__dict__, "agents": plans_for})
     plans = _plan_agents(plan_ctx, resolved, policy, state)
-    if ctx.command == "update":
+    if ctx.command in STALE_CLEANUP and not ctx.verify_only:
         for plan in plans:
             plan.stale = _stale_removal(ctx, man, plan)
     ops = [op for p in plans for op in p.stale.ops]
@@ -781,6 +824,7 @@ def _execute(
             )
             for plan, made in zip(plans, backups):
                 plan.backups = made
+                plan.stale_removed = bool(plan.stale.ops)
             wrote = True
         except TransactionError as exc:
             detail = f"write failed: {exc.cause}; rolled back {len(exc.restored)} file(s)"
@@ -791,7 +835,7 @@ def _execute(
         _plugins(ctx, man, plan, gate, wrote)
     if wrote:
         for plan in plans:
-            opt_in = (ctx.mcp_opt_in, ctx.plugin_opt_in)
+            opt_in = (ctx.mcp_opt_in, ctx.plugin_opt_in, ctx.hooks)
             man.record(_entry(plan, resolved.names, policy, stamp, ctx.target, opt_in))
         try:
             manifest_mod.save(_manifest_path(ctx), man)
@@ -830,6 +874,7 @@ def _execute(
             policy_body=plan.policy_body,
             skill_source=plan.skill_source,
             plugins=plan.plugins.items,
+            hooks=ctx.hooks,
         )
         if not plan.include_mcp:
             stale = adapter.stale_mcp(ctx.target)
@@ -883,8 +928,11 @@ def _plugins(ctx: Ctx, man: manifest_mod.Manifest, plan: AgentPlan, gate, wrote:
 
 
 def _stale_removal(ctx: Ctx, man: manifest_mod.Manifest, plan: AgentPlan):
-    """update: kit items recorded before that the current profile no longer installs."""
-    entry, _ = _owned_entry(ctx, man, plan.adapter.name)
+    """Kit items recorded before that this plan no longer installs (update, and install over
+    an earlier install or a v1 workspace: follow-up 3, 2026-11-08). Unchanged content is
+    removed with a backup; edited content is left and reported. A v1 file the adoption already
+    found edited is reported too when the new plan does not write it."""
+    entry, adoption_conflicts = _owned_entry(ctx, man, plan.adapter.name)
     if entry is None:
         return lifecycle.RemovalPlan()
     rels = {c.rel for c in plan.changes}
@@ -892,7 +940,9 @@ def _stale_removal(ctx: Ctx, man: manifest_mod.Manifest, plan: AgentPlan):
     if plan.include_mcp:
         rels.add(plan.adapter.mcp_config.rel)  # partly owned file: compare per key
     stale = lifecycle.stale_part(entry, rels, keys)
-    return lifecycle.plan_removal(ctx.target, stale, plan.adapter)
+    removal = lifecycle.plan_removal(ctx.target, stale, plan.adapter)
+    removal.conflicts += [c for c in adoption_conflicts if c.partition(": ")[0] not in rels]
+    return removal
 
 
 # ---------------------------------------------------------------- uninstall / restore
@@ -1026,7 +1076,7 @@ def run_restore(ctx: Ctx, stamp: str, out: TextIO) -> int:
         raise TargetError(f"no backup '{stamp}' (available: {', '.join(found) or 'none'})")
     ops: List[lifecycle.Op] = []
     same = 0
-    for path in sorted(p for p in root.rglob("*") if p.is_file()):
+    for path in sorted((p for p in root.rglob("*") if p.is_file()), key=path_order):
         rel = path.relative_to(root).as_posix()
         if rel.startswith(own_files(ctx.target)):
             continue
@@ -1094,7 +1144,7 @@ def _status(ctx: Ctx, items: List[ItemResult]) -> tuple:
 
 def _emit(ctx: Ctx, out: TextIO, text: str, data: dict, code: int) -> int:
     data["exit_code"] = code
-    payload = mask(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+    payload = json.dumps(mask_tree(data), indent=2, ensure_ascii=False) + "\n"
     if ctx.json:
         out.write(payload)
     else:
@@ -1245,6 +1295,11 @@ def _report_text(ctx, env, resolved, policy, plans, extra, shared, status, gate)
         lines += [f"              skill warning: {w}" for w in plan.skill_warnings]
         lines += [f"              warning: {w}" for w in plan.warnings]
         lines += _catalog_lines(plan, " " * 14)
+        if plan.stale_removed:
+            lines.append(
+                f"              removed (no longer in the profile): "
+                f"{len(plan.stale.ops)} item(s), backed up first"
+            )
     for item in extra:
         if item.name.endswith(": install"):
             lines.append(f"Agent {item.name.split(':')[0] + ':':<8}not installed")
@@ -1401,7 +1456,7 @@ def run_capture(ns: argparse.Namespace, kit_root: Path, out: TextIO) -> int:
         "exit_code": code,
     }
     if ns.json:
-        out.write(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        out.write(json.dumps(mask_tree(data), indent=2, ensure_ascii=False) + "\n")
     else:
         out.write(mask("\n".join(lines) + "\n"))
     return code
@@ -1534,6 +1589,14 @@ def run(
             return source_cli.run(ns, kit_root, out, ask)
         if command == "task":
             return task_cli.run(ns, cwd, kit_root, out, ask)
+        if command in ("req", "trace"):
+            return trace_cli.run(command, ns, cwd, out)
+        if command == "report":
+            return evidence_cli.run(ns, cwd, out)
+        if command == "ce":
+            return ce_cli.run(ns, cwd, out)
+        if command == "recover":
+            return recover_cli.run(ns, cwd, out)
         ctx = _ctx(ns, cwd, kit_root)
         ctx.ask = ask
         if ctx.user:

@@ -18,7 +18,12 @@
 | P5-T5 반례 | 신규 `counterexample-generator`를 만들지 않고 기존 `counterexample-hunter`를 확장(블랙박스 단계, `NEEDS_SPEC`, 기록 형식 추가)하는 안을 먼저 검토 | 01_ANALYSIS §0 |
 | P5-T6 알고리즘 | `algorithm-decision-reviewer` 대신 기존 `algorithm-options`를 확장하는 안을 먼저 검토. `data-quality-validator`는 신규 | 01_ANALYSIS §0 |
 | P5 | `launch-compliance-check` 스킬 추가(REQ-SKILL-001) | 보강 |
-| P5-T2 / P5-T2b (신규) | P5-T2는 L1(`kit task` 상태 기계·보고서 검사·승인 기록과 `task-approval` 스킬)만. L2 승인 훅(D-11, `human-hook`)은 P5-T2b로 나눈다 | 검토자 결정 2026-11-07 |
+| P5-T2 / P5-T2b (신규) | P5-T2는 L1(`kit task` 상태 기계·보고서 검사·승인 기록과 `task-approval` 스킬)만. L2 승인 훅(D-11, `human-hook`)은 P5-T2b로 나눈다. P5-T2b는 `kit install --hooks`(project 범위), 승인 단어만 기록, 훅이 켜지면 agent-recorded 거부 | 검토자 결정 2026-11-07 |
+| P5-T3 추적 | 요구사항은 `TASK_BRIEF.md`의 `## Requirements` 절(`- REQ-001 (must): …`)에서 `kit req sync`로 가져온다. 이 절은 task-router의 standard overlay가 쓰게 하고 restricted 원본은 그대로 둔다. 테스트 연결은 `kit trace link`로만 하고 테스트 이름에서 태그를 찾지 않는다. must 요구사항은 정상(normal) 외 경우(boundary·error·counterexample)의 테스트가 하나 이상 있어야 한다 | 검토자 결정 2026-11-07 |
+| P5-T4 테스트 보고서 | locator와 JUnit testcase는 정규화 후 정확히 일치할 때만 짝짓는다(이름만 같으면 짝짓지 않음). 매개변수화 테스트는 한 행으로 집계(FAIL·ERROR 하나라도 → FAIL, 모두 SKIPPED → SKIPPED). 보고서는 `--out` 파일이나 표준 출력. 모든 추적 테스트가 PASS이고 모든 요구사항에 테스트가 있을 때만 0, 아니면 1, JUnit을 쓸 수 없으면 2 | 검토자 결정 2026-11-07 |
+| P5-T5 반례 | Q7대로 `counterexample-hunter`의 standard overlay로 확장. 명령은 `kit ce`. Claude는 파일·셸 도구가 없는 블랙박스 서브에이전트 `.claude/agents/counterexample-blackbox.md`를 키트 소유로 설치(standard·project만). NEEDS_SPEC은 검토자 발화 원문(`--quote`)으로만 풀린다(L1). C 등급 submit은 Task 요구사항에 연결된 기록이 1개 이상이고 PROPOSED가 남지 않아야 한다 | 검토자 결정 2026-11-07 |
+| P5-T6 알고리즘·데이터 | Q7대로 `algorithm-options` standard overlay에 선택 전 검토 8항목과 보고 템플릿을 더한다(구현 후 최적화는 `algorithm-optimizer` 그대로). 신규 `data-quality-validator`는 core 팩(standard 전용)에 넣고 표준 라이브러리 보조 스크립트 `scripts/profile_csv.py`(읽기만 함)를 둔다 | 검토자 결정 2026-11-07 |
+| P5-T7 세션 복구 | 키트는 `.kit/work/HANDOFF.md`에만 쓰고 루트 `HANDOFF.md`는 읽지도 고치지도 않는다. "마지막 승인 이후 변경 파일"은 submit 때 찍은 스냅숏(git HEAD와 파일 해시, `.kit/work/snapshots/<Task>.json`)과 비교한다. WIP와 결정은 `kit recover save`, `kit recover decide`. 훅 승인은 다음 `kit task`·`kit recover` 때 HANDOFF에 반영한다(훅 스크립트는 그대로) | 검토자 결정 2026-11-07 |
 
 ## 2. 결정 사항(ADR) 1차 의견
 

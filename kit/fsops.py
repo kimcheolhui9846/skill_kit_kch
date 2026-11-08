@@ -7,7 +7,7 @@ import json
 import shutil
 from contextlib import contextmanager
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePath
 
 STATE_REL = ".kit/state.json"
 BACKUPS_REL = ".kit/backups"
@@ -66,6 +66,18 @@ def safe_path(root: Path, rel: str) -> Path:
     if candidate != root and root not in candidate.parents:
         raise PathEscapeError(f"refusing path outside target: {rel}")
     return candidate
+
+
+def path_order(path) -> tuple:
+    """Sort key giving the same file order on every system (P6-T4).
+
+    Path objects compare case-insensitively on Windows and case-sensitively elsewhere, so
+    sorted(paths) put `SKILL.md` after `examples/` on Windows and before it on Linux. This key
+    is the Windows order (parts in lower case; the legacy baselines were recorded there), then
+    the exact parts, so names that differ only in case keep a fixed order on Linux.
+    """
+    parts = PurePath(path).parts
+    return (tuple(p.lower() for p in parts), parts)
 
 
 def sha256(data: bytes) -> str:

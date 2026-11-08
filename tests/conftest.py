@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import io
 from pathlib import Path
 
@@ -12,6 +13,11 @@ from kit.model import PASS
 from kit.preflight import ToolInfo
 
 KIT_ROOT = Path(__file__).resolve().parent.parent
+
+# Python 3.9/3.10 have no tomllib: the TOML audit and checks give UNVERIFIED there by design
+# (P6-T4, run on a real 3.9.25). Tests that expect a TOML PASS use TOML_PASS.
+HAS_TOMLLIB = importlib.util.find_spec("tomllib") is not None
+TOML_PASS = PASS if HAS_TOMLLIB else "UNVERIFIED"
 
 pytest_plugins = ["tests.catalog.kit_fixture", "tests.userscope.pc_fixture"]  # kit, home, pc
 

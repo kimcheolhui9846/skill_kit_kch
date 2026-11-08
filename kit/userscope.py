@@ -23,6 +23,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from .fsops import path_order
 from .model import TargetError
 
 HOME_VAR = "${HOME}"
@@ -142,7 +143,7 @@ def omx_files(kit_root: Path, codex_dir: str) -> List[Tuple[str, str, bytes]]:
         base = root / sub
         if not base.is_dir():
             continue
-        for path in sorted(base.rglob("*")):
+        for path in sorted(base.rglob("*"), key=path_order):
             if path.is_file():
                 rel = path.relative_to(root).as_posix()
                 out.append(
@@ -162,7 +163,7 @@ def own_files(kit_root: Path, codex_dir: str) -> List[Tuple[str, str, bytes]]:
         base = root / sub
         if not base.is_dir():
             continue
-        for path in sorted(base.rglob("*")):
+        for path in sorted(base.rglob("*"), key=path_order):
             if path.is_file():
                 rel = path.relative_to(root).as_posix()
                 out.append(

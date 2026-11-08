@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "launch",
+  "kind": "pack",
+  "description": "Pre-launch checklist for a web service or app (standard policy only): launch-compliance-check walks 20 items - privacy, terms, refunds, cookies, consent, SDKs, dark patterns, fees, reviews, claims, accessibility, business info, children, unsubscribe, licenses, deletion - and reports evidence per item. Not legal advice. Already in web and fullstack.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

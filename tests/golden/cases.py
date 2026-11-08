@@ -24,15 +24,21 @@ ENV_LINE = re.compile(r"^Environment:.*$", re.MULTILINE)
 Setup = Optional[Callable[[Path], None]]
 
 
+def _windows_text(path: Path, text: str) -> None:
+    """The bytes write_text gave on Windows, where the P1 baselines were recorded (CRLF), so the
+    tree hashes are the same on Linux (P6-T4)."""
+    path.write_bytes(text.replace("\n", "\r\n").encode("utf-8"))
+
+
 def _user_agents(target: Path) -> None:
-    (target / "AGENTS.md").write_text("# My rules\n\nkeep me\n", encoding="utf-8")
+    _windows_text(target / "AGENTS.md", "# My rules\n\nkeep me\n")
 
 
 def _edited_block(target: Path) -> None:
     body = (KIT_ROOT / "AGENTS.md").read_text(encoding="utf-8").strip()
-    (target / "AGENTS.md").write_text(
+    _windows_text(
+        target / "AGENTS.md",
         f"<!-- hackathon-kit:begin -->\n{body}\n- user edit\n<!-- hackathon-kit:end -->\n",
-        encoding="utf-8",
     )
 
 

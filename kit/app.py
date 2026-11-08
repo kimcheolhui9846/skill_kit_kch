@@ -118,6 +118,10 @@ def main(argv: list[str]) -> int:
             pass
     try:
         return run(argv)
+    except PathEscapeError as exc:  # a safety refusal, not a crash (P7-T1 wording)
+        print("Status:       BLOCKED", file=sys.stderr)
+        print(f"error: {exc}; a link or path leads outside the target", file=sys.stderr)
+        return EXIT_BLOCKED
     except Exception as exc:
         print("Status:       BLOCKED", file=sys.stderr)
         print(f"error: unexpected {type(exc).__name__}: {exc}", file=sys.stderr)

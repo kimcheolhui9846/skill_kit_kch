@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from . import secrets_scan, userscope
-from .fsops import sha256
+from .fsops import path_order, safe_path, sha256
 from .model import TargetError
 from .writers import markdown_block, toml_block
 from .writers.markdown_block import MarkerError, extract_block
@@ -322,7 +322,9 @@ def _copy_own(root: Path, rule: dict, result: CaptureResult) -> None:
         for name in rule.get("copy", {}).get(kind, []):
             source = root / kind / name
             paths = (
-                sorted(p for p in source.rglob("*") if p.is_file()) if source.is_dir() else [source]
+                sorted((p for p in source.rglob("*") if p.is_file()), key=path_order)
+                if source.is_dir()
+                else [source]
             )
             if not source.exists() or source.is_symlink():
                 result.notes.append(f"codex {kind}/{name}: not found (or a link), not copied")
@@ -394,7 +396,7 @@ def changes(kit_root: Path, result: CaptureResult, agents: List[str]) -> List[Tu
 
 def write(kit_root: Path, result: CaptureResult, agents: List[str]) -> None:
     for rel, status in changes(kit_root, result, agents):
-        path = kit_root / rel
+        path = safe_path(kit_root, rel)  # P6-T3: a link under user/ cannot lead outside
         if status == "REMOVE":
             path.unlink()
         elif status != "UNCHANGED":

@@ -39,6 +39,7 @@ from pathlib import Path, PurePosixPath
 from typing import Callable, Dict, List, Optional, Tuple
 
 from . import catalog, skill_check, sources
+from .fsops import path_order, safe_path
 from .github_fetch import MAX_BYTES, DownloadTooLarge, GitHub, unquote
 from .model import TargetError, UsageError
 from .source_scan import Finding, scan_file
@@ -801,16 +802,16 @@ class _Txn:
 
     def _save(self, rel: str) -> None:
         if rel not in self.saved:
-            path = self.root / rel
+            path = safe_path(self.root, rel)  # P6-T3: refused before any write
             self.saved[rel] = path.read_bytes() if path.is_file() else None
 
     def write(self, rel: str, data: bytes) -> None:
         self._save(rel)
-        _write_file(self.root / rel, data)
+        _write_file(safe_path(self.root, rel), data)
 
     def delete(self, rel: str) -> None:
         self._save(rel)
-        path = self.root / rel
+        path = safe_path(self.root, rel)
         if path.is_file():
             path.unlink()
             _prune(path.parent, self.root / sources.THIRD_PARTY)
@@ -1004,7 +1005,7 @@ def plan_remove(kit_root: Path, source_id: str) -> Removal:
 def _named_in_profiles(kit_root: Path, skills: List[str]) -> List[str]:
     found = []
     for folder in ("profiles", "profiles/packs"):
-        for path in sorted((kit_root / folder).glob("*.json")):
+        for path in sorted((kit_root / folder).glob("*.json"), key=path_order):
             text = path.read_text(encoding="utf-8")
             found += [s for s in skills if f'"{s}"' in text and s not in found]
     return found

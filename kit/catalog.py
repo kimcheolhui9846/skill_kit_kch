@@ -35,6 +35,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from .fsops import path_order
 from .profiles import ProfileError
 
 CATALOG_REL = "catalog/skills.json"
@@ -224,11 +225,16 @@ def load_all(kit_root: Path) -> Dict[str, List[SkillEntry]]:
     return entries
 
 
+def is_build_artifact(rel: Path) -> bool:
+    """Bytecode a run of a bundled script leaves behind (P5-T6): never installed or checked."""
+    return "__pycache__" in rel.parts or rel.suffix in (".pyc", ".pyo")
+
+
 def _layer(root: Path) -> List[Tuple[str, bytes]]:
     return [
         (p.relative_to(root).as_posix(), p.read_bytes())
-        for p in sorted(root.rglob("*"))
-        if p.is_file()
+        for p in sorted(root.rglob("*"), key=path_order)
+        if p.is_file() and not is_build_artifact(p.relative_to(root))
     ]
 
 
@@ -266,7 +272,7 @@ def skill_files(
                 merged[rel] = data
     if "SKILL.md" not in merged:
         raise CatalogError(f"skill '{entry.name}' has no SKILL.md for {agent}")
-    return sorted(merged.items(), key=lambda item: Path(item[0]))  # same order as legacy
+    return sorted(merged.items(), key=lambda item: path_order(item[0]))  # same order as legacy
 
 
 class SkillSource:
@@ -298,7 +304,7 @@ class SkillSource:
             root = self.kit_root / entry.location
             rels += [
                 p.relative_to(self.kit_root).as_posix()
-                for p in sorted(root.rglob("*"))
+                for p in sorted(root.rglob("*"), key=path_order)
                 if p.is_file()
             ]
         rels += [rel for rel in entry.include.values() if rel.startswith(THIRD_PARTY + "/")]
@@ -341,8 +347,8 @@ class SkillSource:
 
         files = [
             (p.relative_to(skill_dir).as_posix(), p.read_bytes())
-            for p in sorted(skill_dir.rglob("*"))
-            if p.is_file()
+            for p in sorted(skill_dir.rglob("*"), key=path_order)
+            if p.is_file() and not is_build_artifact(p.relative_to(skill_dir))
         ]
         name = skill_dir.name
         kit_rules = name not in self.entries or self.entries[name].origin == "kit"

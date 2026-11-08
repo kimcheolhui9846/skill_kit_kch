@@ -1,0 +1,19 @@
+
+## Kit additions: requirement IDs
+
+Add a `## Requirements` section to `TASK_BRIEF.md` right after `## Evaluation`, one testable
+requirement per line with a stable ID and a priority (must, should or could):
+
+```markdown
+## Requirements
+- REQ-001 (must): <one testable requirement>
+- REQ-002 (should): <one testable requirement>
+```
+
+- Never reuse or renumber an ID; a dropped requirement keeps its number unused.
+- Then run `kit req sync`: it records them in `.kit/work/trace.json` and raises the revision
+  of every requirement whose line changed.
+- Link each test with `kit trace link TC-001 --req REQ-001 --locator <file>::<test> --case
+  normal|boundary|error|counterexample`. A must requirement needs one test that is not normal.
+- Before declaring the task done run `kit trace check`; exit 1 lists untested, weak or stale
+  requirements and tests that point to unknown ones.

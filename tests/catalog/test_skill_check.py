@@ -46,8 +46,8 @@ def test_every_catalog_skill_is_clean(kit_root, agent, policy):
         assert report.errors == [], name
         assert report.warnings == KNOWN_WARNINGS.get(name, []), name
         checked += 1
-    # standard: +7 research pack (U-40), +task-approval (P5-T2)
-    assert checked == {"restricted": 11, "standard": 32}[policy]
+    # standard: +7 research pack (U-40), +task-approval (P5-T2), +launch-compliance-check
+    assert checked == {"restricted": 11, "standard": 35}[policy]
 
 
 # ---------------------------------------------------------------- spec rules (both agents)

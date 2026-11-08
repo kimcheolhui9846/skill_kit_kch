@@ -187,6 +187,8 @@ def test_standard_replaces_and_adds_vendored_skills(kit_root, workspace):
             "benchmark",
             "codebase-explorer",
             "counterexample-hunter",
+            "data-quality-validator",
+            "session-recovery",
             "design-review",
             "implementation-review",
             "task-approval",

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="5" failures="1" errors="0" time="0.012">
+    <testsuite name="src/sum.test.ts" timestamp="2026-11-07T03:00:00.000Z" hostname="host" tests="4" failures="1" errors="0" skipped="1" time="0.004">
+        <testcase classname="src/sum.test.ts" name="sum &gt; adds two numbers" time="0.001">
+        </testcase>
+        <testcase classname="src/sum.test.ts" name="sum &gt; handles negatives" time="0.002">
+            <failure message="expected -1 to be 1 // Object.is equality (api_key=FAKEKEY1234567890)" type="AssertionError">
+AssertionError: expected -1 to be 1 // Object.is equality
+ at src/sum.test.ts:9:22
+            </failure>
+        </testcase>
+        <testcase classname="src/sum.test.ts" name="sum &gt; big numbers" time="0">
+            <skipped/>
+        </testcase>
+        <testcase classname="src/sum.test.ts" name="sum &gt; a | b in the name" time="0.001">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/parse.test.ts" timestamp="2026-11-07T03:00:00.000Z" hostname="host" tests="1" failures="0" errors="0" skipped="0" time="0.001">
+        <testcase classname="src/parse.test.ts" name="parse &gt; reads one row" time="0.001">
+        </testcase>
+    </testsuite>
+</testsuites>

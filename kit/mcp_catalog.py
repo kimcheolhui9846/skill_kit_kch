@@ -258,7 +258,7 @@ def _select(
     for name in list(listed) + [n for n in opt_in if n not in listed]:
         entry = catalog.get(name)
         if entry is None:
-            raise UsageError(f"unknown {flag[2:]} '{name}' (see catalog/{flag[2:]}.json)")
+            raise UsageError(f"unknown {flag[2:]} '{name}' (see {CATALOG_FILE[flag]})")
         why = _why_not(entry, agent, policy)
         if why is None and need_installable and not installable(entry):
             why = "listed only: " + entry["disabled_reason"]
@@ -269,6 +269,10 @@ def _select(
         else:
             sel.items.append((name, entry))
     return sel
+
+
+# the file each opt-in flag names (P7-T1: --plugin pointed at a plugin.json that does not exist)
+CATALOG_FILE = {"--mcp": "catalog/mcp.json", "--plugin": "catalog/plugins.json"}
 
 
 def select_servers(
@@ -292,7 +296,7 @@ def check_opt_in(kit_root: Path, mcp: Sequence[str], plugins: Sequence[str], age
         for name in names:
             entry = catalog.get(name)
             if entry is None:
-                raise UsageError(f"unknown {flag[2:]} '{name}' (see catalog/{flag[2:]}.json)")
+                raise UsageError(f"unknown {flag[2:]} '{name}' (see {CATALOG_FILE[flag]})")
             if flag == "--mcp" and not installable(entry):
                 raise UsageError(f"MCP server '{name}' is listed only: {entry['disabled_reason']}")
             reasons = [_why_not(entry, a, policy) for a in agents]

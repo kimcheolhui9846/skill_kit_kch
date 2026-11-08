@@ -1,0 +1,56 @@
+$ kit plan --agent claude
+Environment:  Windows 11 AMD64, shell=windows, python 3.12.10
+Target:       <target>
+Scope:        project
+Profiles:     core, hitl   Policy: standard
+Network:      not used
+[claude] Planned changes:
+  CREATE    CLAUDE.md
+  CREATE    .claude/skills/task-router/examples/example.md
+  CREATE    .claude/skills/task-router/SKILL.md
+  CREATE    .claude/skills/test-driven-development/LICENSE
+  CREATE    .claude/skills/test-driven-development/references/languages.md
+  CREATE    .claude/skills/test-driven-development/SKILL.md
+  CREATE    .claude/skills/test-driven-development/writing-good-tests.md
+  CREATE    .claude/skills/algorithm-optimizer/examples/example.md
+  CREATE    .claude/skills/algorithm-optimizer/references/languages.md
+  CREATE    .claude/skills/algorithm-optimizer/SKILL.md
+  CREATE    .claude/skills/verification-before-completion/LICENSE
+  CREATE    .claude/skills/verification-before-completion/references/languages.md
+  CREATE    .claude/skills/verification-before-completion/SKILL.md
+  CREATE    .claude/skills/implementation-review/examples/example.md
+  CREATE    .claude/skills/implementation-review/SKILL.md
+  CREATE    .claude/skills/benchmark/examples/example.md
+  CREATE    .claude/skills/benchmark/references/languages.md
+  CREATE    .claude/skills/benchmark/SKILL.md
+  CREATE    .claude/skills/systematic-debugging/condition-based-waiting-example.ts
+  CREATE    .claude/skills/systematic-debugging/condition-based-waiting.md
+  CREATE    .claude/skills/systematic-debugging/defense-in-depth.md
+  CREATE    .claude/skills/systematic-debugging/find-polluter.sh
+  CREATE    .claude/skills/systematic-debugging/LICENSE
+  CREATE    .claude/skills/systematic-debugging/root-cause-tracing.md
+  CREATE    .claude/skills/systematic-debugging/SKILL.md
+  CREATE    .claude/skills/codebase-explorer/examples/example.md
+  CREATE    .claude/skills/codebase-explorer/SKILL.md
+  CREATE    .claude/skills/counterexample-hunter/examples/example.md
+  CREATE    .claude/skills/counterexample-hunter/SKILL.md
+  CREATE    .claude/skills/algorithm-options/examples/example.md
+  CREATE    .claude/skills/algorithm-options/SKILL.md
+  CREATE    .claude/skills/design-review/examples/example.md
+  CREATE    .claude/skills/design-review/SKILL.md
+  CREATE    .claude/skills/requesting-code-review/code-reviewer.md
+  CREATE    .claude/skills/requesting-code-review/LICENSE
+  CREATE    .claude/skills/requesting-code-review/SKILL.md
+  CREATE    .claude/skills/receiving-code-review/LICENSE
+  CREATE    .claude/skills/receiving-code-review/SKILL.md
+  CREATE    .claude/skills/karpathy-guidelines/LICENSE
+  CREATE    .claude/skills/karpathy-guidelines/SKILL.md
+  CREATE    .claude/skills/task-approval/SKILL.md
+  CREATE    .claude/skills/session-recovery/SKILL.md
+  CREATE    .claude/skills/data-quality-validator/scripts/profile_csv.py
+  CREATE    .claude/skills/data-quality-validator/SKILL.md
+  CREATE    .claude/agents/counterexample-blackbox.md
+Summary:      45 create, 0 update, 0 append, 0 conflict, 0 unchanged
+  Replaced skills (standard): tdd-automator -> test-driven-development, submission-validator -> verification-before-completion
+DRY RUN: nothing was written.
+(exit 0)

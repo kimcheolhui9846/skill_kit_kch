@@ -260,9 +260,10 @@ def test_trace_priority_decides_must_once_trace_exists(workspace):
     trace = {
         "schema": 1,
         "requirements": [
-            {"id": "REQ-001", "priority": "must"},
-            {"id": "REQ-002", "priority": "should"},
+            {"id": "REQ-001", "text": "a", "priority": "must", "revision": 1},
+            {"id": "REQ-002", "text": "b", "priority": "should", "revision": 1},
         ],
+        "tests": [],
     }
     (workspace / tasks.TRACE_REL).write_text(json.dumps(trace), encoding="utf-8")
     assert kit(workspace, "submit", "T-001")[0] == EXIT_READY

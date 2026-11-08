@@ -44,6 +44,8 @@ def install(kit, workspace, *extra):
 
 
 REPLACED_IN_STANDARD = ["submission-validator", "systematic-debugging", "tdd-automator"]
+# standard appends an overlay to these (P5-T3 task-router); restricted keeps the original
+OVERLAID_IN_STANDARD = ["algorithm-options", "counterexample-hunter", "task-router"]
 
 
 def test_restricted_catalog_is_exactly_the_legacy_skills(kit_root):
@@ -68,7 +70,8 @@ def test_restricted_catalog_is_exactly_the_legacy_skills(kit_root):
 def test_layered_files_equal_the_original_for_legacy_skills(kit_root, agent, policy):
     """No agent layers exist yet, so every agent gets the original bytes ("mirror" check)."""
     source = catalog.source_for(kit_root, agent, policy)
-    kept = LEGACY if policy == "restricted" else sorted(set(LEGACY) - set(REPLACED_IN_STANDARD))
+    changed = set(REPLACED_IN_STANDARD) | set(OVERLAID_IN_STANDARD)
+    kept = LEGACY if policy == "restricted" else sorted(set(LEGACY) - changed)
     for name in kept:
         original = [(r.split("/", 3)[3], d) for r, d in iter_skill_files(kit_root, name)]
         assert source(name) == original
@@ -122,8 +125,8 @@ def test_install_puts_each_layer_where_it_belongs(kit, workspace):
     assert (workspace / ".agents/skills/codex-only/SKILL.md").is_file()
     assert not (workspace / ".claude/skills/codex-only").exists()
     assert "skipped skills: codex-only (not for claude)" in out
-    assert "Skills 17/17 verified in .agents/skills/" in out  # 15 standard core + 2 demo
-    assert "Skills 16/16 verified in .claude/skills/" in out  # 15 core + tree-demo
+    assert "Skills 19/19 verified in .agents/skills/" in out  # 17 standard core + 2 demo
+    assert "Skills 18/18 verified in .claude/skills/" in out  # 17 core + tree-demo
     assert not any(p.name.endswith(".append") for p in workspace.rglob("*"))
 
 
@@ -185,7 +188,7 @@ def test_legacy_path_ignores_the_tree(kit, workspace, kit_root):
         (lambda d: d["skills"][0].update(agents=["gemini"]), "unknown agent"),
         (lambda d: d["skills"][0].update(policies=["loose"]), "unknown policie"),
         (lambda d: d["skills"][0].update(colour=1), "unknown field"),
-        (lambda d: d["skills"][0].update(overlay_policies=["standard"]), "without overlay"),
+        (lambda d: d["skills"][0].pop("overlay", None), "without overlay"),
         (lambda d: d["skills"].append({"name": "ghost", "location": None}), "no location"),
         (lambda d: d.update(schema=2), "schema 1"),
     ],

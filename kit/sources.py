@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 from typing import Dict, List, Optional
 
+from .fsops import path_order
 from .profiles import ProfileError
 
 LOCK_REL = "sources.lock.json"
@@ -214,12 +215,12 @@ def check(kit_root: Path) -> List[str]:
     covered = {rel for s in lock.values() for rel in s.files}
     root = kit_root / THIRD_PARTY
     if root.is_dir():
-        for path in sorted(root.rglob("*")):
+        for path in sorted(root.rglob("*"), key=path_order):
             if path.is_file():
                 rel = path.relative_to(kit_root).as_posix()
                 if rel not in covered:
                     problems.append(f"{rel} is not in {LOCK_REL}")
-        for folder in sorted(p for p in root.iterdir() if p.is_dir()):
+        for folder in sorted((p for p in root.iterdir() if p.is_dir()), key=path_order):
             prefix = folder.relative_to(kit_root).as_posix() + "/"
             licensed = any(
                 s.license_file and s.license_file.startswith(prefix) for s in lock.values()

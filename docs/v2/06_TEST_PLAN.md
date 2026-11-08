@@ -125,21 +125,21 @@
 | HITL-003 | 자동 | TC-HTL-03: 선행 Task가 미승인일 때 `task start` → 2 | V-14 | P5-T1 |
 | HITL-004 | 자동 + 문서 | TC-HTL-04: 정책 렌더에 중간 승인 조건(A.3) 목록이 있음 | — | P5 |
 | HITL-005 | 자동 | TC-HTL-05: 보고서 템플릿이 §5.6 섹션을 모두 포함 | — | P5-T2 |
-| HITL-006 | 자동 + 수동 | TC-HTL-06: approve의 `by` 3종 기록. 비대화형 human-cli 거부. 훅이 승인 파일 쓰기를 막을 때 exit 2(Claude 형식, Codex 형식). 실제 에이전트 연동은 M-05. **P5-T2는 L1 부분**(`tests/hitl/test_tasks.py`: human-cli TTY·재입력, agent-recorded 발화 필수·마스킹, CLI의 `human-hook` 거부). 훅 부분은 P5-T2b | — | P5-T2, P5-T2b |
-| TEST-001 | 자동 | TC-HTL-07: `report tests` 표에 원문 열이 모두 있음 | — | P5-T3 |
-| TEST-002 | 자동 | TC-HTL-08: JUnit fixture 3종(pytest, vitest, go-junit-report). 없는 locator → NOT RUN, skipped/error 처리 | — | P5-T3 |
-| TRACE-001 | 자동 | TC-HTL-09: REQ ID 중복 거부 | V-12 | P5-T3 |
-| TRACE-002 | 자동 | TC-HTL-10: requirements가 없는 테스트 경고 | V-12 | P5-T3 |
-| TRACE-003 | 자동 | TC-HTL-11: `trace check`가 테스트 없는 REQ를 보고 → 1 | V-12 | P5-T3 |
-| TRACE-004 | 자동 | TC-HTL-12: `req impact` 결과가 revision이 바뀐 REQ의 테스트 목록 | V-12 | P5-T3 |
-| TRACE-005 | 자동 | TC-HTL-13: 보고서가 "구현 정확성"과 "테스트 설계 타당성"을 다른 절로 나눔 | — | P5-T3 |
-| CE-001 | 자동 + 스킬 검토 | TC-HTL-14: counterexamples 상태 전이(PROPOSED → ACCEPTED/REJECTED/NEEDS_SPEC → CONVERTED). TC-SKL-02: `counterexample-hunter` standard overlay에 블랙박스 단계·NEEDS_SPEC·기록 형식이 있고, restricted 원본은 바뀌지 않음(Q7) | V-13 | P5-T5 |
-| CE-002 | 자동 | TC-HTL-15: C 등급 Task는 반례 기록이 없으면 submit 거부 | — | P5-T5 |
-| ALGO-001 | 스킬 검토 | TC-SKL-03: `algorithm-options` standard overlay에 8개 검토 항목이 있고 restricted 원본은 바뀌지 않음(Q7) | — | P5-T6 |
-| DATA-001 | 스킬 검토 | TC-SKL-04: `data-quality-validator`의 frontmatter·필수 항목 8개, "무조건 삭제 금지" 조항 | — | P5-T6 |
-| SESS-001 | 자동 | TC-HTL-16: recover fixture에서 7개 항목 복원 | V-15 | P5-T7 |
-| SESS-002 | 자동 | TC-HTL-17: HANDOFF.md에는 승인 상태만 있고 WIP는 `.kit/work/wip/`에 분리 | — | P5-T7 |
-| SESS-003 | 자동 | TC-HTL-18: 키트 소유가 아닌 `HANDOFF.md`가 있으면 건드리지 않음. 상태 파일은 `.kit/` 아래에만 | — | P5-T7 |
+| HITL-006 | 자동 + 수동 | TC-HTL-06: approve의 `by` 3종 기록. 비대화형 human-cli 거부. 훅이 승인 파일 쓰기를 막을 때 JSON `permissionDecision: deny`(Claude 형식, Codex 형식; Codex가 exit 2를 막지 않아 바꿈, M-05). 실제 에이전트 연동은 M-05. **P5-T2는 L1 부분**(`tests/hitl/test_tasks.py`: human-cli TTY·재입력, agent-recorded 발화 필수·마스킹, CLI의 `human-hook` 거부). 훅 부분은 P5-T2b(`tests/hitl/test_approval_hook.py`: 승인 단어 판정, human-hook 기록, 섞인 문장 미기록, 여러 SUBMITTED, 규칙 위반 시 미기록, PreToolUse가 Claude·Codex 형식 입력에서 exit 2, 일반 작업 통과, 훅이 있을 때 agent-recorded 거부, 설치·verify·uninstall·CONFLICT) | — | P5-T2, P5-T2b |
+| TEST-001 | 자동 | TC-HTL-07: `report tests` 표에 원문 열이 모두 있음. 표를 Task 보고서 4절에 붙이면 `kit task`의 표 읽기로 행이 읽히고 NOT RUN에 사유가 있음. `tests/hitl/test_report_tests.py` | — | P5-T4 |
+| TEST-002 | 자동 | TC-HTL-08: JUnit fixture 3종(pytest는 실제 출력, vitest·go-junit-report는 공개 형식대로 작성). 없는 locator → NOT RUN, skipped/error 처리, 매개변수화 집계, 다른 파일의 같은 이름은 짝짓지 않음, XML 깨짐·DOCTYPE → 2, 실패 메시지 마스킹, `--out`이 증거·상태 파일을 덮지 않음 | — | P5-T4 |
+| TRACE-001 | 자동 | TC-HTL-09: REQ ID 중복 거부(`req add` → 2, 파일 안 중복 → 65). `tests/hitl/test_trace.py` | V-12 | P5-T3 |
+| TRACE-002 | 자동 | TC-HTL-10: requirements가 없는 테스트 경고(`NO_REQUIREMENTS`), 없는 REQ를 가리키는 테스트(`UNKNOWN_REQ`) | V-12 | P5-T3 |
+| TRACE-003 | 자동 | TC-HTL-11: `trace check`가 테스트 없는 REQ를 보고 → 1. must에 normal 테스트만 있으면 `WEAK`, 다른 case 하나로 풀림. 빈 파일·없는 파일은 0, 깨진 JSON·스키마 위반은 65 | V-12 | P5-T3 |
+| TRACE-004 | 자동 | TC-HTL-12: `req impact` 결과가 revision이 바뀐 REQ의 테스트 목록(`REVIEW`). `req edit`·`req sync` 개정 뒤 `STALE`, 다시 link하면 풀림. `TASK_BRIEF.md` 동기화(추가·개정·유지·사라짐 경고, 거부 4종, 작업 공간 밖). task-router standard overlay | V-12 | P5-T3 |
+| TRACE-005 | 자동 | TC-HTL-13: 보고서가 "구현 정확성"과 "테스트 설계 타당성"을 다른 절로 나눔 (00_PROMPT §10.4), 질문 6개 답. 제목에 번호가 없음 | — | P5-T4 |
+| CE-001 | 자동 + 스킬 검토 | TC-HTL-14: counterexamples 상태 전이(PROPOSED → ACCEPTED/REJECTED/NEEDS_SPEC → CONVERTED). TC-SKL-02: `counterexample-hunter` standard overlay에 블랙박스 단계·NEEDS_SPEC·기록 형식이 있고, restricted 원본은 바뀌지 않음(Q7). 기록 스키마 위반 13종 → 65, 잘못된 전이 → 2, NEEDS_SPEC은 `resolve`(발화 마스킹) 없이 CONVERTED 불가, convert는 추적된 테스트 필요, 보고서 "반례 검토" 열. 블랙박스 서브에이전트: standard Claude만 설치·verify·uninstall, 사용자 파일은 CONFLICT. `tests/hitl/test_counterexamples.py` | V-13 | P5-T5 |
+| CE-002 | 자동 | TC-HTL-15: C 등급 Task는 반례 기록이 없으면 submit 거부. 다른 요구사항의 기록은 세지 않음, PROPOSED가 남으면 거부, NEEDS_SPEC은 통과, S 등급은 검사 안 함 | — | P5-T5 |
+| ALGO-001 | 스킬 검토 | TC-SKL-03: `algorithm-options` standard overlay에 8개 검토 항목이 있고 restricted 원본은 바뀌지 않음(Q7). 항목 순서와 보고 템플릿까지 자동 검사(`tests/catalog/test_p5t6_skills.py`) | — | P5-T6 |
+| DATA-001 | 스킬 검토 + 자동 | TC-SKL-04: `data-quality-validator`의 frontmatter·필수 항목 8개, "무조건 삭제 금지" 조항, 정적 검증(두 에이전트), standard core에만 설치. 보조 스크립트: 결측·중복·이상치·타입 불일치·필드 수가 틀린 행이 있는 CSV 픽스처, cp949, 표본 제한, 읽기만 함, 오류 종료 코드 | — | P5-T6 |
+| SESS-001 | 자동 | TC-HTL-16: 승인 2개 + 진행 중 1개 + WIP 픽스처에서 7개 항목 복원(텍스트·JSON), 깨진 WIP 6종은 승인 상태만으로 복원(종료 코드 1), git 없는 폴더·git 저장소·더 큰 저장소 안의 하위 폴더, 스냅숏 없음·잘림 (`tests/hitl/test_recover.py`) | V-15 | P5-T7 |
+| SESS-002 | 자동 | TC-HTL-17: `.kit/work/HANDOFF.md`에는 승인 상태만 있고 WIP는 `.kit/work/wip.json`에 분리. 승인 즉시 갱신, 훅 승인은 다음 kit 명령에서 갱신, 승인 뒤 바뀐 보고서는 옮기지 않음 | — | P5-T7 |
+| SESS-003 | 자동 | TC-HTL-18: 루트 `HANDOFF.md`와 표식 없는 `.kit/work/HANDOFF.md`는 바이트 그대로. 모든 상태 파일은 `.kit/work/` 아래에만, `.kit/` 밖 트리는 그대로 | — | P5-T7 |
 
 ### SKILL · USER · DOC (보강)
 
@@ -163,6 +163,8 @@
 | 자동 테스트가 없는(문서·수동만 있는) REQ | AGENT-004, SRC-001, SRC-006, SRC-008, DOC-001 — 모두 문서 산출물 요구사항 |
 
 ## 3. 검증 매트릭스 V-01~V-24
+
+P6-T2 실행 결과와 실제 테스트 이름은 `docs/v2/regression/P6-T2-matrix.md`에 있다. 원문 방법을 그대로 따르는 테스트가 없던 V-04·05·07·08·09·16·17·18은 `tests/test_p6_matrix.py`에 있다. P6-T3 보안 검증(링크를 통한 경로 탈출, 링크를 만들지 않음, TOML·줄 단위·JSON 감사 규칙 일치, lock 해시 독립 재계산)은 `tests/test_p6_security.py`와 `docs/v2/regression/P6-T3-security.md`에 있다. P6-T4 플랫폼 검증(Linux·Python 3.9 실제 실행, cp949, PowerShell)은 `docs/v2/regression/P6-T4-platform.md`, `tests/test_p6_platform.py`, 검토자용 `docs/v2/WINDOWS_MANUAL_CHECK.md`에 있다. V-16의 Linux 부분은 P6-T4에서 실행했다. P6-T5 E2E HITL 시나리오(요구사항 3개·Task 2개, 보고서 없는 submit 거부, 승인 전 의존 Task 시작 거부, 승인 뒤 HANDOFF 갱신, 새 프로세스의 recover가 승인 상태와 WIP를 나눠 보여 줌, 요구사항 개정 뒤 `req impact`)는 `tests/test_p6_e2e.py`와 `docs/v2/regression/P6-T5-e2e.md`에 있다. P6-T6 에이전트 로드 수동 점검표는 `docs/v2/AGENT_LOAD_CHECK.md`(M-01·M-02 대체, 결과 칸은 검토자)이고, 점검표의 스킬 목록·설치 파일·출처가 실제 설치와 맞는지는 `tests/test_p6_agent_load_check.py`가 지킨다. P7-T1: 사용자 문서(README, `docs/guides/`)의 명령은 `devtools/run_doc_commands.py`가 실행해 `docs/v2/regression/P7-T1-doc-commands.md`에 기록하고, `tests/test_doc_commands.py`가 문서의 모든 명령이 그 기록에 있는지 확인한다. `docs/CATALOG.md`는 `devtools/make_catalog_doc.py`가 실제 `kit plan` 결과로 만들고 `tests/test_catalog_doc.py`가 최신인지 확인한다.
 
 | V | 연결 TC |
 |---|---|
@@ -195,11 +197,11 @@
 
 | ID | 내용 | 절차 | 기록 위치 |
 |---|---|---|---|
-| M-01 | Codex 스킬·MCP 로드 | 설치한 대상에서 Codex를 열고 `/skills`, `/mcp` 확인. user 범위는 `~/.codex/skills`(OMX 포함) | `docs/v2/manual/M-01.md` |
-| M-02 | Claude Code 스킬·MCP·플러그인 로드 | `/skills`, `/mcp`, `/plugin`. `both`에서 `.agents/skills` 중복이 보이는지(R-4) | M-02.md |
+| M-01 | Codex 스킬·MCP 로드 | 설치한 대상에서 Codex를 열고 `/skills`, `/mcp` 확인. user 범위는 `~/.codex/skills`(OMX 포함) | `docs/v2/AGENT_LOAD_CHECK.md` 1절(P6-T6) |
+| M-02 | Claude Code 스킬·MCP·플러그인 로드 | `/skills`, `/mcp`, `/plugin`. `both`에서 `.agents/skills` 중복이 보이는지(R-4) | `docs/v2/AGENT_LOAD_CHECK.md` 2절(P6-T6) |
 | M-03 | Python 3.9 | `uv python install 3.9` 후 전체 테스트(네트워크 승인 필요) | M-03.md |
 | M-04 | Linux·macOS·pwsh 7 | `devtools/manual_verify.sh` / `.ps1` | M-04.md |
-| M-05 | 승인 훅 실제 동작 | `--hooks` 설치 뒤 각 에이전트에서 "승인" 입력 → `by: human-hook` 기록. 에이전트에게 승인 파일 쓰기를 시키면 차단되는지 | M-05.md |
+| M-05 | 승인 훅 실제 동작 | `--hooks` 설치 뒤 각 에이전트에서 "승인" 입력 → `by: human-hook` 기록. 에이전트에게 승인 파일 쓰기를 시키면 차단되는지. **VERIFIED-RUN 2026-11-07**(Claude 2.1.319·Codex 0.166.0, 결과와 발견은 ADR-011 구현 절) | ADR-011 |
 | M-06 | user 범위 첫 실제 적용 | 이 PC에서 `install --scope user --dry-run`의 diff를 검토한 뒤 직접 적용 → M-01·M-02 | M-06.md |
 
 결과는 실행한 사람과 날짜를 적고 `VERIFIED-RUN`으로 표시한다. 하지 않은 항목은 최종 보고서에 `NOT RUN`으로 남긴다.

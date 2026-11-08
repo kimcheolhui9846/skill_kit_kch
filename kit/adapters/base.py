@@ -45,6 +45,7 @@ class AgentAdapter(Protocol):
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,  # [(name, catalog entry)] from catalog/plugins.json
+        hooks: bool = False,  # --hooks: approval hook (kit.approval_hooks, project scope)
     ) -> List[FileChange]:
         """Pure: decide every change without writing (REQ-ARCH-004)."""
         ...
@@ -61,6 +62,7 @@ class AgentAdapter(Protocol):
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[ItemResult]:
         """Item-by-item check of what is actually in the target."""
         ...

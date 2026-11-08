@@ -13,8 +13,8 @@ import json
 from pathlib import Path
 from typing import Callable, List, Optional, TextIO
 
-from . import tasks
-from .logs import mask
+from . import recover, tasks
+from .logs import mask, mask_tree
 from .model import EXIT_BLOCKED, EXIT_PARTIAL, EXIT_READY, TargetError, UsageError
 
 Ask = Optional[Callable[[str], str]]
@@ -100,6 +100,11 @@ def run(ns: argparse.Namespace, cwd: Path, kit_root: Path, out: TextIO, ask: Ask
         )
     tasks.save(target, data)
     lines, payload = result
+    if ns.action == "submit":  # the state the reviewer is asked to approve (P5-T7)
+        recover.take_snapshot(target, tasks.get(data, ns.id))
+    handoff = recover.refresh_handoff(target, data)
+    if ns.action == "approve" and handoff == "updated":
+        lines.append(f"Handoff:      {recover.HANDOFF_REL} updated (approved state only)")
     return _emit(
         out,
         ns.json,
@@ -164,6 +169,7 @@ def _confirm(ns, ask: Ask) -> str:
 
 
 def _status(target: Path, data: dict, ns, out: TextIO) -> int:
+    recover.refresh_handoff(target, data)  # catches up after a hook approval (P5-T7)
     rows = data["tasks"]
     if ns.action == "status" and ns.id:
         rows = [tasks.get(data, ns.id)] if any(t["id"] == ns.id for t in rows) else []
@@ -175,6 +181,8 @@ def _status(target: Path, data: dict, ns, out: TextIO) -> int:
     for t in rows:
         appr = t.get("approval")
         by = f" by {appr['by']}" if appr else ""
+        if appr and appr.get("by") == "human-hook" and appr.get("agent") == "codex":
+            by += " (codex hook: guardrail only)"
         subs = t.get("subtasks", [])
         done = sum(1 for s in subs if s["state"] == "DONE")
         lines.append(
@@ -202,7 +210,10 @@ def _status(target: Path, data: dict, ns, out: TextIO) -> int:
 
 def _emit(out: TextIO, as_json: bool, payload: dict, lines: List[str], code: int) -> int:
     if as_json:
-        out.write(json.dumps({**payload, "exit_code": code}, indent=2, ensure_ascii=False) + "\n")
+        out.write(
+            json.dumps(mask_tree({**payload, "exit_code": code}), indent=2, ensure_ascii=False)
+            + "\n"
+        )
     else:
         out.write(mask("\n".join(lines)) + "\n")
     return code

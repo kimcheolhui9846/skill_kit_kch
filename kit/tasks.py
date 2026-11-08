@@ -20,7 +20,8 @@ Rules (a broken rule is a Refused, exit 2; a broken file is a TasksError, exit 6
 - approve: only SUBMITTED, and only while the report still has the hash it had at submit.
   The record keeps the report hash; status warns when the report changes after approval.
 - by: human-cli (a person retyped the task id at a terminal), agent-recorded (the agent
-  quotes the user's words as evidence). human-hook is written only by the L2 hook (P5-T2b).
+  quotes the user's words as evidence). human-hook is written only by the L2 hook
+  (P5-T2b, kit.approval_hooks); while that hook is installed agent-recorded is refused.
 
 Honesty: L1 is a state machine an agent can still bypass (for example by editing the JSON by
 hand). It makes skipped approvals visible after the fact through the `by` field and the
@@ -36,6 +37,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from . import approval_hooks, counterexamples
+from . import trace as trace_mod
 from .fsops import PathEscapeError, safe_path, sha256
 
 TASKS_REL = ".kit/work/tasks.json"
@@ -309,14 +312,11 @@ def test_rows(text: str) -> List[Dict[str, str]]:
 
 def must_requirements(target: Path, task: dict) -> List[str]:
     """All task requirements until trace.json exists; then those with priority must."""
-    trace = safe_path(target, TRACE_REL)
-    if not trace.is_file():
-        return list(task["requirements"])
     try:
-        data = json.loads(trace.read_bytes().decode("utf-8"))
-        prio = {r["id"]: r.get("priority") for r in data.get("requirements", [])}
-    except (OSError, UnicodeDecodeError, ValueError, TypeError, KeyError):
-        raise TasksError(f"{TRACE_REL} is not valid") from None
+        data = trace_mod.load(target)  # missing or empty file: nothing recorded yet
+    except trace_mod.TraceError as exc:
+        raise TasksError(f"{TRACE_REL} is not valid ({exc})") from None
+    prio = {r["id"]: r["priority"] for r in data["requirements"]}
     return [r for r in task["requirements"] if prio.get(r, "must") == "must"]
 
 
@@ -356,6 +356,8 @@ def submit(target: Path, data: dict, task_id: str, report: Optional[str]) -> dic
         raise Refused(f"subtask(s) not done: {', '.join(open_subs)}")
     rel = report or task.get("report") or default_report(task_id)
     digest, problems = check_report(target, task, rel)
+    if task.get("grade") == "C":  # TC-HTL-15
+        problems += counterexamples.submit_problems(target, task)
     if problems:
         raise Refused(f"cannot submit {task_id}: " + "; ".join(problems))
     task["report"] = rel
@@ -378,6 +380,13 @@ def approve(target: Path, data: dict, task_id: str, by: str, evidence: str) -> d
         raise Refused(f"{task_id} is {task['state']}; only SUBMITTED can be approved")
     if by not in BY:
         raise ValueError(f"--by must be one of {', '.join(BY)}")
+    hooked = approval_hooks.installed(target)
+    if by == "agent-recorded" and hooked:
+        raise Refused(
+            f"the approval hook is on here ({', '.join(hooked)}); the user approves by replying "
+            "only 'approve' (recorded by human-hook) or with kit task approve at "
+            "a terminal"
+        )
     digest = current_sha(target, task)
     if digest != task.get("submitted_sha256"):
         raise Refused(f"{task['report']} changed after submit; submit {task_id} again")

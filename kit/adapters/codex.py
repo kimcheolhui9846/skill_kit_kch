@@ -9,11 +9,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import List, Optional
 
-from .. import mcp_catalog, plugin_install
+from .. import approval_hooks, mcp_catalog, plugin_install
 from ..audit import audit_target
 from ..fsops import State
 from ..mcpconfig import stale_block_item
-from ..model import FAIL, PASS, ItemResult
+from ..model import FAIL, PASS, ItemResult, Outcome
 from ..plan import SKILL_SOURCE, FileChange, plan_changes, plan_file
 from ..profiles import Profile
 from ..verify import verify_target
@@ -56,6 +56,7 @@ class CodexAdapter:
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[FileChange]:
         changes = plan_changes(
             target,
@@ -73,6 +74,11 @@ class CodexAdapter:
             changes.append(
                 plan_file(target, rel, "plugin-config", _market_file(kit_root, plugins), state)
             )
+        if hooks:
+            config = approval_hooks.plan_config(target, self.name, state)
+            changes.append(config)
+            if config.outcome != Outcome.CONFLICT:  # no script without its registration
+                changes.append(approval_hooks.plan_script(target, kit_root, self.name, state))
         return changes
 
     def verify(
@@ -87,6 +93,7 @@ class CodexAdapter:
         policy_body: Optional[str] = None,
         skill_source=None,
         plugins=None,
+        hooks: bool = False,
     ) -> List[ItemResult]:
         # The legacy path (kit.app) still calls verify_target itself; the new path uses this.
         items = verify_target(
@@ -104,6 +111,8 @@ class CodexAdapter:
         )
         if plugins:
             items.append(_verify_market_file(target, kit_root, plugins))
+        if hooks:
+            items += approval_hooks.verify(target, kit_root, self.name, changes)
         return items
 
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None) -> ItemResult:
@@ -114,4 +123,5 @@ class CodexAdapter:
         return stale_block_item(target)
 
     def manual_checks(self, target: Path) -> List[str]:
-        return [f"Open Codex in {target} and run /skills to confirm the kit skills load."]
+        steps = [f"Open Codex in {target} and run /skills to confirm the kit skills load."]
+        return steps + approval_hooks.manual_step(self.name, target)

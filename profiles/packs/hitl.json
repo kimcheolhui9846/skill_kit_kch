@@ -2,7 +2,7 @@
   "schema": 2,
   "name": "hitl",
   "kind": "pack",
-  "description": "Human-in-the-loop pack: approval workflow, test reports, traceability, counterexamples, session recovery. Skills are added in Phase 5; empty until then.",
+  "description": "Human-in-the-loop pack: approval workflow, test reports, traceability, counterexamples, session recovery (kit task/req/trace/report/ce/recover). It lists no skills of its own: task-approval and session-recovery come with core under the standard policy.",
   "agents": [
     "codex",
     "claude"

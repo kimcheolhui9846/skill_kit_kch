@@ -18,7 +18,7 @@ from kit import commands, mcp_catalog
 from kit.mcp_catalog import CatalogError
 from kit.model import EXIT_BLOCKED, EXIT_PARTIAL, EXIT_READY, EXIT_USAGE
 from tests.catalog.kit_fixture import write
-from tests.conftest import tree_digest
+from tests.conftest import TOML_PASS, tree_digest
 
 SETTINGS = ".claude/settings.json"
 PLUGIN_ID = "security-guidance@hackathon-kit"
@@ -242,6 +242,15 @@ def test_bad_opt_in_is_a_usage_error(kit, workspace, capsys, argv, message):
     assert tree_digest(workspace) == before
 
 
+@pytest.mark.parametrize("flag", ["--mcp", "--plugin"])
+def test_unknown_name_points_at_a_catalog_file_that_exists(kit, workspace, capsys, flag):
+    """P7-T1: --plugin used to point at catalog/plugin.json; the file is plugins.json."""
+    assert run(kit, workspace, "install", "--agent", "claude", flag, "nope")[0] == EXIT_USAGE
+    err = capsys.readouterr().err
+    named = err.split("(see ", 1)[1].split(")", 1)[0]
+    assert (kit / named).is_file(), named
+
+
 def test_profile_with_unknown_server_is_a_usage_error(kit, workspace):
     pack = {"schema": 2, "kind": "pack", "name": "odd", "mcp": {"shared": ["evil-server"]}}
     write(kit, "profiles/packs/odd.json", json.dumps(pack))
@@ -355,11 +364,11 @@ def test_verify_and_update_keep_the_install_choices(kit, workspace):
         items = {
             a: {i["name"]: i["verified"] for i in v["items"]} for a, v in data["agents"].items()
         }
-        assert items["codex"]["mcp-config"] == "PASS"
+        assert items["codex"]["mcp-config"] == TOML_PASS
         assert items["claude"]["mcp-config"] == "PASS"
         assert items["claude"]["plugin-config"] == "PASS"
         assert items["claude"]["security audit"] == "PASS"
-        assert items["codex"]["security audit"] == "PASS"
+        assert items["codex"]["security audit"] == TOML_PASS
         assert "plugin-config" not in items["codex"]
     assert (workspace / SETTINGS).is_file()
 

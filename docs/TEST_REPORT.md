@@ -1,5 +1,57 @@
 # 테스트 보고서
 
+1부는 v2 최종 결과다(2026-11-08). 2부는 v1(계획 1~2와 그 뒤) 기록을 그대로 둔 것이다. v2의 단계별 근거는 `docs/v2/regression/`에 있다.
+
+# 1부. v2
+
+## 최종 실행 (P7-T2, 2026-11-08)
+
+최종 검증 보고서는 `docs/v2/FINAL_REPORT.md`다. 후속 1~4(중간 승인 조건, 표준 라이브러리 검사, 재설치 정리, `launch-compliance-check`)를 반영한 마지막 전체 실행은 **1790 passed, 2 skipped**(`docs/v2/regression/raw/f4-pytest.txt`, `f4-junit.xml`)이고, ruff 172개 파일과 shellcheck 4개가 깨끗했다. 아래 표는 P7-T1 시점의 실행이다.
+
+### P7-T1 실행
+
+환경: Windows 11 Pro 10.0.26200, Python 3.12.10, uv 0.10.9, shellcheck 0.11.0. 작업은 `feat/v2-multi-agent` 브랜치에서 아직 커밋하지 않은 상태로 실행했다.
+
+| 명령 | 결과 | 근거 |
+|---|---|---|
+| `uv run --offline pytest -q -p no:cacheprovider` | **1517 passed, 2 skipped** | `docs/v2/regression/raw/p7t1-pytest.txt`, `p7t1-junit.xml` |
+| `uv run --offline ruff check .` | PASS | `All checks passed!` |
+| `uv run --offline ruff format --check .` | PASS | `164 files already formatted` |
+| `shellcheck` (추적 중인 `.sh` 전부) | PASS | 출력 없음, 종료 코드 0 |
+| `uv run python devtools/run_doc_commands.py` | PASS | 사용자 문서의 명령 95개, 기대와 다른 종료 코드 0개(`docs/v2/regression/P7-T1-doc-commands.md`) |
+
+건너뛴 2개는 심볼릭 링크 테스트다. 이 PC에서는 링크를 만들 수 없다. Linux에서는 실행되어 통과했다(P6-T4).
+
+## 단계별 근거
+
+| 단계 | 내용 | 결과 | 기록 |
+|---|---|---|---|
+| P6-T1 | v1 기준선(P1-T1)과 전체 회귀 비교 | 기준선 테스트 모두 유지, 1356 passed | `regression/P6-T1-regression.md` |
+| P6-T2 | 검증 행렬 V-01~V-18 | 18개 모두 근거 테스트 있음 | `regression/P6-T2-matrix.md` |
+| P6-T3 | 보안: 링크를 통한 경로 탈출, 링크를 만들지 않음, TOML·JSON 감사 규칙 일치, lock 해시 | 통과. 변이 M1~M11 중 M3만 살아남음(다른 방어선이 이미 막음), 보강한 M3b는 잡힘 | `regression/P6-T3-security.md` |
+| P6-T4 | 플랫폼: Linux(WSL2), 실제 Python 3.9.25, cp949 PowerShell 5.1 | Linux 1407 passed, 3.9 1397 passed. 결함 2개(파일 순서, 3.9의 표 비교) 고침 | `regression/P6-T4-platform.md` |
+| P6-T5 | E2E HITL 시나리오 6단계(실제 프로세스, 실제 pytest JUnit) | 7개 통과, 변이 6개 모두 잡힘 | `regression/P6-T5-e2e.md` |
+| P6-T6 | 에이전트 로드 점검표와 그 정합성 테스트 | 4개 통과, 변이 5개 모두 잡힘 | `docs/v2/AGENT_LOAD_CHECK.md` |
+| P7-T1 | 문서 명령 실행, 카탈로그 문서 생성, 예시 로그 | 문서 명령 95개 기대대로 | `regression/P7-T1-doc-commands.md` |
+| P7-T2 | REQ 84개 커버리지(JUnit에서 계산), 기준선 비교, 후속 1~4 | PASS 81, 문서 3. 기준선 339개 변화 없음 | `regression/P7-T2-req-coverage.md`, `docs/v2/FINAL_REPORT.md` |
+
+## 미검증 (검토자 확인 필요)
+
+| 항목 | 상태 | 확인 방법 |
+|---|---|---|
+| Codex·Claude Code 안에서의 스킬·MCP·훅·서브에이전트 로드 | UNVERIFIED | `docs/v2/AGENT_LOAD_CHECK.md` |
+| PowerShell 7, 기본 설정 PowerShell 5.1의 리디렉션 인코딩 | NOT RUN | `docs/v2/WINDOWS_MANUAL_CHECK.md` |
+| 실제 Linux 기기, macOS | NOT RUN | WSL2에서만 실행 |
+| Windows에서 Python 3.9 | NOT RUN | 3.9는 Linux에서만 실행 |
+| user 범위 실제 적용(`--scope user --yes`) | NOT RUN | 검토자 작업 M-06 |
+| `--plugin` 실제 설치 | 이번에는 NOT RUN | P4-T5에서 격리 설정 폴더로 확인한 기록 |
+| `git clone`으로 받는 v2 | NOT RUN | `main` 병합 뒤 |
+
+승인 훅(L2)은 2026-11-07 Claude Code 2.1.319와 codex-cli 0.166.0에서 실제로 확인했다(ADR-011, M-05, VERIFIED-RUN).
+
+# 2부. v1 기록
+
+
 ## 계획 1
 
 실행일: 2026-10-28, 환경: Windows 11 AMD64, Python 3.12.10, codex-cli 0.165.0, shellcheck 0.11.0
