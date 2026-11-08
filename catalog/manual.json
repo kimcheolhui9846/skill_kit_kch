@@ -27,6 +27,239 @@
         "Delete its data folder if you no longer need the stored provider keys."
       ],
       "docs": "https://ccrdesk.top/en/guides/cli/"
+    },
+    "headroom": {
+      "package": "headroom-ai",
+      "version": "0.43.1",
+      "license": "Apache-2.0",
+      "origin": "https://github.com/headroomlabs-ai/headroom",
+      "commit": "2d3ee5184643",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "context-compression proxy that wraps a coding agent and relays its model requests (07_SOURCES_EVALUATION U-08). An anonymous telemetry beacon is ON by default",
+      "network_egress": "your model requests pass through its local proxy to the provider; anonymous beacon (compression ratios, provider and model IDs, OS) on by default; PyPI update check at most once a day",
+      "file_access": "keeps originals for retrieval in its local store; `headroom wrap` registers itself with the wrapped agent until `headroom unwrap`",
+      "steps": [
+        "Read the risks above; the kit does not run any of this.",
+        "Turn telemetry and update checks off first (README 'Telemetry'): set HEADROOM_TELEMETRY=off and HEADROOM_BEACON=off (or DO_NOT_TRACK=1, or HEADROOM_OFFLINE=1), and HEADROOM_UPDATE_CHECK=off, in the shell you start it from.",
+        "Install the pinned version in its own environment: uv tool install --python 3.13 \"headroom-ai[all]==0.43.1\"",
+        "Run one wrapped session: headroom wrap claude   (or: headroom wrap codex). The proxy exits with the wrapped agent."
+      ],
+      "undo": [
+        "headroom unwrap claude   (and/or: headroom unwrap codex) removes a durable wrap or registration",
+        "uv tool uninstall headroom-ai",
+        "Unset the HEADROOM_* variables you set."
+      ],
+      "docs": "https://github.com/headroomlabs-ai/headroom/blob/2d3ee5184643/README.md"
+    },
+    "rtk": {
+      "package": "rtk-oss",
+      "version": "1.1.0",
+      "license": "Apache-2.0 for the rtk-oss edition; the default rtk binary is Apache-2.0 + BUSL-1.1 and rtk-proxy is BUSL-1.1",
+      "origin": "https://github.com/rtk-ai/rtk",
+      "commit": "753a3b0e939f",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "shell hook that rewrites the agent's Bash commands to compress their output (07_SOURCES_EVALUATION U-20). Use the Apache-2.0-only rtk-oss edition",
+      "network_egress": "none for the hook; telemetry is off by default (opt in only with `rtk telemetry enable`)",
+      "file_access": "`rtk init -g` writes a hook into the agent's user settings (Claude Code by default, `--codex` for Codex)",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. Pick rtk-oss: the default rtk binary mixes Apache-2.0 and BUSL-1.1, and both editions install a binary named rtk, so only one can be installed.",
+        "Install rtk-oss 1.1.0 from the release binaries or the methods in the installation guide (https://www.rtk-ai.app/guide/getting-started/installation); on macOS/Linux: brew install rtk-ai/tap/rtk-oss",
+        "Preview with the --dry-run option the Quick Start guide describes, then add the hook: rtk init -g   (Codex: rtk init -g --codex)",
+        "Restart the agent."
+      ],
+      "undo": [
+        "Remove the hook with the uninstall step of the Quick Start guide (https://www.rtk-ai.app/guide/getting-started/quick-start); the kit did not verify its exact flag.",
+        "Uninstall the binary the same way you installed it (for example: brew uninstall rtk-oss).",
+        "Restart the agent."
+      ],
+      "docs": "https://www.rtk-ai.app/guide/getting-started/installation"
+    },
+    "graphify": {
+      "package": "graphifyy",
+      "version": "0.9.104",
+      "license": "Apache-2.0",
+      "origin": "https://github.com/Graphify-Labs/graphify",
+      "commit": "433a57a00290",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "code knowledge-graph CLI and skill; installs a PreToolUse hook (Claude Code) or instruction blocks (AGENTS.md for Codex) that steer the agent to the graph (07_SOURCES_EVALUATION U-07). PyPI name is graphifyy (two y)",
+      "network_egress": "PyPI download; extraction uses your agent or the backends you configure with API keys; README says no telemetry",
+      "file_access": "reads the repository; writes graphify-out/, a PreToolUse hook and CLAUDE.md/AGENTS.md instructions; `graphify hook install` adds git hooks",
+      "steps": [
+        "Read the risks above; the kit does not run any of this.",
+        "Install the pinned CLI: uv tool install graphifyy==0.9.104",
+        "Register it for this project only (not user-wide): graphify install --project   (Codex: graphify install --project --platform codex)",
+        "In the agent: /graphify ."
+      ],
+      "undo": [
+        "graphify uninstall   (add --purge to also delete graphify-out/)",
+        "If you ran graphify hook install, remove those git hooks too (see the docs).",
+        "uv tool uninstall graphifyy"
+      ],
+      "docs": "https://github.com/Graphify-Labs/graphify/blob/433a57a00290/README.md"
+    },
+    "claude-mem": {
+      "package": "claude-mem",
+      "version": "15.12.0",
+      "license": "Apache-2.0",
+      "origin": "https://github.com/thedotmack/claude-mem",
+      "commit": "eb00299a6a74",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "session memory: hooks capture tool activity, a local worker summarises it and later sessions recall it (07_SOURCES_EVALUATION U-42). Usage analytics are ON by default; the installer auto-installs Bun and uv",
+      "network_egress": "npm download; anonymous usage analytics on by default; the memory provider you choose (claude-mem observer service, OpenRouter/Gemini key, or your Anthropic plan); optional browser sign-in and cloud sync",
+      "file_access": "stores session observations in ~/.claude-mem; registers hooks and a plugin with each agent it sets up; installs Bun and uv if missing",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. Session content is stored and summarised.",
+        "To skip the account sign-in, set CLAUDE_MEM_ONLINE_OPTIN=false (or pass an explicit --provider).",
+        "Install the pinned version in an interactive terminal: npx claude-mem@15.12.0 install   (it asks which agents; --ide values: npx claude-mem@15.12.0 --help)",
+        "Turn analytics off: npx claude-mem@15.12.0 telemetry disable"
+      ],
+      "undo": [
+        "Uninstall is only partly documented upstream (README at the pinned commit has no uninstall section); the kit does not invent the missing steps.",
+        "In Claude Code remove the plugin from /plugin; check the agent's settings for hooks it added.",
+        "Delete ~/.claude-mem if you no longer want the stored memory.",
+        "Bun and uv that it installed stay; remove them separately if you do not use them."
+      ],
+      "docs": "https://github.com/thedotmack/claude-mem/blob/eb00299a6a74/README.md"
+    },
+    "openrig": {
+      "package": "@openrig/cli",
+      "version": "0.7.9",
+      "license": "Apache-2.0",
+      "origin": "https://github.com/mvschwarz/openrig",
+      "commit": "ddb9d25be74a",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "tmux-based multi-agent rigs (07_SOURCES_EVALUATION U-10). No native Windows: macOS, Linux or WSL2 only. Its setup writes ~/.codex and ~/.claude",
+      "network_egress": "npm download; may install tmux, Herdr and a missing Claude Code or Codex during `rig setup`",
+      "file_access": "`rig setup` and its daemon write ~/.tmux.conf, ~/.openrig, hooks and trust in ~/.codex/config.toml, workspace trust in ~/.claude.json, hooks in the project's .claude/settings.local.json, and skills in ~/.claude/skills and ~/.agents/skills",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. Use macOS, Linux or WSL2 (native Windows is not supported).",
+        "Install the pinned CLI (Node.js 22 or 24): npm install -g @openrig/cli@0.7.9   (its postinstall only checks Node.js and SQLite)",
+        "Preview what setup changes: rig setup --dry-run --providers claude   (or codex)",
+        "Apply it: rig setup --providers claude --no-herdr"
+      ],
+      "undo": [
+        "Uninstall is only partly documented upstream (the README lists what setup changes but gives no uninstall command); the kit does not invent the missing steps.",
+        "npm uninstall -g @openrig/cli",
+        "Remove the OpenRig block from ~/.tmux.conf, its hooks and trust entries from ~/.codex/config.toml, its hooks from .claude/settings.local.json, and its skills (openrig-skills, refocusing, rigs) from ~/.claude/skills and ~/.agents/skills.",
+        "Delete ~/.openrig."
+      ],
+      "docs": "https://github.com/mvschwarz/openrig/blob/ddb9d25be74a/README.md"
+    },
+    "ruflo": {
+      "package": "ruflo",
+      "version": "3.72.2",
+      "license": "MIT",
+      "origin": "https://github.com/ruvnet/ruflo",
+      "commit": "b7bc909d5f0d",
+      "agents": ["codex", "claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "orchestration platform: MCP server, hooks, background daemon and swarms (07_SOURCES_EVALUATION U-44). Upstream examples use @latest; pin 3.72.2 yourself",
+      "network_egress": "npm download; whatever model providers and federation you configure",
+      "file_access": "`ruflo init` writes .claude/, .claude-flow/, CLAUDE.md, helpers and settings into the project and starts hooks and a daemon",
+      "steps": [
+        "Read the risks above; the kit does not run any of this.",
+        "Smallest surface (MCP only, Claude Code's default local scope): claude mcp add ruflo -- npx -y ruflo@3.72.2 mcp start",
+        "Full CLI setup (writes the project files listed above): npx -y ruflo@3.72.2 init"
+      ],
+      "undo": [
+        "claude mcp remove ruflo",
+        "Uninstall after `init` is only partly documented upstream; the kit does not invent the missing steps. Use git status / git diff to find and remove the files it added (.claude/, .claude-flow/, CLAUDE.md changes, settings) and stop its daemon."
+      ],
+      "docs": "https://github.com/ruvnet/ruflo/blob/b7bc909d5f0d/README.md"
+    },
+    "bureau-des-agents": {
+      "version": "0.1.0",
+      "license": "MIT",
+      "origin": "https://github.com/devlikemasta/bureau-des-agents",
+      "commit": "184daa898cbb",
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "risk": "medium",
+      "summary": "local web 'office' UI that runs and shows Claude Code agents (07_SOURCES_EVALUATION U-45). Interface in French",
+      "network_egress": "git clone and npm install; the agents it starts use your Claude Code account; the server listens on 127.0.0.1 only",
+      "file_access": "its clone folder; the agents it starts work in the folders you give them",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. Needs Node.js 22.18+ and a signed-in Claude Code.",
+        "git clone https://github.com/devlikemasta/bureau-des-agents.git, then cd bureau-des-agents and git checkout 184daa898cbb",
+        "npm install   (dependency install scripts were not reviewed by the kit)",
+        "npm start, then open http://localhost:4848"
+      ],
+      "undo": [
+        "Stop the server (Ctrl+C in its terminal).",
+        "Delete the cloned bureau-des-agents folder."
+      ],
+      "docs": "https://github.com/devlikemasta/bureau-des-agents/blob/184daa898cbb/README.md"
+    },
+    "mobbin": {
+      "license": "Mobbin terms of service (paid account)",
+      "origin": "https://docs.mobbin.com/mcp/introduction",
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "remote MCP (Streamable HTTP, OAuth) with Mobbin's app screens and flows (U-35). Remote servers never go into catalog/mcp.json (§15); you add it yourself",
+      "network_egress": "every tool call goes to https://api.mobbin.com/mcp with your OAuth session",
+      "file_access": "none; Claude Code stores the OAuth session itself",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. No API key: sign-in is OAuth in the browser.",
+        "claude mcp add --transport http mobbin https://api.mobbin.com/mcp   (Mobbin's page uses --scope user; without it the server is added for this project only)",
+        "In Claude Code run /mcp and sign in to Mobbin."
+      ],
+      "undo": [
+        "claude mcp remove mobbin",
+        "Revoke the access in your Mobbin account if you no longer use it."
+      ],
+      "docs": "https://docs.mobbin.com/mcp/clients/claude-code-cli"
+    },
+    "nicelydone": {
+      "license": "Nicelydone terms of service",
+      "origin": "https://nicelydone.club/mcp",
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "remote MCP (Streamable HTTP, OAuth 2.1 with dynamic client registration) with SaaS screens and flows (U-36). The command below is Claude Code's generic form: Nicelydone shows its own wording only after sign-in (UNVERIFIED)",
+      "network_egress": "every tool call goes to https://mcp.nicelydone.club/mcp with your OAuth session",
+      "file_access": "none; Claude Code stores the OAuth session itself",
+      "steps": [
+        "Read the risks above; the kit does not run any of this. No API key: sign-in is OAuth.",
+        "claude mcp add --transport http nicelydone https://mcp.nicelydone.club/mcp",
+        "In Claude Code run /mcp and sign in to Nicelydone."
+      ],
+      "undo": [
+        "claude mcp remove nicelydone",
+        "Revoke the access in your Nicelydone account if you no longer use it."
+      ],
+      "docs": "https://nicelydone.club/mcp"
+    },
+    "refero": {
+      "license": "Refero terms of service (Pro plan includes MCP tool calls)",
+      "origin": "https://doc.refero.design/mcp/getting-started",
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "risk": "high",
+      "summary": "remote MCP (HTTP) with product screens and user flows (U-37). Use OAuth: the docs also show an Authorization header with a token, which would put a secret into the MCP config, so this guide leaves it out",
+      "network_egress": "every tool call goes to https://api.refero.design/mcp with your OAuth session",
+      "file_access": "none; Claude Code stores the OAuth session itself",
+      "steps": [
+        "Read the risks above; the kit does not run any of this.",
+        "claude mcp add --transport http refero https://api.refero.design/mcp   (sign in with OAuth; do not add a token header)",
+        "In Claude Code run /mcp and complete the sign-in."
+      ],
+      "undo": [
+        "claude mcp remove refero",
+        "Revoke the access in your Refero account if you no longer use it."
+      ],
+      "docs": "https://doc.refero.design/mcp/getting-started"
     }
   }
 }

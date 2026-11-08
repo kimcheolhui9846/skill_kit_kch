@@ -28,8 +28,11 @@ def backups(ws):
 
 def test_uninstall_returns_workspace_to_before(run_kit, workspace):
     (workspace / "CLAUDE.md").write_text("# mine\n\nkeep\n", encoding="utf-8")
+    # B-3 (2026-11-08): a user server the audit allows (a catalog name the kit does not
+    # install here); one outside the allowlist would now block the install before any write.
+    mine = {"playwright": {"command": "npx", "args": ["-y", "my-playwright@1"]}}
     (workspace / ".mcp.json").write_text(
-        json.dumps({"mcpServers": {"mine": {"command": "x"}}}, indent=2) + "\n", encoding="utf-8"
+        json.dumps({"mcpServers": mine}, indent=2) + "\n", encoding="utf-8"
     )
     (workspace / ".claude").mkdir()
     (workspace / ".claude/settings.json").write_text("{}", encoding="utf-8")

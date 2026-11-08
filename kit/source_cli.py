@@ -188,6 +188,7 @@ def _plan_lines(kit_root: Path, plan: sa.Plan, verb: str) -> List[str]:
         ]  # noqa: E501
     for item in plan.catalog_entries:
         extra = f"; replaces {', '.join(item['replaces'])}" if item.get("replaces") else ""
+        extra += f"; requires {', '.join(item['requires'])}" if item.get("requires") else ""
         packs = ", ".join(item["packs"]) or "none"
         lines.append(f"Catalog:      {item['name']} (packs: {packs}; policy: standard{extra})")
     for o in plan.overlaps:

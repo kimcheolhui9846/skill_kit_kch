@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "motion",
+  "kind": "pack",
+  "description": "Opt-in animation and interface-craft skills from emilkowalski/skills (standard policy only, never restricted): animate, animate-expo, animation-performance, animation-vocabulary, apple-design, ask-sonner, break-ui, choreograph, find-animation-opportunities, improve-animations, mobile-native, pick-ui-library, prototype, remove-animations, review-animations, write-swift. emil-design-eng stays in web and fullstack.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

@@ -403,7 +403,10 @@ def test_standard_claude_install_brings_the_black_box_subagent(workspace):
     assert "name: counterexample-blackbox" in front and "\ntools: TodoWrite\n" in front
     skill = (workspace / ".claude/skills/counterexample-hunter/SKILL.md").read_text("utf-8")
     original = (KIT_ROOT / ".agents/skills/counterexample-hunter/SKILL.md").read_text("utf-8")
-    assert skill.startswith(original.rstrip("\n"))
+    renamed = original.replace("tdd-automator", "test-driven-development").replace(
+        "submission-validator", "verification-before-completion"
+    )  # standard names the replacements (follow-up A)
+    assert skill.startswith(renamed.rstrip("\n"))
     for text in (
         "Black box first",
         "counterexample-blackbox",

@@ -113,6 +113,21 @@ commit, and an agent fetches them only after the user opts in.
 - License: Apache-2.0
 - Used as: `catalog/plugins.json` plugin `security-guidance`, declared in `.claude/settings.json` (source pinned to the commit above) after `--plugin security-guidance`. Claude Code installs it when the user runs `/plugin install`.
 
+### Added 2026-11-08 (step 3): MCP servers and Claude Code plugins
+
+All off by default; the kit writes a pinned entry only after `--mcp NAME` / `--plugin NAME` and runs none of them.
+
+| Catalog entry | Repository | Commit | Version | License |
+|---|---|---|---|---|
+| mcp `codebase-memory` (`uvx codebase-memory-mcp==0.12.1`) | https://github.com/DeusData/codebase-memory-mcp | a7158ac2f48ca646b4527341b76f930f2aeff87e | 0.12.1 | MIT |
+| mcp `markitdown` (`uvx markitdown-mcp==0.0.1a8`) | https://github.com/microsoft/markitdown | 21d9c1d01ecc12538dab19811fd247ef2f96ef60 | 0.0.1a8 | MIT |
+| mcp `inspo` (`npx -y inspo-mcp@0.2.0`) | https://github.com/Nutlope/inspo | 022f80977c1e84d86284b17c928ab4b29f37f3ed | 0.2.0 | MIT |
+| mcp `rea` (`npx -y rea-agents@6.8.0 mcp`) | https://github.com/morluto/rea | 160d821ac9a0310afcb8d1fc427862dd6508add5 | 6.8.0 | MIT |
+| plugin `filetree` | https://github.com/data-goblin/claude-code-filetree | a3d36b1a56c0d982b307a58ef88fd3e857c977e6 | 0.8.2 | MIT |
+| plugin `replay-theater` (`claude-code/mods/replay-theater`) | https://github.com/anthropics/claude-code-playground | 569c5283d9a0a7ee7938df85bb32e4f48cbb8c86 | 0.1.0 | Apache-2.0 |
+| plugin `savvy-progress` (`plugins/savvy-progress`) | https://github.com/JohnnyVizz/claude-kit | c871c153ead54ad9547cc717d0f3e5a676c73986 | 1.2.1 | MIT |
+| plugin `effortless` | https://github.com/HeyCubit/effortless | 7912a6ccdf0a562274a74f1f06f1306722c163db | 1.72.0 | MIT |
+
 <!-- kit-source:begin k-dense-ai-scientific-agent-skills -->
 ### K-Dense-AI/scientific-agent-skills — experimental-design, exploratory-data-analysis, pytorch-lightning, scientific-critical-thinking, scikit-learn, statistical-analysis, statistical-power
 
@@ -122,3 +137,53 @@ commit, and an agent fetches them only after the user opts in.
 - Used verbatim: `skills/experimental-design`, `skills/exploratory-data-analysis`, `skills/pytorch-lightning`, `skills/scientific-critical-thinking`, `skills/scikit-learn`, `skills/statistical-analysis`, `skills/statistical-power`
 - Added by `kit source add` (2026-11-06).
 <!-- kit-source:end k-dense-ai-scientific-agent-skills -->
+
+<!-- kit-source:begin emilkowalski-skills -->
+### emilkowalski/skills — animate, animate-expo, animation-performance, animation-vocabulary, apple-design, ask-sonner, break-ui, choreograph, find-animation-opportunities, improve-animations, mobile-native, pick-ui-library, prototype, remove-animations, review-animations, write-swift
+
+- Repository: https://github.com/emilkowalski/skills
+- Commit: c8a79627b59d72d764d6ab6f2c87c09a48169833
+- License: MIT, in `third_party/emilkowalski-skills/LICENSE` (installed with the skill)
+- Used verbatim: `skills/animate`, `skills/animate-expo`, `skills/animation-performance`, `skills/animation-vocabulary`, `skills/apple-design`, `skills/ask-sonner`, `skills/break-ui`, `skills/choreograph`, `skills/find-animation-opportunities`, `skills/improve-animations`, `skills/mobile-native`, `skills/pick-ui-library`, `skills/prototype`, `skills/remove-animations`, `skills/review-animations`, `skills/write-swift`
+- Added by `kit source add` (2026-11-08).
+<!-- kit-source:end emilkowalski-skills -->
+
+<!-- kit-source:begin mattpocock-skills -->
+### mattpocock/skills — domain-modeling, to-spec, handoff
+
+- Repository: https://github.com/mattpocock/skills
+- Commit: 4ae2317ddb22b046e26455e4f9c9b3aaaf62212d
+- License: MIT, in `third_party/mattpocock-skills/LICENSE` (installed with the skill)
+- Used verbatim: `skills/engineering/domain-modeling`, `skills/engineering/to-spec`, `skills/productivity/handoff`
+- Added by `kit source add` (2026-11-08).
+<!-- kit-source:end mattpocock-skills -->
+
+<!-- kit-source:begin dietrichgebert-ponytail -->
+### DietrichGebert/ponytail — ponytail, ponytail-audit, ponytail-debt, ponytail-gain, ponytail-review
+
+- Repository: https://github.com/DietrichGebert/ponytail
+- Commit: 96608e078b2d5ea607c5c3b8b5a54d1c1fba6846
+- License: MIT, in `third_party/DietrichGebert-ponytail/LICENSE` (installed with the skill)
+- Used verbatim: `skills/ponytail`, `skills/ponytail-audit`, `skills/ponytail-debt`, `skills/ponytail-gain`, `skills/ponytail-review`
+- Added by `kit source add` (2026-11-08).
+<!-- kit-source:end dietrichgebert-ponytail -->
+
+<!-- kit-source:begin affaan-m-ecc -->
+### affaan-m/ECC — accessibility, api-design, architecture-decision-records, database-migrations, error-handling, python-testing, regex-vs-llm-structured-text
+
+- Repository: https://github.com/affaan-m/ECC
+- Commit: d2ef2680594f9a17526a6e1a2e18b3d242c5d17b
+- License: MIT, in `third_party/affaan-m-ECC/LICENSE` (installed with the skill)
+- Used verbatim: `skills/accessibility`, `skills/api-design`, `skills/architecture-decision-records`, `skills/database-migrations`, `skills/error-handling`, `skills/python-testing`, `skills/regex-vs-llm-structured-text`
+- Added by `kit source add` (2026-11-08).
+<!-- kit-source:end affaan-m-ecc -->
+
+<!-- kit-source:begin cloudflare-skills -->
+### cloudflare/skills — agents-sdk, cloudflare-app-bootstrap, cloudflare-one-migrations, durable-objects, frameworks-on-cloudflare, k2, sandbox-migrate-to-next, sandbox-next, sandbox-stable, workers-best-practices, workers-development, workers-profiling, wrangler
+
+- Repository: https://github.com/cloudflare/skills
+- Commit: 6eb6c781aa9b6438e0c7307bd102788a75fe1a6d
+- License: Apache-2.0, in `third_party/cloudflare-skills/LICENSE` (installed with the skill)
+- Used verbatim: `skills/agents-sdk`, `skills/cloudflare-app-bootstrap`, `skills/cloudflare-one-migrations`, `skills/durable-objects`, `skills/frameworks-on-cloudflare`, `skills/k2`, `skills/sandbox-migrate-to-next`, `skills/sandbox-next`, `skills/sandbox-stable`, `skills/workers-best-practices`, `skills/workers-development`, `skills/workers-profiling`, `skills/wrangler`
+- Added by `kit source add` (2026-11-08).
+<!-- kit-source:end cloudflare-skills -->

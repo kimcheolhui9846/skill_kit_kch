@@ -37,17 +37,8 @@ SNAPSHOT_FILES = {
     ],
     "claude": ["user/claude/CLAUDE.block.md", "user/claude/settings.json", "user/claude/mcp.json"],
 }
-# REQ-USER-004 patterns on top of kit.secrets_scan
-EXTRA_PATTERNS = [
-    ("bearer token", re.compile(r"(?i)\bbearer\s+(?!\$\{)[A-Za-z0-9._~+/=-]{8,}")),
-    (  # a literal value: NAME = "value" / NAME: 'value' / NAME=value (env style, no spaces)
-        "token/secret assignment",
-        re.compile(
-            r"(?i)\b[A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|APIKEY)\b"
-            r"(?:\s*[=:]\s*[\"'](?!\$\{)[^\s\"'$]{6,}[\"']|=(?![\"'$])[^\s\"'$]{6,})"
-        ),
-    ),
-]
+# REQ-USER-004 patterns on top of the token formats; the same set `kit source add` uses
+EXTRA_PATTERNS = secrets_scan.LITERAL_PATTERNS
 _REDACT_TABLE = re.compile(r"(?:^|\.)(env|headers|http_headers|env_http_headers)$")
 _KEY_VALUE = re.compile(r"^(\s*)([A-Za-z0-9_\"'.-]+)(\s*=\s*)(.+?)\s*$")
 _INLINE = re.compile(r"^(\s*(?:env|headers|http_headers|env_http_headers)\s*=\s*)\{(.*)\}\s*$")
@@ -271,11 +262,9 @@ def _dump(data) -> str:
 
 
 def scan(rel: str, text: str) -> List[Tuple[str, str, int]]:
+    """Every hit stops the capture, placeholders included (it writes into the repo)."""
     hits = [(rel, label, line) for label, line in secrets_scan.find(text)]
-    for number, line in enumerate(text.splitlines(), start=1):
-        for label, pattern in EXTRA_PATTERNS:
-            if pattern.search(line):
-                hits.append((rel, label, number))
+    hits += [(rel, label, line) for label, line, _ in secrets_scan.find_literal(text)]
     return hits
 
 

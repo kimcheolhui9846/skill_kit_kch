@@ -50,7 +50,7 @@ kit install --agent both       # 둘 다. 하나라도 실패하면 둘 다 되�
 
 | 옵션 | 뜻 | 기본값 |
 |---|---|---|
-| `--profile a[,b]` | 프로필과 팩 조합. 목록은 `kit profiles list`, 설치될 스킬은 `docs/CATALOG.md` | `core,hitl` |
+| `--profile a[,b]` | 프로필과 팩 조합. 목록은 `kit profiles list`, 설치될 스킬은 `kit profiles show`나 `docs/CATALOG.md` | `core,hitl` |
 | `--policy standard\|restricted` | `restricted`는 v1과 같은 스킬 11개(시험용). `standard`는 외부 스킬 포함 17개 | `standard` |
 | `--offline` | 네트워크를 쓰지 않는다. 네트워크가 필요한 항목은 `SKIPPED` | 끔 |
 | `--yes` | 네트워크 사용과 user 범위 변경을 묻지 않고 허용한다. 터미널이 없으면 이것이 있어야 그런 작업을 한다 | 끔 |
@@ -134,7 +134,7 @@ kit version
 ```
 
 - `doctor`: 이 PC에 어떤 에이전트 CLI가 있는지, 이 작업 공간에 키트가 무엇을 설치했는지(v1 흔적 포함) 보여 주고 다음 명령을 추천한다. 쓰지 않는다.
-- `profiles show`: 프로필 파일이 나열한 스킬을 보여 준다. 정책과 카탈로그가 적용되기 **전** 목록이다. 실제로 설치되는 스킬은 `kit plan`이나 `docs/CATALOG.md`로 본다.
+- `profiles show a[,b] [--agent A] [--policy standard|restricted]`: 그 프로필·에이전트·정책으로 `install`/`plan`이 **실제로 설치하는** 스킬을 보여 준다. 정책과 카탈로그를 적용한 결과이며 planner와 같은 코드로 계산한다(대체된 스킬은 `replaced: 옛 이름 -> 새 이름`, 빠진 스킬은 `skipped: 이름 (이유)` 줄로 따로 보인다). `--policy`를 빼면 `install`과 같은 기본값(프로필이 정하지 않으면 `standard`)을 쓰고, `Policy:` 줄에 실제로 쓴 정책을 적는다. Tools와 MCP 줄은 프로필 파일의 목록이다(MCP 카탈로그 필터는 `kit plan`에서 본다). 쓰지 않는다.
 
 ## 10. 사용자(홈) 범위
 

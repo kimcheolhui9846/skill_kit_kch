@@ -81,6 +81,7 @@ from .model import (
 from .plan import FileChange, format_plan
 from .preflight import EnvReport, run_preflight
 from .profiles import Profile, ProfileError
+from .register import WRITES
 from .report import overall_status
 from .transaction import TransactionError, apply_all, fresh_stamp
 
@@ -157,7 +158,8 @@ Commands:
             approved state (HANDOFF.md, tasks.json) and the temporary state apart
                                      (.kit/work/wip.json, decisions.md; 1 = warnings)
   doctor    [--target DIR]           which agents are on this PC, what the kit installed
-  profiles  list | show a[,b] [--agent codex|claude|both]
+  profiles  list | show a[,b] [--agent codex|claude|both] [--policy standard|restricted]
+                                     (show: the skills install would put in, after the policy)
   help, version
 
 --scope user installs into ~/.codex and ~/.claude: the user/ snapshot, OMX (Codex) and the
@@ -219,6 +221,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("action", choices=("list", "show"))
     p.add_argument("spec", nargs="?")
     p.add_argument("--agent", choices=("codex", "claude", "both"))
+    p.add_argument("--policy", choices=policy_render.POLICIES)
     p = sub.add_parser("capture", add_help=False)
     p.add_argument("--agent", choices=("codex", "claude", "both"), default="both")
     p.add_argument("--write", action="store_true")
@@ -763,24 +766,60 @@ def _run_verify(ctx: Ctx, man: manifest_mod.Manifest, out: TextIO) -> int:
     groups: Dict[tuple, List[str]] = {}
     for agent, spec in specs.items():
         groups.setdefault(spec, []).append(agent)
-    codes = []
+    runs = []
     for (spec, policy, mcp, plugins, hooks), agents in groups.items():
         resolved = profile_resolver.resolve(ctx.kit_root, spec, policy_override=policy)
         group = replace(ctx, mcp_opt_in=list(mcp), plugin_opt_in=list(plugins), hooks=hooks)
-        codes.append(_execute(group, man, resolved, policy, missing, out, plans_for=agents))
+        runs.append((group, resolved, policy, agents))
+    held = False
+    if not ctx.verify_only and len(runs) > 1:
+        # B-3: groups are written one after another; when one group's audit blocks, none of
+        # them writes. _execute plans again, so each group still sees the state before it.
+        held = any(_prepare(g, man, r, p, a).blocking for g, r, p, a in runs)
+    codes = []
+    for group, resolved, policy, agents in runs:
+        codes.append(
+            _execute(group, man, resolved, policy, missing, out, plans_for=agents, held=held)
+        )
         missing = {}
     return max(codes)
 
 
-def _execute(
+@dataclass
+class _Prepared:
+    """Everything a run decides before it writes."""
+
+    env: EnvReport
+    state: State
+    plans: List[AgentPlan]
+    ops: list
+    forget: List[str]
+    tool_profile: Profile
+    online: list
+    audits: List[Optional[ItemResult]]  # per plan: the audit before the write (B-3)
+    blocking: List[ItemResult]  # those of the audits above that end the run BLOCKED
+
+
+def _planned_files(plans: List[AgentPlan]) -> Dict[str, Optional[bytes]]:
+    """What apply_all would leave in each file it touches: the changes, then the stale ops."""
+    planned: Dict[str, Optional[bytes]] = {}
+    for plan in plans:
+        for change in plan.changes:
+            if change.outcome in WRITES and change.data is not None:
+                planned[change.rel] = change.data
+    for plan in plans:
+        for op in plan.stale.ops:
+            planned[op.rel] = op.data
+    return planned
+
+
+def _prepare(
     ctx: Ctx,
     man: manifest_mod.Manifest,
     resolved: profile_resolver.ResolvedProfile,
     policy: str,
-    missing: Dict[str, Optional[str]],
-    out: TextIO,
     plans_for: Optional[List[str]] = None,
-) -> int:
+) -> _Prepared:
     env = run_preflight(ctx.target)
     state = State.load(ctx.target)
     plan_ctx = ctx if plans_for is None else Ctx(**{**ctx.__dict__, "agents": plans_for})
@@ -794,15 +833,80 @@ def _execute(
     if ctx.user:  # tools and the MCP handshake are per workspace
         tool_profile = Profile(tool_profile.name, tool_profile.description)
     online = tools.plan_tools(tool_profile, env, ctx.offline, ctx.verify_only)
+    audits: List[Optional[ItemResult]] = [None] * len(plans)
+    if not ctx.verify_only and plans:
+        # B-3 (2026-11-08): audit the MCP config this run would leave (the planned bytes over
+        # what is on disk) before anything is written. The audit after the write stays.
+        rules = mcp_catalog.allowlist(ctx.kit_root)
+        planned = _planned_files(plans)
+        audits = [p.adapter.audit_planned(ctx.target, ctx.kit_root, rules, planned) for p in plans]
+    blocking = [a for a in audits if a is not None and a.required and a.verified in BAD]
+    return _Prepared(env, state, plans, ops, forget, tool_profile, online, audits, blocking)
+
+
+HELD_DETAIL = "nothing written: the security audit of another agent blocks this run"
+
+
+def _block_items(prep: _Prepared, held: bool) -> None:
+    """A blocked run reports, per agent, its audit before the write (and why it waited)."""
+    for plan, item in zip(prep.plans, prep.audits):
+        plan.items = [item] if item is not None else []
+        if held and not prep.blocking:
+            plan.items.append(ItemResult("write", True, False, False, FAIL, HELD_DETAIL))
+
+
+def _block_lines(ctx: Ctx, plans: List[AgentPlan], extra: List[ItemResult]) -> List[str]:
+    """Items, status and next actions of a run the audit before the write blocks."""
+    rows = [("", i) for i in extra] + [(p.adapter.name, i) for p in plans for i in p.items]
+    lines = ["Items:"]
+    for agent, i in rows:
+        if _shown(i, ctx.verbose):
+            kind = "required" if i.required else "optional"
+            where = f"[{agent}] " if agent else ""
+            detail = f"  ({i.detail})" if i.detail else ""
+            lines.append(f"  {i.verified:<10} {kind} {where}{i.name}{detail}")
+    lines += ["Status:       BLOCKED", "Next action:"]
+    for agent, i in rows:
+        where = f"[{agent}] " if agent else ""
+        if i.verified == FAIL and i.name != "write":
+            lines.append(f"  - {where}Fix {i.name}: {i.detail}. Then re-run.")
+    return lines
+
+
+def _execute(
+    ctx: Ctx,
+    man: manifest_mod.Manifest,
+    resolved: profile_resolver.ResolvedProfile,
+    policy: str,
+    missing: Dict[str, Optional[str]],
+    out: TextIO,
+    plans_for: Optional[List[str]] = None,
+    held: bool = False,
+) -> int:
+    prep = _prepare(ctx, man, resolved, policy, plans_for)
+    env, state, plans, ops, forget = prep.env, prep.state, prep.plans, prep.ops, prep.forget
+    tool_profile, online = prep.tool_profile, prep.online
+    blocked = not ctx.verify_only and bool(plans) and (bool(prep.blocking) or held)
+    if blocked and not ctx.dry_run:  # nothing will run, so nothing to ask about
+        return _report_blocked(ctx, out, env, resolved, policy, prep, missing, held)
     gate = _decide(ctx, _network_needs(ctx, online, tool_profile, plans))
     network = gate.allowed
     actions = online if network else _without_network(online)
 
     if ctx.dry_run:
-        text = _dry_run_text(ctx, env, resolved, policy, plans, online, gate)
+        block = None
+        if blocked:
+            _block_items(prep, held)
+            block = _block_lines(ctx, plans, [])
+        text = _dry_run_text(ctx, env, resolved, policy, plans, online, gate, block)
         data = _dry_json(ctx, resolved, policy, plans)
         data["network"] = gate.to_json()
-        return _emit(ctx, out, text, data, EXIT_READY)
+        if not blocked:
+            return _emit(ctx, out, text, data, EXIT_READY)
+        data["status"] = "BLOCKED"
+        for plan in plans:
+            data["agents"][plan.adapter.name]["items"] = _items_json(plan.items)
+        return _emit(ctx, out, text, data, EXIT_BLOCKED)
     _confirm_user(ctx, _dry_run_text(ctx, env, resolved, policy, plans, online, gate))
 
     stamp = fresh_stamp(ctx.target)
@@ -899,6 +1003,34 @@ def _execute(
         except (OSError, PathEscapeError):
             pass
     return _emit(ctx, out, text, data, code)
+
+
+def _report_blocked(ctx, out, env, resolved, policy, prep, missing, held) -> int:
+    """B-3: the audit before the write blocks the run. Nothing is written: no kit file, backup,
+    state, manifest or log; no tool, plugin or MCP check runs. The report goes to the output
+    (and --report-json) only, so the workspace stays byte for byte as it was."""
+    extra = [
+        ItemResult(f"{agent}: install", True, False, False, FAIL, why)
+        for agent, why in missing.items()
+        if why
+    ]
+    _block_items(prep, held)
+    plans = prep.plans
+    gate = NetworkGate(False, "none")
+    lines = _header(ctx, env, resolved, policy)
+    for plan in plans:
+        lines.append(f"Agent {plan.adapter.name + ':':<8}NOT WRITTEN (the security audit blocks)")
+    lines += _network_lines(gate, True)
+    lines += _block_lines(ctx, plans, extra)
+    lines.append(
+        "Nothing was written: the security audit runs before the write (no kit file, backup, "
+        "state or log)."
+    )
+    text = "\n".join(lines) + "\n"
+    data = _report_json(ctx, resolved, policy, plans, extra, [], "BLOCKED", EXIT_BLOCKED)
+    data["network"] = gate.to_json()
+    data["written"] = False
+    return _emit(ctx, out, text, data, EXIT_BLOCKED)
 
 
 def _plugins(ctx: Ctx, man: manifest_mod.Manifest, plan: AgentPlan, gate, wrote: bool) -> None:
@@ -1253,7 +1385,7 @@ def _header(ctx: Ctx, env: EnvReport, resolved, policy: str) -> List[str]:
     return lines + [f"Warning:      {w}" for w in resolved.policy_warnings(policy)]
 
 
-def _dry_run_text(ctx, env, resolved, policy, plans, actions, gate) -> str:
+def _dry_run_text(ctx, env, resolved, policy, plans, actions, gate, block=None) -> str:
     lines = _header(ctx, env, resolved, policy)
     lines += _network_lines(gate, False)
     for plan in plans:
@@ -1276,6 +1408,7 @@ def _dry_run_text(ctx, env, resolved, policy, plans, actions, gate) -> str:
         lines += ["Planned tools:", tools.format_tool_plan(actions)]
     lines += mcp_catalog.manual_lines(_guides(ctx, policy))
     lines += credentials.lines(_api_needs(ctx, policy, plans))
+    lines += block or []  # B-3: the audit before the write would block the run
     lines += ["DRY RUN: nothing was written.", ""]
     return "\n".join(lines)
 
@@ -1522,7 +1655,7 @@ def run_doctor(target: Path, kit_root: Path, as_json: bool, out: TextIO) -> int:
 
 def run_profiles(ns: argparse.Namespace, kit_root: Path, out: TextIO) -> int:
     if ns.action == "list":
-        if ns.spec is not None or ns.agent is not None:
+        if ns.spec is not None or ns.agent is not None or ns.policy is not None:
             raise UsageError("profiles list takes no other arguments")
         lines = []
         for name, kind in profile_resolver.list_entries(kit_root):
@@ -1533,8 +1666,27 @@ def run_profiles(ns: argparse.Namespace, kit_root: Path, out: TextIO) -> int:
     if not ns.spec:
         raise UsageError("profiles show needs a profile, e.g. profiles show core,hitl")
     agents = None if ns.agent in (None, "both") else [ns.agent]
-    out.write(profile_resolver.render_show(profile_resolver.resolve(kit_root, ns.spec), agents))
+    resolved = profile_resolver.resolve(kit_root, ns.spec, policy_override=ns.policy)
+    policy = resolved.policy or DEFAULT_POLICY  # as install/plan choose it
+    out.write(
+        profile_resolver.render_show(
+            resolved, agents, policy, _shown_skills(kit_root, resolved, policy)
+        )
+    )
     return EXIT_READY
+
+
+def _shown_skills(kit_root: Path, resolved: profile_resolver.ResolvedProfile, policy: str):
+    """B-1: profiles show lists the skills install/plan would put in (same _catalog_skills)."""
+    entries = catalog.load(kit_root, policy)
+
+    def for_view(view: profile_resolver.AgentView) -> tuple:
+        profile = view.profile
+        return _catalog_skills(
+            entries, profile.skills, profile.required_skills, resolved.order, view.agent, policy
+        )
+
+    return for_view
 
 
 # ---------------------------------------------------------------- entry

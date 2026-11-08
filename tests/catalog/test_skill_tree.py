@@ -74,7 +74,8 @@ def test_layered_files_equal_the_original_for_legacy_skills(kit_root, agent, pol
     kept = LEGACY if policy == "restricted" else sorted(set(LEGACY) - changed)
     for name in kept:
         original = [(r.split("/", 3)[3], d) for r, d in iter_skill_files(kit_root, name)]
-        assert source(name) == original
+        # standard names the replacements instead of replaced skills (follow-up A)
+        assert source(name) == catalog.rename_mentions(original, source.renames)
 
 
 def test_agents_skills_unchanged_v22(kit_root):

@@ -182,6 +182,11 @@ def test_multiline_strings_hide_headers():
 # ---------------------------------------------------------------- TC-SEC-05 (always runs)
 
 
+# Upstream example values, not secrets. "eyJhbGciOiJIUzI1NiIs" is the base64 of the JWT header
+# fragment {"alg":"HS256", followed by "..." (eng-patterns pack, 2026-11-08).
+KNOWN_PLACEHOLDERS = [("third_party/affaan-m-ECC/skills/api-design/SKILL.md", "bearer token", 303)]
+
+
 def test_repo_user_and_third_party_have_no_secrets():
     hits = []
     for folder in ("user", "third_party"):
@@ -192,7 +197,7 @@ def test_repo_user_and_third_party_have_no_secrets():
                 except UnicodeDecodeError:
                     continue
                 hits += capture.scan(path.relative_to(KIT_ROOT).as_posix(), text)
-    assert hits == []
+    assert [hit for hit in hits if hit not in KNOWN_PLACEHOLDERS] == []
 
 
 @pytest.mark.parametrize(

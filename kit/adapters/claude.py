@@ -16,9 +16,10 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from .. import approval_hooks, mcp_catalog, plugin_install, subagents
+from .. import audit as audit_mod
 from ..audit import audit_mcp_json
 from ..fsops import State
 from ..mcpjson import plan_mcp_json, plan_owned_keys, verify_mcp_json, verify_owned_keys
@@ -178,6 +179,19 @@ class ClaudeAdapter:
 
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None) -> ItemResult:
         return audit_mcp_json(target, kit_root, allowlist)
+
+    def audit_planned(
+        self,
+        target: Path,
+        kit_root: Path,
+        allowlist: Optional[dict],
+        planned: Dict[str, Optional[bytes]],
+    ) -> ItemResult:
+        """B-3: the audit of the .mcp.json this run would leave (planned bytes over the disk)."""
+        rel = self.mcp_config.rel
+        if rel not in planned:
+            return self.audit(target, kit_root, allowlist)
+        return audit_mod.audit_mcp_json_data(planned[rel], kit_root, allowlist)
 
     def stale_mcp(self, target: Path) -> Optional[ItemResult]:
         return None

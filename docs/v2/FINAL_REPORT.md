@@ -1,6 +1,6 @@
 # Skill Kit v2 최종 검증 보고서
 
-- 작성: P7-T2, 2026-11-08. 같은 날 후속 1~4를 반영해 갱신했다.
+- 작성: P7-T2, 2026-11-08. 같은 날 후속 1~4, 그리고 후속 A·B-1·B-2·외부 출처 1~3단계·B-3을 반영해 갱신했다.
 - 형식: `00_PROMPT.md` §16
 - 근거 원문: `docs/v2/regression/` (단계별 기록과 `raw/` 출력)
 
@@ -17,6 +17,8 @@
   - 이미 설치된 곳에 다시 `install`하면 이전 설치에서 빠진 항목을 정리한다(후속 3).
 - **카탈로그:**
   - 스킬 38개(공통·에이전트별 층), MCP와 플러그인 카탈로그(허용 목록, 버전 고정, 기본 비활성).
+  - 외부 스킬 44개를 opt-in 팩 5개(`eng-patterns`, `lean`, `cloudflare`, `motion`, `planning-extras`)로 더했다. standard 정책 전용이고 기본 설치에는 들어가지 않는다(2단계).
+  - MCP 4개(+목록만 1개), 플러그인 4개, 수동 도구 7개, 원격 MCP 연결 안내 3개를 더했다. 모두 기본으로 꺼져 있고 키트는 실행하지 않는다(3단계).
   - 외부 출처는 `sources.lock.json`에 해시로 고정한다.
   - `source add`로 GitHub 주소에서 스킬을 받는다. 계획을 보여 준 뒤 승인을 받고, 원자적으로 반영한다.
 - **프로필과 정책:**
@@ -35,14 +37,14 @@
 - **`launch-compliance-check`의 한국 법령 인용 확인:** 원문 확인은 하지 못했다. 스킬은 만들었고, 인용은 `UNVERIFIED`로 두었다(7절).
 
 ### 전체 판정: **PARTIAL**
-- **자동 테스트:** 1790 passed, 2 skipped, 0 failed. P1 기준선 테스트 339개는 하나도 빠지거나 결과가 바뀌지 않았다.
+- **자동 테스트:** 1997 passed, 2 skipped, 0 failed(`raw/fb3-pytest.txt`). P1 기준선 테스트 339개는 하나도 빠지거나 결과가 바뀌지 않았다.
 - **REQ 84개**(원문 71 + 보강 10 + 이후 결정 3): 자동 테스트 PASS 81개, 문서로만 확인 3개. 미구현이나 부분 구현은 없다.
 - **PARTIAL인 이유:** 사람이 확인해야 할 항목이 NOT RUN으로 남아 있다.
   - 에이전트 안에서의 로드 확인(M-01, M-02)
   - user 범위 실제 적용(M-06)
   - PowerShell 7, macOS, 실제 Linux 기기
   - 한국 법령 인용 원문 확인
-  - 검토자 결정 대기 3건(8절)
+  - 검토자 결정 대기는 없다. 감사 순서는 B-3(2026-11-08)에서 쓰기 전으로 바꿨고, `hitl` 팩 소속은 ADR-008 개정으로, `profiles show` 출력은 B-1에서 해결했다.
 
 ## 2. 실행 환경
 
@@ -52,19 +54,22 @@
 | Python | 3.12.10 (이 PC). Linux에서 3.9.25, 3.11.16, 3.14.4를 실행했다(P6-T4, WSL2 Ubuntu 26.04) |
 | 도구 | uv 0.10.9, ruff 0.17.3, shellcheck 0.11.0, git 2.54.0.windows.1, Windows PowerShell 5.1.26100.9711 |
 | 에이전트 CLI | codex-cli 0.166.0, Claude Code 2.1.319. 버전 확인만 했고, 훅 실험(M-05)은 격리된 설정 폴더에서 2026-11-07에 했다 |
-| 실행 일시 | 최종 전체 실행 2026-11-08 14:55~14:59 (+0900) |
-| 커밋 | `feat/v2-multi-agent` / HEAD `67921d46c5813e13d6eea6d7f8c25876577beaec`. P5-T2b 이후의 변경은 아직 커밋하지 않은 작업 트리에서 실행했다 |
+| 실행 일시 | 최종 전체 실행 2026-11-08 (B-3 뒤, `raw/fb3-pytest.txt`) |
+| 커밋 | `feat/v2-multi-agent` / HEAD `98e7aef1b2e984ade0550304439a26b8ae605054`. 후속 A 이후의 변경은 아직 커밋하지 않은 작업 트리에서 실행했다 |
 
 ## 3. 실행한 명령과 원문 결과 요약
 
 | 명령 | 결과 요약(원문) | 일시 |
 |---|---|---|
-| `uv run --offline pytest -q -p no:cacheprovider --junitxml=docs/v2/regression/raw/f4-junit.xml` | `1790 passed, 2 skipped in 260.59s (0:04:20)`, exit 0 (`raw/f4-pytest.txt`) | 2026-11-08 14:59 |
-| `uv run --offline ruff check .` | `All checks passed!` | 2026-11-08 15:00 |
-| `uv run --offline ruff format --check .` | `172 files already formatted` | 2026-11-08 15:00 |
+| `uv run --offline pytest -q -p no:cacheprovider --junitxml=docs/v2/regression/raw/fb3-junit.xml` | `1997 passed, 2 skipped in 417.16s (0:06:57)`, exit 0 (`raw/fb3-pytest.txt`) | 2026-11-08 (B-3 뒤) |
+| `uv run --offline ruff check .` | `All checks passed!` | 2026-11-08 (B-3 뒤) |
+| `uv run --offline ruff format --check .` | `180 files already formatted` | 2026-11-08 (B-3 뒤) |
+| `python run_kit.py source check` | 출처 25개, `Files: match the lock`, `Status: READY` | 2026-11-08 (B-3 뒤) |
+| 후속 A·B-1·1~3단계 전체 실행 | `1813` / `1855` / `1907` / `1938` / `1982 passed`, 모두 2 skipped (`raw/fa`, `fb1`, `fs1`, `fs2`, `fs3-pytest.txt`) | 2026-11-08 |
+| 후속 4 전체 실행 | `1790 passed, 2 skipped in 260.59s` (`raw/f4-pytest.txt`) | 2026-11-08 14:59 |
 | `shellcheck` (git이 추적하는 `.sh` 4개) | 출력 없음, 모두 exit 0 | 2026-11-08 12:44 (그 뒤 `.sh` 변경 없음) |
-| `uv run python devtools/req_coverage.py docs/v2/regression/raw/f4-junit.xml` | `PASS 81, 문서 3` (`regression/P7-T2-req-coverage.md`) | 2026-11-08 15:00 |
-| 기준선 비교(P1 `baseline/raw/pytest-junit.xml` 대 `f4-junit.xml`, `classname::name` 단위) | 기준선 339개, 사라진 것 0, 결과가 바뀐 것 0, 새 실패 0 | 2026-11-08 15:00 |
+| `uv run python devtools/req_coverage.py docs/v2/regression/raw/fb3-junit.xml` | `PASS 81, 문서 3`. 표는 `f4-junit.xml`로 만든 `regression/P7-T2-req-coverage.md`와 한 글자도 다르지 않다 | 2026-11-08 (B-3 뒤) |
+| 기준선 비교(P1 `baseline/raw/pytest-junit.xml` 대 `fb3-junit.xml`, `classname::name` 단위) | 기준선 339개, 사라진 것 0, 결과가 바뀐 것 0, 새 실패 0 | 2026-11-08 (B-3 뒤) |
 | `uv run python devtools/run_doc_commands.py` | `95 commands, 0 unexpected` (`regression/P7-T1-doc-commands.md`, 후속 3에서 마이그레이션 절차를 바꾼 뒤 다시 실행) | 2026-11-08 14:23 |
 | 후속 1~3 전체 실행 | `1670 passed` / `1740 passed` / `1754 passed`, 모두 2 skipped (`raw/f1~f3-pytest.txt`) | 2026-11-08 |
 | P7-T2 첫 전체 실행 | `1669 passed, 2 skipped` (`raw/p7t2-pytest.txt`) | 2026-11-08 12:43 |
@@ -74,7 +79,7 @@
 
 ## 4. 요구사항 커버리지 (§4의 모든 REQ)
 
-- 표는 `devtools/req_coverage.py`가 `raw/f4-junit.xml`에서 만들었다(`regression/P7-T2-req-coverage.md`와 같다).
+- 표는 `devtools/req_coverage.py`가 `raw/f4-junit.xml`에서 만들었다(`regression/P7-T2-req-coverage.md`와 같다). 마지막 실행 `raw/fb3-junit.xml`로 다시 만들어도 같은 표가 나온다(새 테스트는 REQ 대응표에 더하지 않았다).
 - REQ와 테스트의 대응은 그 스크립트의 `MAP`에 있다.
 - `tests/test_req_coverage.py`가 두 가지를 확인한다.
   - 문서의 REQ가 모두 대응표에 있다.
@@ -127,7 +132,7 @@
 | REQ-PROF-002 | 구현 | `profiles/test_profile_resolver.py` | PASS (19 passed) |  |
 | REQ-PROF-003 | 구현 | `profiles/test_profile_resolver.py` | PASS (2 passed) |  |
 | REQ-PROF-004 | 구현 | `profiles/test_profile_resolver.py`, `profiles/test_p4t6_profiles_policy.py` | PASS (17 passed) |  |
-| REQ-PROF-005 | 구현 | `profiles/test_profile_resolver.py`, `cli/test_commands.py` | PASS (2 passed) | 보여 주는 목록은 정책 적용 전(11개). standard 실제 설치는 17개(검토자 결정 대기) |
+| REQ-PROF-005 | 구현 | `profiles/test_profile_resolver.py`, `cli/test_commands.py` | PASS (2 passed) | B-1: 정책 적용 후 목록(standard core 17개)을 보여 준다. `cli/test_profiles_show.py`가 실제 설치와 같은지 확인 |
 | REQ-SRC-001 | 구현 | - | 문서 | 문서: 07_SOURCES_EVALUATION.md |
 | REQ-SRC-002 | 구현 | `catalog/test_sources.py`, `test_p6_security.py` | PASS (19 passed) |  |
 | REQ-SRC-003 | 구현 | `catalog/test_sources.py`, `test_skills.py` | PASS (4 passed) |  |
@@ -191,22 +196,22 @@ PASS 81, 문서 3
 | 심볼릭 링크 2개 | SAFE-003, USER-008 | 링크를 통한 탈출, 목록의 링크 파일 | 거부, Note | 이 PC에서 링크를 만들 수 없음. Linux(P6-T4)에서는 실행되어 통과 | SKIPPED |
 | 에이전트 안 로드(M-01, M-02) | AGENT-005, USER-005 | `/skills`, `/mcp`, `/plugin`, `/hooks` | `AGENT_LOAD_CHECK.md` 표대로 보임 | 실행 기록 없음 | NOT RUN |
 
-폴더별 결과(`f4-junit.xml`):
+폴더별 결과(`fb3-junit.xml`):
 
 | 폴더 | passed | skipped |
 |---|---|---|
 | 루트 `tests/test_*.py` | 721 | 1 |
 | adapters | 23 | 0 |
-| catalog | 271 | 0 |
-| cli | 145 | 0 |
+| catalog | 375 | 0 |
+| cli | 202 | 0 |
 | golden | 49 | 0 |
 | hitl | 307 | 0 |
 | profiles | 104 | 0 |
-| sources | 81 | 0 |
+| sources | 127 | 0 |
 | userscope | 56 | 1 |
 | writers | 33 | 0 |
 
-- **통계:** PASS 1790 / FAIL 0 / SKIPPED 2 / NOT RUN: 수동 항목 9개(7절)
+- **통계:** PASS 1997 / FAIL 0 / SKIPPED 2 / NOT RUN: 수동 항목 9개(7절)
 
 ## 6. 기존 기능 회귀
 
@@ -227,6 +232,12 @@ PASS 81, 문서 3
 | v2 `install`이 이전 설치에서 빠진 항목을 정리 | 그대로인 것은 백업 뒤 지우고, 고친 것은 CONFLICT(1)로 보고한다. v1 위 standard 설치에서는 대체된 v1 스킬이 지워진다 | 후속 3 중간 승인(A안) |
 | standard 정책에 중간 승인 조건 9개 | 이미 standard로 설치한 작업 공간은 정책 구간이 OUTDATED로 보이고 `update`로 갱신된다 | 후속 1 승인 |
 | `web`·`fullstack`(standard)에 `launch-compliance-check` 추가 | 그 프로필의 설치 스킬이 하나 늘었다. 스냅숏 테스트 2개의 기대값을 바꿨다(트리거 3, 설계 승인 범위) | 후속 4 중간 승인 |
+| v2 `install`·`update`·`plan`이 쓰기 전에 보안 감사 | 허용 목록 밖 MCP 서버가 있으면 아무것도 쓰지 않고 2로 끝난다. `plan`·`--dry-run`도 2다. 기존 테스트 3개의 기대값을 바꿨다(`test_partly_owned_files_lose_only_the_kit_parts`·`test_uninstall_returns_workspace_to_before`의 사용자 서버를 허용되는 이름으로, V-05의 `CLAUDE.md` 검사를 바이트 일치로). 기존 경로는 그대로다 | B-3 사용자 승인(2026-11-08) |
+| standard 설치에서 키트 스킬 본문의 대체된 스킬 이름을 바꿔 씀 | `tdd-automator`·`submission-validator`를 가리키던 키트 스킬 Markdown이 설치될 때 대체 스킬 이름을 가리킨다. 외부 스킬과 `.agents/skills` 원본, restricted 정책은 그대로다. 미러와 바이트 비교하던 기존 테스트 4개의 기대값을 바꿨다 | 후속 A 승인 |
+| `profiles show`가 정책을 반영(`--policy`) | 출력에 `Policy:` 줄과 그 정책에서 실제로 설치되는 스킬이 나온다. 잘못된 정책은 64 | B-1 승인 |
+| 여러 줄 frontmatter 읽기, `source add` 보완 | 기존 스킬 67개는 예전 파서와 같은 결과다. 큰 저장소의 `--path` 부분 받기, 경로별 라이선스 | 1단계 승인 |
+| opt-in 팩 5개와 외부 스킬 44개 | `--profile core,<팩>`으로만 설치된다. 기본·기존 프로필·restricted에는 없다. `test_capture.py`에 JWT 헤더 예시 1줄 예외 | 2단계 승인 |
+| MCP·플러그인·수동 도구 항목 추가, 비밀값 검사 규칙 공유 | 새 항목은 모두 기본 비활성이다. `source add`가 이제 리터럴 비밀값을 REVIEW, 예시값을 WARN으로 보고한다. `test_mcp_catalog.py`의 설치 가능 목록에 4개를 더했다 | 3단계 승인 |
 
 ## 7. 미구현·미검증
 
@@ -255,10 +266,13 @@ PASS 81, 문서 3
   - L0(정책 문구)과 L1(상태 기계)은 기본으로 켜진다.
   - L2(훅)는 opt-in(`--hooks`)이다.
   - L1은 셸 명령으로 우회할 수 있다. 승인 기록의 `by`(human-cli / human-hook / agent-recorded)로 나중에 가려낼 수 있을 뿐, 위조를 원천 차단하지는 못한다.
-- **보안 감사는 쓰기 뒤에 한다(v1과 같음).**
-  - 작업 공간에 허용 목록 밖 MCP 서버가 이미 있으면 BLOCKED(2)로 끝난다. 그때 키트 파일은 이미 써져 있다.
+- **보안 감사는 쓰기 전에 한다(B-3, 2026-11-08, 새 경로만).**
+  - `install`·`update`는 아무것도 쓰기 전에 MCP 설정을 감사한다. 감사 대상은 디스크에 있는 설정 위에 이번 실행이 쓸 내용(계획, 메모리 안)을 겹친 결과다. `plan`·`--dry-run`도 같은 감사를 한다.
+  - 허용 목록 밖 MCP 서버가 있으면 BLOCKED(2)로 끝나고 **아무것도 쓰지 않는다.** 키트 파일, 백업, 상태 파일, 매니페스트, 실행 로그 모두 생기지 않는다. 이유 문구는 이전과 같다. `plan`·`--dry-run`도 같은 이유로 2를 낸다.
+  - `--agent both`, 그리고 프로필이 달라 두 묶음으로 나뉘는 `update`는 한쪽 감사만 막아도 양쪽 모두 쓰지 않는다.
+  - 막지 않는 결과(PASS, UNVERIFIED)면 이전처럼 쓴다. 쓰기 뒤 감사도 그대로 둔다. 쓴 결과가 계획과 다를 때(쓰기 실패, 그사이 바뀐 파일)를 잡기 위해서다.
   - 사용자 서버는 고치지 않고, 키트가 실행하지도 않는다.
-  - 이 순서를 유지할지는 검토자 결정을 기다린다(P6-T2).
+  - 기존 경로(서브커맨드 없는 호출)는 v1과 같이 쓰기 뒤에 감사한다(골든 테스트, `test_remote_server_blocks_the_run`).
 - **재설치 정리(후속 3):**
   - 다른 프로필·정책으로 다시 `install`하면 이전 설치에서 빠진 키트 항목을 지운다. 지우기 전에 백업하므로 `kit restore --backup <시각>`으로 되돌릴 수 있다.
   - 사용자가 고친 항목은 지우지 않고 `stale:` CONFLICT로 남긴다. 에이전트가 그 낡은 스킬을 함께 읽을 수 있다.
@@ -268,8 +282,8 @@ PASS 81, 문서 3
   - `capture`는 auth·세션·sqlite·기록 파일을 가져오지 않는다.
 - **전역 설정:** project 범위 명령은 HOME을 바꾸지 않는다(V-18). 전역을 바꾸는 것은 `--scope user`뿐이고, 백업과 확인을 거친다.
 - **`launch-compliance-check`는 법률 자문이 아니다.** 판정은 증거 수집이고, 법적 판단은 NEEDS_HUMAN으로 남긴다. 한국 법령 인용은 모두 UNVERIFIED다.
-- **`kit profiles show`:** 정책을 적용하기 전 목록(core 11개)을 보여 준다. standard로 실제 설치되는 목록(17개)과 다르다. 실제 목록은 `kit plan` 또는 `docs/CATALOG.md`로 본다(결정 대기).
-- **`hitl` 팩:** 스킬을 직접 나열하지 않는다. `task-approval`, `session-recovery`는 standard 정책의 `core` 팩으로 들어온다(ADR-008과 다름, 결정 대기).
+- **`kit profiles show`:** B-1에서 해결했다. 이제 planner와 같은 코드로 정책·카탈로그를 적용한 목록(standard core 17개)을 보여 주고 `--policy standard|restricted`를 받는다. Tools·MCP 줄은 여전히 프로필 파일의 목록이다.
+- **`hitl` 팩:** 스킬을 직접 나열하지 않는다. `task-approval`, `session-recovery`는 standard 정책의 `core` 팩으로 들어온다. 검토자가 이 구현을 유지하기로 정했고(2026-11-08), ADR-008에 개정으로 적었다. `hitl` 팩은 `kit task/req/trace/report/ce/recover` 명령과 정책 문구를 맡는다.
 - **Python 3.9/3.10:** tomllib가 없어서 Codex `config.toml` 감사가 UNVERIFIED로 끝나고, 사람이 확인하라는 안내가 나온다.
 - **Claude Code의 `.agents/skills`:** `--agent both`일 때 Claude Code가 `.agents/skills`도 읽는지는 에이전트 안에서 확인해야 한다(`AGENT_LOAD_CHECK.md`).
 
@@ -283,7 +297,7 @@ PASS 81, 문서 3
    - 4절 표의 "테스트(파일)" 열과 `devtools/req_coverage.py`의 `MAP`에 있다.
    - 테스트 이름 단위의 대응은 `06_TEST_PLAN.md` 2절과 P6-T2 매트릭스에 있다.
 3. **테스트는 실제로 실행됐는가?**
-   - 실행됐다. 2026-11-08 14:55에 1792개 케이스가 실행되었고, 근거는 `raw/f4-junit.xml`이다.
+   - 실행됐다. 2026-11-08 B-3 뒤에 1999개 케이스가 실행되었고, 근거는 `raw/fb3-junit.xml`이다.
    - 4절의 결과는 모두 그 파일에서 셌다.
    - 수동 항목 9개는 실행 기록이 없어 NOT RUN이다.
 4. **실패한 테스트는 무엇인가?**
@@ -298,10 +312,10 @@ PASS 81, 문서 3
    - 에이전트 안 로드 확인(M-01, M-02).
    - user 범위의 첫 실제 적용(M-06).
    - L1 승인 강제는 우회할 수 있다는 한계.
-   - 감사를 쓰기 뒤에 하는 순서.
-   - `profiles show`와 실제 설치의 차이, `hitl` 팩의 스킬 소속.
+   - 기존 경로(v1)는 여전히 쓰기 뒤에 감사한다. 새 경로는 B-3에서 쓰기 전으로 바꿨다.
    - 재설치 정리가 대체된 v1 스킬을 지운다는 점(백업 있음).
-   - P5-T2b 이후 변경이 아직 커밋되지 않았다는 점.
+   - 후속 A 이후 변경이 아직 커밋되지 않았다는 점.
+   - opt-in 팩의 외부 스킬 44개와 새 MCP·플러그인은 에이전트 안에서 실제로 실행해 보지 않았다는 점.
 
 ## 10. 후속 작업 제안
 
@@ -309,6 +323,6 @@ PASS 81, 문서 3
 |---|---|---|---|
 | 1 | 한국 법령 인용 14개 확인 → `sources.md`의 수준과 날짜 갱신 | S | 사람이 law.go.kr에서 확인하거나, 접근할 수 있는 환경에서 다시 조회 |
 | 2 | 검토자 수동 확인: `AGENT_LOAD_CHECK.md`, `WINDOWS_MANUAL_CHECK.md`, M-06 | - | 7절의 NOT RUN 해소 |
-| 3 | 결정 대기 항목 정리: `profiles show` 출력, `hitl` 팩 소속(ADR-008), 감사 순서 | S | 8절 |
+| 3 | 결정 대기 항목 정리: 끝남. 감사 순서는 B-3에서 쓰기 전으로 바꿈(새 경로만), `hitl` 팩 소속은 ADR-008 개정, `profiles show` 출력은 B-1에서 해결 | - | 8절 |
 | 4 | `docs/EXTENDING.md` (새 에이전트 Adapter 추가 안내) | L | 06_TEST_PLAN DOC-001 행 |
-| 5 | 비밀값 감사 → 커밋(P5-T2b~후속 4) → PR → `main` 병합 뒤 `git clone` 설치 확인 | - | 7절. 커밋과 푸시는 요청이 있을 때만 한다 |
+| 5 | 비밀값 감사 → 커밋(후속 A~B-3) → PR → `main` 병합 뒤 `git clone` 설치 확인 | - | 7절. 커밋과 푸시는 요청이 있을 때만 한다 |

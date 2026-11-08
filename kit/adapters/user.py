@@ -104,6 +104,9 @@ class _UserBase:
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None):
         return None  # the home config is the user's own; kit entries come from the catalog
 
+    def audit_planned(self, target: Path, kit_root: Path, allowlist, planned):
+        return None  # as audit: nothing to check before the write either
+
     def stale_mcp(self, target: Path) -> Optional[ItemResult]:
         return None
 

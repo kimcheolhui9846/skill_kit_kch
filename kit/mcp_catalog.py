@@ -59,7 +59,8 @@ REQUIRED = (
     "network_egress",
     "file_access",
 )
-_VERSION = re.compile(r"^\d+(\.\d+)*([-.+][0-9A-Za-z.-]+)?$")
+# exact versions only; PEP 440 pre-releases (0.0.1a8, 2.0rc1) are exact too
+_VERSION = re.compile(r"^\d+(\.\d+)*((a|b|rc)\d+)?([-.+][0-9A-Za-z.-]+)?$")
 _SHA = re.compile(r"^[0-9a-f]{40}$")
 _REMOTE_KEYS = ("url", "headers", "bearer_token_env_var", "type")
 _SECRETISH = re.compile(r"(?i)(TOKEN|SECRET|API_KEY|PASSWORD)")

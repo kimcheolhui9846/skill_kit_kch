@@ -69,7 +69,15 @@ def browser_pack(kit: Path) -> None:
 def test_shipped_catalogs_load(kit_root):
     servers = mcp_catalog.load_servers(kit_root)
     installable = sorted(n for n, e in servers.items() if mcp_catalog.installable(e))
-    assert installable == ["context7", "playwright", "sequential-thinking"]
+    assert installable == [
+        "codebase-memory",
+        "context7",
+        "inspo",
+        "markitdown",
+        "playwright",
+        "rea",
+        "sequential-thinking",
+    ]  # step 3 (2026-11-08) added codebase-memory, inspo, markitdown and rea, all off
     assert servers["context7"]["enabled_by_default"] is False  # needs a key (P4-T9)
     assert servers["context7"]["args"] == ["-y", "@upstash/context7-mcp@4.5.1"]
     for name in ("fetch", "git", "filesystem"):

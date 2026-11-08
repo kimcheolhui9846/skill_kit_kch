@@ -174,16 +174,21 @@ def test_the_other_agent_keeps_its_files(run_kit, workspace):
 
 
 def test_partly_owned_files_lose_only_the_kit_parts(run_kit, workspace):
-    """python adds an MCP server; core does not. The user's own server and text stay."""
+    """python adds an MCP server; core does not. The user's own server and text stay.
+
+    B-3 (2026-11-08): the user's server is one the audit allows (a catalog name the kit did not
+    install); a server outside the allowlist now blocks before any write
+    (tests/cli/test_audit_before_write.py), so the cleanup could not be seen with one."""
+    mine = {"playwright": {"command": "npx", "args": ["-y", "my-playwright@1"]}}
     (workspace / ".mcp.json").write_text(
-        json.dumps({"mcpServers": {"mine": {"command": "x"}}}, indent=2) + "\n", encoding="utf-8"
+        json.dumps({"mcpServers": mine}, indent=2) + "\n", encoding="utf-8"
     )
     (workspace / ".codex").mkdir()
     (workspace / ".codex/config.toml").write_text('model = "mine"\n', encoding="utf-8")
     run_kit("install", "--agent", "both", "--profile", "python", "--offline")
     assert "sequential-thinking" in (workspace / ".mcp.json").read_text(encoding="utf-8")
     code, out = run_kit("install", "--agent", "both", "--offline")
-    assert code == EXIT_BLOCKED, out  # the audit flags "mine" (outside the allowlist), as before
+    assert code == EXIT_READY, out
     servers = json.loads((workspace / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"]
-    assert servers == {"mine": {"command": "x"}}
+    assert servers == mine
     assert (workspace / ".codex/config.toml").read_text(encoding="utf-8") == 'model = "mine"\n'

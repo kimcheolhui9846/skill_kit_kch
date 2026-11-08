@@ -92,15 +92,16 @@ def test_v05_uninstall_gives_the_user_files_back(run_kit, workspace):
 
 
 def test_v05_a_user_server_outside_the_allowlist_blocks_but_stays_as_written(run_kit, workspace):
-    """The audit checks the result after writing (legacy behaviour, test_audit.py): the run is
-    BLOCKED and says why; the user's server is neither removed nor changed."""
+    """The run is BLOCKED and says why; the user's server is neither removed nor changed.
+    B-3 (2026-11-08): the v2 audit runs before the write, so CLAUDE.md stays as it was too
+    (the legacy installer still audits after writing, test_audit.py)."""
     mine = b'{"mcpServers": {"mine": {"command": "my-tool"}}}\n'
     (workspace / ".mcp.json").write_bytes(mine)
     (workspace / "CLAUDE.md").write_bytes(USER_FILES["CLAUDE.md"])
     code, out = run_kit("install", "--agent", "claude", "--offline")
     assert code == EXIT_BLOCKED and "mine: not in mcp/allowlist.json" in out
     assert (workspace / ".mcp.json").read_bytes() == mine
-    assert (workspace / "CLAUDE.md").read_bytes().startswith(USER_FILES["CLAUDE.md"])
+    assert (workspace / "CLAUDE.md").read_bytes() == USER_FILES["CLAUDE.md"]
 
 
 # ---------------------------------------------------------------- V-07

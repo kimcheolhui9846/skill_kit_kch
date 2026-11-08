@@ -33,12 +33,23 @@
 
 | 결정 | 수(사용자 목록 49개 기준) | 항목 |
 |---|---|---|
-| ADOPT-VENDOR | 8 | U-01, U-04, U-05(대체안), U-16, U-31(일부), U-32, U-40(7개, 2026-11-06), U-49(일부) |
-| ADOPT-REFERENCE | 15 | U-02, U-03, U-06, U-12, U-14, U-15, U-19, U-22, U-24, U-25, U-33, U-41, U-45, U-46, U-48 |
-| DEFER | 21 | U-07, U-08, U-09, U-10, U-13, U-17, U-20, U-27, U-28, U-29, U-30, U-34, U-35, U-36, U-37, U-38, U-39, U-42, U-43, U-44, U-47 |
+| ADOPT-VENDOR | 12 | U-01, U-04, U-05(대체안), U-06(5개, 2026-11-08), U-16, U-17(13개, 2026-11-08), U-22(7개, 2026-11-08), U-31(일부), U-32, U-33(3개, 2026-11-08), U-40(7개, 2026-11-06), U-49(일부) |
+| ADOPT-REFERENCE | 12 | U-02, U-03, U-12, U-14, U-15, U-19, U-24, U-25, U-41, U-45, U-46, U-48 |
+| DEFER | 20 | U-07, U-08, U-09, U-10, U-13, U-20, U-27, U-28, U-29, U-30, U-34, U-35, U-36, U-37, U-38, U-39, U-42, U-43, U-44, U-47 |
 | MANUAL-GUIDE(검토자 결정 2026-11-06) | 1 | U-23 (`catalog/manual.json`, 키트는 실행하지 않음) |
 | REJECT | 3 | U-11, U-18, U-21 |
 | EXCLUDED(검토자 결정 2026-11-06) | 1 | U-26 |
+
+2026-11-08 3단계(검토자 승인: MCP 서버, Claude 플러그인, 수동 도구, 원격 MCP 수동 안내, 문서 전용 링크, 평가 정정) 뒤의 분류다. 바뀐 항목과 이유는 §8.1에 있다.
+
+| 결정 | 수 | 항목 |
+|---|---|---|
+| ADOPT-VENDOR | 12 | 위와 같음 |
+| ADOPT-REFERENCE | 20 | U-02, U-03, U-09, U-12, U-13, U-14, U-15, U-19, U-24, U-25, U-27, U-28, U-29, U-34, U-39, U-41, U-43, U-46, U-47, U-48 |
+| DEFER | 2 | U-30, U-38 |
+| MANUAL-GUIDE | 11 | U-07, U-08, U-10, U-20, U-23, U-35, U-36, U-37, U-42, U-44, U-45 |
+| REJECT | 3 | U-11, U-18, U-21 |
+| EXCLUDED | 1 | U-26 |
 
 목록 밖 항목:
 
@@ -79,42 +90,42 @@
 | U-04 | `emilkowalski/skills@c8a79627b59d` | MIT(LICENSE) | push 2026-11-04, 이슈 1 | 없음(마크다운 26개) | 스크립트 없음 → low |
 | U-05 | `vercel-labs/agent-skills@1a2c79d4e6c4` | 루트 LICENSE **없음**. README "License: MIT"만 있음 | push 2026-10-27 | 없음 | `web-design-guidelines`가 **쓸 때마다 `raw.githubusercontent.com/.../main/command.md`를 받아옴**(고정 안 됨, 네트워크) → medium. 규칙 원본 `vercel-labs/web-interface-guidelines@434b7f91`은 MIT(LICENSE, © 2025 Vercel Labs) |
 | U-06 | `DietrichGebert/ponytail@96608e078b2d` | MIT | v5.3.3(2026-10-29) | npm, 의존성 0, 수명주기 없음 | 행동 지침 플러그인 → low |
-| U-07 | `Graphify-Labs/graphify@16218bfc80d4` | Apache-2.0 | v0.9.103(2026-11-05), 이슈 1,616 | Python 도구 | `CLAUDE.md` 수정, PreToolUse 훅 → high |
-| U-08 | `headroomlabs-ai/headroom@2d3ee5184643` | Apache-2.0 | v0.43.1(2026-11-05) | 로컬 프록시 | 모델 요청을 중계 → high |
-| U-09 | `HeyCubit/effortless@e5c590dfd940` | MIT | push 2026-10-23 | Claude Code mod | 홈 설정에 쓰고 API 키 환경 변수를 씀 → high |
-| U-10 | `mvschwarz/openrig@bd39da9872af` | Apache-2.0 | v0.7.8(2026-11-05) | npm(수명주기 없음), tmux | 셸 세션 제어. Windows에서 tmux 없음 → medium |
+| U-07 | `Graphify-Labs/graphify@16218bfc80d4` | Apache-2.0 | v0.9.103(2026-11-05), 이슈 1,616 | Python 도구 | `CLAUDE.md` 수정, PreToolUse 훅 → high **2026-11-08:** v0.9.104(`433a57a00290`). PyPI 이름은 `graphifyy`(y 두 개). README에 텔레메트리 없음 |
+| U-08 | `headroomlabs-ai/headroom@2d3ee5184643` | Apache-2.0 | v0.43.1(2026-11-05) | 로컬 프록시 | 모델 요청을 중계 → high **2026-11-08:** 익명 텔레메트리 비콘이 **기본 켜짐**. `HEADROOM_TELEMETRY=off`, `HEADROOM_BEACON=off`, `DO_NOT_TRACK=1`, `HEADROOM_OFFLINE=1`로 끔(README) |
+| U-09 | `HeyCubit/effortless@e5c590dfd940` | MIT | push 2026-10-23 | Claude Code mod | 홈 설정에 쓰고 API 키 환경 변수를 씀 → high **2026-11-08:** 고정 커밋 `7912a6ccdf0a`(플러그인 1.72.0). Haiku를 프롬프트마다 부름, 앱 안 Update 버튼이 고정을 우회, 설정 안내에 붙인 키는 `~/.config/jev/.env`에 평문 저장, 사용자 설정에 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1` 필요 |
+| U-10 | `mvschwarz/openrig@bd39da9872af` | Apache-2.0 | v0.7.8(2026-11-05) | npm(수명주기 없음), tmux | 셸 세션 제어. Windows에서 tmux 없음 → medium **2026-11-08:** v0.7.9(`ddb9d25be74a`). 네이티브 Windows 미지원(WSL2만). `rig setup`이 `~/.tmux.conf`, `~/.codex/config.toml`, `~/.claude.json`, `~/.claude/skills`, `~/.agents/skills`에 씀 |
 | U-11 | `trailhq/Trail-Code@ca20a67764e9` | MIT | push 2026-11-03 | npm `@nanonets/graft`. **`postinstall`과 `prepare`가 있음**. `prepare`가 배포본에 PostHog 텔레메트리 키를 넣음 | 훅, 텔레메트리 → high |
 | U-12 | `msitarzewski/agency-agents@b37b5bb33b78` | MIT | push 2026-10-25 | 마크다운 384개(에이전트 정의) | low. 다만 양이 많음 |
-| U-13 | `DeusData/codebase-memory-mcp@612eee2518ef` | MIT | v0.12.1(2026-10-16), 이슈 550 | 네이티브 바이너리 MCP | 저장소 전체를 색인 → medium |
-| U-14 | `calesthio/OpenMontage@d21f5d4eaa08` | **AGPL-3.0** | push 2026-11-03 | — | 레포에 넣으면 AGPL 의무가 생김 |
-| U-15 | `f/prompts.chat@06539cb86bd2` | 이중 라이선스(코드 MIT, 프롬프트 CC0. LICENSE·LICENSE-MIT·LICENSE-CC0 원문 확인) | push 2026-11-05 | Next.js 앱, `postinstall: prisma generate` | 웹 앱 → 설치 대상이 아님 |
+| U-13 | `DeusData/codebase-memory-mcp@612eee2518ef` | MIT | v0.12.1(2026-10-16), 이슈 550 | 네이티브 바이너리 MCP | 저장소 전체를 색인 → medium **2026-11-08 정정:** npm 패키지에 `postinstall`이 있어 PyPI `uvx codebase-memory-mcp==0.12.1`을 씀. 첫 실행 때 GitHub Releases에서 네이티브 바이너리를 받고 데몬을 띄움(캐시 `~/.cache/codebase-memory-mcp`). `install` 하위 명령은 쓰지 않음. lock 커밋 `a7158ac2f48c`(태그 v0.12.1) |
+| U-14 | `calesthio/OpenMontage@d21f5d4eaa08` | **AGPL-3.0** | push 2026-11-03 | — | 레포에 넣으면 AGPL 의무가 생김 **2026-11-08 정정:** 저장소가 `OpenMontageInc/OpenMontage`로 옮겨짐. AGPL-3.0 그대로 |
+| U-15 | `f/prompts.chat@06539cb86bd2` | 이중 라이선스(코드 MIT, 프롬프트 CC0. LICENSE·LICENSE-MIT·LICENSE-CC0 원문 확인) | push 2026-11-05 | Next.js 앱, `postinstall: prisma generate` | 웹 앱 → 설치 대상이 아님 **2026-11-08:** HEAD `ba34d09010de` |
 | U-16/U-32 | `multica-ai/andrej-karpathy-skills@2c606141936f` | 루트 LICENSE **없음**. README "License: MIT", 스킬 frontmatter `license: MIT`. **저작권 표시 문구가 없음** | push 2026-04-20(7개월 전) | 마크다운 | low |
 | U-17 | `cloudflare/skills@1f2cd0a19588` | Apache-2.0 | push 2026-11-03 | 스킬 19개가 `npx wrangler`를 씀 | Cloudflare 토큰, 배포(외부 쓰기) → high |
 | U-18 | `charmbracelet/mods@0425d0d7861e` | MIT | **보관됨(archived)**. 마지막 릴리스 v1.8.1(2025-07-10) | Go CLI | — |
-| U-19 | `mksglu/context-mode@7bad9ac3501f` | **Elastic License 2.0**(원문 확인. OSI 오픈소스 아님) | v2.1.4(2026-11-05) | npm, 훅 | 훅이 도구 출력을 가로챔 → high |
-| U-20 | `rtk-ai/rtk@8268663fac0b` | Apache-2.0 | v1.1.0(2026-10-25), 이슈 1,711 | Rust 바이너리, 셸 훅 | 셸 명령을 다시 씀 → high |
+| U-19 | `mksglu/context-mode@7bad9ac3501f` | **Elastic License 2.0**(원문 확인. OSI 오픈소스 아님) | v2.1.4(2026-11-05) | npm, 훅 | 훅이 도구 출력을 가로챔 → high **2026-11-08:** v2.1.6 |
+| U-20 | `rtk-ai/rtk@8268663fac0b` | Apache-2.0 | v1.1.0(2026-10-25), 이슈 1,711 | Rust 바이너리, 셸 훅 | 셸 명령을 다시 씀 → high **2026-11-08 정정:** 라이선스가 **섞여 있음**: 기본 `rtk` 바이너리는 Apache-2.0 + BUSL-1.1, `rtk-oss`는 Apache-2.0만, `rtk-proxy`는 BUSL-1.1. 텔레메트리는 기본 꺼짐(README). v1.1.0 커밋 `753a3b0e939f` |
 | U-21 | `vercel-labs/skills@cad8cda44e89` | MIT | v1.7.6(2026-11-03) | `find-skills`가 `npx skills add <임의 저장소>`를 안내 | 고정되지 않은 외부 스킬 설치 → high |
 | U-22 | `affaan-m/ECC@b38be6a7f635` | MIT | v2.2.3(2026-10-01) | npm 의존성 5. 훅·에이전트·스킬 대량 | high(훅) |
 | U-23 | `musistudio/claude-code-router@057abaa1f955` (2026-11-06 재선정; 이전 후보 `weave-os/router`) | MIT | push 2026-10-10. npm `@musistudio/claude-code-router@3.1.3`, bin `ccr`. 설치 스크립트(pre/post/install, prepare) 없음 | 로컬 프록시가 Claude Code 요청을 다른 모델 제공자로 중계 | 코드·프롬프트가 외부 제공자로 나감, 제공자 API 키 필요, Claude Code의 요청 주소를 바꿈 → high |
-| U-24 | `KasperZutterman/Second-Brain@4302f25c60f5` (2026-11-06 재선정; 이전 후보 `NicholasSpisak/second-brain`) | MIT | push 2026-10-14 | 파일은 README와 LICENSE뿐(링크 모음) | 실행할 것이 없음 → low |
-| U-25 | `google-research/harness2@686881751887` | Apache-2.0 | push 2026-11-02 | Python 연구 도구 | medium |
+| U-24 | `KasperZutterman/Second-Brain@4302f25c60f5` (2026-11-06 재선정; 이전 후보 `NicholasSpisak/second-brain`) | MIT | push 2026-10-14 | 파일은 README와 LICENSE뿐(링크 모음) | 실행할 것이 없음 → low **2026-11-08:** HEAD `4302f25c60f5` 그대로 |
+| U-25 | `google-research/harness2@686881751887` | Apache-2.0 | push 2026-11-02 | Python 연구 도구 | medium **2026-11-08:** Linux 전용. HEAD `686881751887` 그대로 |
 | U-26 | 제외(검토자 결정 2026-11-06) | — | — | — | — |
-| U-27 | `JohnnyVizz/claude-kit@c871c153ead5` | MIT | push 2026-10-12 | Claude Code mod | 홈 설정에 씀 → medium |
-| U-28 | `data-goblin/claude-code-filetree@2b42d0faf707` | MIT | v0.8.0(2026-11-05). Claude Code 2.1.287 이상 필요 | mod | 홈 설정에 쓰고 원격 호출이 있음 → medium |
-| U-29 | `anthropics/claude-code-playground@569c5283d9a0`의 `claude-code/mods/replay-theater` | Apache-2.0 | push 2026-10-01 | mod: `hooks/hooks.json` + `replay-theater.mjs` | 훅 → medium |
+| U-27 | `JohnnyVizz/claude-kit@c871c153ead5` | MIT | push 2026-10-12 | Claude Code mod | 홈 설정에 씀 → medium **2026-11-08 정정:** 고정 커밋의 코드에서 홈 설정 쓰기와 네트워크 호출을 찾지 못함. 플러그인 1.2.1. mod라서 medium 유지 |
+| U-28 | `data-goblin/claude-code-filetree@2b42d0faf707` | MIT | v0.8.0(2026-11-05). Claude Code 2.1.287 이상 필요 | mod | 홈 설정에 쓰고 원격 호출이 있음 → medium **2026-11-08 정정:** 홈 설정 쓰기·네트워크 호출을 찾지 못함. v0.8.2(`a3d36b1a56c0`)는 Claude Code **2.1.306** 이상 필요 |
+| U-29 | `anthropics/claude-code-playground@569c5283d9a0`의 `claude-code/mods/replay-theater` | Apache-2.0 | push 2026-10-01 | mod: `hooks/hooks.json` + `replay-theater.mjs` | 훅 → medium **2026-11-08:** 플러그인 0.1.0, 루트 LICENSE Apache-2.0 원문 확인. Claude Code 2.1.287 이상 |
 | U-30 | `JuliusBrussee/caveman@ca3a524022a9` | Apache-2.0 | v4.0.1(2026-10-13) | 스킬 22개 + `.codex/hooks.json` + `src/hooks/*` | 세션 시작 훅. 설명이 YAML 여러 줄 블록(§5.2) → medium |
 | U-33 | `mattpocock/skills@4ae2317ddb22` | MIT | v1.3.2(2026-10-29) | 스킬 39개 | 일부가 git 훅·pre-commit을 설치 → medium |
-| U-34 | `morluto/rea@a7574d427472` | MIT | rea-agents 6.8.0(2026-10-25), 이슈 1,621 | npm 의존성 42, `prepare` | 사용자 홈에 자동 설치 → high |
-| U-35~U-38 | Mobbin, Nicelydone, Refero, Lazyweb 원격 MCP | 서비스 약관(유료·OAuth·토큰) | — | 원격 HTTP | 외부 송신, 비밀값 → high |
-| U-39 | `Nutlope/inspo@022f80977c1e` | MIT | push 2026-10-28, 버전 0.0.0(배포본 없음) | npm | 고정할 버전이 없음 → medium |
+| U-34 | `morluto/rea@a7574d427472` | MIT | rea-agents 6.8.0(2026-10-25), 이슈 1,621 | npm 의존성 42, `prepare` | 사용자 홈에 자동 설치 → high **2026-11-08 정정:** 홈 자동 설치는 `rea-agents setup`일 때뿐이고, `rea-agents mcp`로 **프로젝트 범위 stdio 서버**를 띄울 수 있음. lock 커밋 `160d821ac9a0`(6.8.0, package.json 확인) |
+| U-35~U-38 | Mobbin, Nicelydone, Refero, Lazyweb 원격 MCP | 서비스 약관(유료·OAuth·토큰) | — | 원격 HTTP | 외부 송신, 비밀값 → high **2026-11-08:** Mobbin `https://api.mobbin.com/mcp`(OAuth, 공식 문서의 Claude Code 명령 확인), Nicelydone `https://mcp.nicelydone.club/mcp`(OAuth 2.1), Refero `https://api.refero.design/mcp`(OAuth 또는 Bearer 토큰 헤더). Lazyweb은 엔드포인트를 공식 문서에서 찾지 못함(UNVERIFIED) |
+| U-39 | `Nutlope/inspo@022f80977c1e` | MIT | push 2026-10-28, 버전 0.0.0(배포본 없음) | npm | 고정할 버전이 없음 → medium **2026-11-08 정정:** npm `inspo-mcp@0.2.0`이 배포되어 **고정할 수 있음**(gitHead `022f80977c1e`). 첫 실행 때 약 14 MB 카탈로그를 Vercel Blob에서 받음. 선택 키 `TOGETHER_API_KEY`(키 발급 페이지는 UNVERIFIED) |
 | U-40 | `K-Dense-AI/scientific-agent-skills@a25cf9ec00e2` | MIT(LICENSE.md) | v2.72.0(2026-10-01) | 스킬 **177개**(`skills/`) | 스킬마다 다름. 일부는 API 키를 씀 |
 | U-41 | `wheresryan22/anatomy@1482e8469b0a` | MIT | v1.1.0(2026-10-12) | SKILL.md 1개(186줄, 설명 1,018자) | low |
-| U-42 | `thedotmack/claude-mem@89b97644e39d` | Apache-2.0 | v15.10.0(2026-11-05) | 플러그인과 훅, 로컬 DB | 세션 내용을 저장 → high |
-| U-43 | `microsoft/markitdown@7482c092d9c0` | MIT | v0.1.9(2026-10-21) | pip, `markitdown-mcp` | 파일 읽기, URL 변환 → medium |
-| U-44 | `ruvnet/ruflo@722232566ad1` | MIT | v3.72.0(2026-11-06) | npm `claude-flow`, 의존성 26 | 설정, 훅, 데몬 → high |
+| U-42 | `thedotmack/claude-mem@89b97644e39d` | Apache-2.0 | v15.10.0(2026-11-05) | 플러그인과 훅, 로컬 DB | 세션 내용을 저장 → high **2026-11-08:** v15.12.0(`eb00299a6a74`). 사용 분석이 **기본 켜짐**(`npx claude-mem telemetry disable`), 설치기가 Bun·uv를 자동 설치 |
+| U-43 | `microsoft/markitdown@7482c092d9c0` | MIT | v0.1.9(2026-10-21) | pip, `markitdown-mcp` | 파일 읽기, URL 변환 → medium **2026-11-08 정정:** MCP는 `markitdown-mcp==0.0.1a8`(알파), 커밋 `21d9c1d01ecc`(markitdown v0.1.9). 아무 파일이나 읽고 아무 URL이나 받으므로 **high** |
+| U-44 | `ruvnet/ruflo@722232566ad1` | MIT | v3.72.0(2026-11-06) | npm `claude-flow`, 의존성 26 | 설정, 훅, 데몬 → high **2026-11-08:** v3.72.2(`b7bc909d5f0d`). `ruflo init`이 `.claude/`, `.claude-flow/`, `CLAUDE.md`, 설정을 프로젝트에 씀 |
 | U-45 | `devlikemasta/bureau-des-agents@184daa898cbb` | MIT | v0.1.0(2026-10-14), ★60 | 로컬 웹 앱 | medium |
-| U-46 | `anthropics/claude-plugins-official@ff920a4094a3`의 `plugins/security-guidance` | Apache-2.0 | push 2026-11-06 | Python 훅 67개 | SessionStart 훅이 `~/.claude/security/agent-sdk-venv`를 만들고 SDK를 pip로 설치함. Stop 훅이 git diff를 **LLM API로 보냄**(`ANTHROPIC_API_KEY`) → high |
-| U-47 | `D4Vinci/Scrapling@bc602488b44e` | BSD-3-Clause | v0.5.1(2026-11-04) | pip, 브라우저 | 웹 수집(외부 송신) → high |
+| U-46 | `anthropics/claude-plugins-official@ff920a4094a3`의 `plugins/security-guidance` | Apache-2.0 | push 2026-11-06 | Python 훅 67개 | SessionStart 훅이 `~/.claude/security/agent-sdk-venv`를 만들고 SDK를 pip로 설치함. Stop 훅이 git diff를 **LLM API로 보냄**(`ANTHROPIC_API_KEY`) → high **2026-11-08 정정:** 키트 고정 `ff920a4094a3`(2.0.17)은 HEAD보다 **한 버전 뒤**다. HEAD의 2.0.18은 훅이 바뀌어 diff를 검토한 뒤에만 올림 |
+| U-47 | `D4Vinci/Scrapling@bc602488b44e` | BSD-3-Clause | v0.5.1(2026-11-04) | pip, 브라우저 | 웹 수집(외부 송신) → high **2026-11-08:** v0.5.1. MCP를 띄우려면 Python 패키지와 `scrapling install`(브라우저 다운로드)이 먼저 필요 |
 | U-48 | `anthropics/knowledge-work-plugins@d900840716eb` | Apache-2.0 | push 2026-11-04 | Claude(Cowork) 플러그인 | 업무 커넥터 → medium |
 | U-49 | `obra/superpowers@22f0b463e7a5` (= v7.0.2) | MIT(© 2025 Jesse Vincent) | v7.0.2(2026-11-03), 이슈 336 | 스킬 15개 + 세션 시작 훅(`hooks/session-start`) | 아래 스킬 5개는 마크다운 + 예시 파일만 → low. `brainstorming`은 로컬 서버를 띄움(127.0.0.1) → medium |
 | U-51 | `Yeachan-Heo/oh-my-codex@509a299d586b`, 태그 v0.21.46 = `f7830d0ae1b5` | MIT(© 2026 Yeachan-Heo) | v0.21.46(2026-11-02) | npm CLI: **`postinstall`과 `prepare`가 있음**. 태그 커밋 기준 스킬 29개, prompts 32개 | 마크다운 → low. CLI와 훅 → high |
@@ -134,45 +145,45 @@
 | U-01 | UI 미적 방향, web/fullstack | 그대로 | 그대로(원래 Claude용) | 없음. 디자인 묶음에서 1순위(§3.1) | 새 UI를 만들 때. 72줄 | **ADOPT-VENDOR**(A2). 공식, 마크다운, Apache 원문이 스킬 폴더에 있음 |
 | U-02 | 디자인 시스템 데이터 검색 | 스크립트 실행 필요 | `.claude/skills` 형식 | U-01과 겹침 | 데이터가 크고 글꼴 54개 | **ADOPT-REFERENCE**. 스크립트, 원격 호출, 글꼴 라이선스 확인 부담. 링크만 둠 |
 | U-03 | 디자인 + 이미지 생성 | 그대로(스크립트는 Node) | 그대로 | U-01과 겹침 | API 키가 필요함 | **ADOPT-REFERENCE**. 훅을 설치하는 스크립트(설정 쓰기)와 API 키 |
-| U-04 | 인터랙션·애니메이션 다듬기, web/fullstack | 그대로 | 그대로 | U-01과 역할이 다름(동작·세부) | 677줄. 500줄 권장 초과는 경고만 | **ADOPT-VENDOR**(A3). `emil-design-eng` 1개만. 나머지 16개는 필요해지면 `kit source add` |
+| U-04 | 인터랙션·애니메이션 다듬기, web/fullstack | 그대로 | 그대로 | U-01과 역할이 다름(동작·세부) | 677줄. 500줄 권장 초과는 경고만 | **ADOPT-VENDOR**(A3). `emil-design-eng` 1개만. 나머지 16개는 필요해지면 `kit source add` **2026-11-08 검토자 승인:** 나머지 16개를 opt-in 팩 `motion`(standard만)으로 `kit source add`(같은 커밋). REVIEW 10건(방어 문구 5, 중첩 코드 펜스 앞 U+200B 4, 이모지 안 U+200D 1)을 줄마다 확인해 무해로 보고 `--accept-risk` |
 | U-05 | UI 코드 가이드라인 리뷰, web/fullstack | 그대로 | 그대로 | `design-review`(구조 리뷰)와 대상이 다름 | 리뷰할 때. 규칙 8 KB | 원본 스킬은 **REJECT**: 쓸 때마다 고정되지 않은 URL을 받음(§14.3), LICENSE 파일 없음. **대체안 ADOPT-VENDOR**(A4): 규칙 원문을 고정 커밋으로 `references/`에 두고 SKILL.md는 키트가 씀(origin `adapted`) |
-| U-06 | "덜 쓰기" 행동 지침 | 그대로 | 플러그인 | standard 정책·karpathy와 겹침 | 낮음 | **ADOPT-REFERENCE**. 정책 파일과 중복 |
-| U-07 | 코드 지식 그래프 | 스킬 + 도구 | 훅 | `codebase-explorer` | 큰 저장소에서 유용 | **DEFER**. 정책 파일을 수정하고 훅을 씀. 큰 저장소용 opt-in 팩을 설계할 때 다시 봄(P4-T5 이후) |
-| U-08 | 컨텍스트 압축 프록시 | 프록시 | 프록시 | — | — | **DEFER**. 요청 경로 중계 → 자동 활성화 금지. 사용자 범위 수동 도구로만 검토 |
-| U-09 | 추론 노력 자동 선택(Claude mod) | 해당 없음 | mod | — | — | **DEFER**(P4-T5 Claude mod 카탈로그) |
-| U-10 | tmux 다중 에이전트 | 도구 | 도구 | 오케스트레이션 묶음 | Windows에 tmux 없음 | **DEFER**. 이 PC(Windows)에서 쓸 수 없음 |
+| U-06 | "덜 쓰기" 행동 지침 | 그대로 | 플러그인 | standard 정책·karpathy와 겹침 | 낮음 | **ADOPT-REFERENCE**. 정책 파일과 중복 **2026-11-08 검토자 승인:** opt-in 팩 `lean`(standard만)으로 5개 `kit source add`. `ponytail-help`는 뺌(전역 `npm install -g …@latest`·`brew` 안내, 플러그인 전용 명령) |
+| U-07 | 코드 지식 그래프 | 스킬 + 도구 | 훅 | `codebase-explorer` | 큰 저장소에서 유용 | **DEFER**. 정책 파일을 수정하고 훅을 씀. 큰 저장소용 opt-in 팩을 설계할 때 다시 봄(P4-T5 이후) **2026-11-08 3단계: MANUAL-GUIDE**(`catalog/manual.json` `graphify` 0.9.104). 정책 파일·훅을 쓰므로 키트는 실행하지 않고 프로젝트 범위 설치(`graphify install --project`)와 `graphify uninstall`을 안내 |
+| U-08 | 컨텍스트 압축 프록시 | 프록시 | 프록시 | — | — | **DEFER**. 요청 경로 중계 → 자동 활성화 금지. 사용자 범위 수동 도구로만 검토 **2026-11-08 3단계: MANUAL-GUIDE**(`headroom` 0.43.1). 요청 경로 중계라 자동 활성화 금지는 그대로. 텔레메트리 끄는 환경 변수를 첫 단계로 안내 |
+| U-09 | 추론 노력 자동 선택(Claude mod) | 해당 없음 | mod | — | — | **DEFER**(P4-T5 Claude mod 카탈로그) **2026-11-08 3단계: ADOPT-REFERENCE**(`catalog/plugins.json` `effortless`, high, 기본 꺼짐, `--plugin effortless`). 선택 키 `TYPESAFE_API_KEY`는 이름만 |
+| U-10 | tmux 다중 에이전트 | 도구 | 도구 | 오케스트레이션 묶음 | Windows에 tmux 없음 | **DEFER**. 이 PC(Windows)에서 쓸 수 없음 **2026-11-08 3단계: MANUAL-GUIDE**(`openrig` 0.7.9). 이 PC(Windows)에서는 WSL2가 필요. 되돌리기는 상류 문서가 일부뿐이라 그렇게 적음 |
 | U-11 | 공유 코드 메모리 | 도구 + 훅 | 도구 + 훅 | `codebase-explorer` | — | **REJECT**. `postinstall`, 배포본 텔레메트리 키(§14.3). 대안은 U-13(DEFER) |
 | U-12 | 역할별 에이전트 정의 384개 | 변환 필요(Codex agents 형식 다름) | `.claude/agents` | 오케스트레이션 묶음 | 매우 큼 | **ADOPT-REFERENCE** |
-| U-13 | 코드 색인 MCP | MCP | MCP | `codebase-explorer` | 큰 저장소 | **DEFER**(P4-T5 MCP 카탈로그에서 바이너리 고정·해시를 확인한 뒤 opt-in 후보) |
-| U-14 | 영상 편집 에이전트 | — | — | — | 개발 키트와 무관 | **ADOPT-REFERENCE**(링크만). AGPL이라 복사 불가 |
-| U-15 | 프롬프트 모음 | — | — | — | — | **ADOPT-REFERENCE**. 설치 대상이 아님 |
+| U-13 | 코드 색인 MCP | MCP | MCP | `codebase-explorer` | 큰 저장소 | **DEFER**(P4-T5 MCP 카탈로그에서 바이너리 고정·해시를 확인한 뒤 opt-in 후보) **2026-11-08 3단계: ADOPT-REFERENCE**(`catalog/mcp.json` `codebase-memory`, medium, 기본 꺼짐, `--mcp codebase-memory`). npm 대신 uvx |
+| U-14 | 영상 편집 에이전트 | — | — | — | 개발 키트와 무관 | **ADOPT-REFERENCE**(링크만). AGPL이라 복사 불가 **2026-11-08:** 링크만(§8.1 문서 전용 목록). 새 주소 `OpenMontageInc/OpenMontage` |
+| U-15 | 프롬프트 모음 | — | — | — | — | **ADOPT-REFERENCE**. 설치 대상이 아님 **2026-11-08:** 링크만(§8.1 문서 전용 목록) |
 | U-16 | 행동 지침 CLAUDE.md | AGENTS.md로 옮겨야 함 | 그대로 | `shared/policies/standard.md`와 대부분 겹침(단순성, 가정 밝히기, 수술적 변경, 검증 기준) | 짧음 | **ADOPT-VENDOR**(A6, Q2 결정). 저작권 표시가 없다는 사실을 NOTICES에 그대로 적는다 |
-| U-17 | Cloudflare 배포 | 그대로 | 그대로 | — | Cloudflare를 쓸 때만 | **DEFER**. 토큰, 배포 쓰기. fullstack 프로필의 opt-in 팩 후보(P4-T6) |
+| U-17 | Cloudflare 배포 | 그대로 | 그대로 | — | Cloudflare를 쓸 때만 | **DEFER**. 토큰, 배포 쓰기. fullstack 프로필의 opt-in 팩 후보(P4-T6) **2026-11-08 검토자 승인:** opt-in 팩 `cloudflare`(standard만)로 13개 `kit source add`. 뺀 것: `basin`(`references/sql/configuration.md:27`이 토큰을 프로젝트 `.env` 파일에 두라고 안내), `cf-cli`(전역 npm 설치, 사용자 AGENTS.md/CLAUDE.md 수정 안내), `turnstile-spin`(API 토큰을 `~/.cf-turnstile-token`에 저장, `~/.claude/skills` 링크), `web-perf`(`@latest` MCP), `nextjs-on-cloudflare`(묻지 않고 `npx skills add`), `cloudflare-email-service`(묻지 않고 도메인 발송 활성화), 그리고 이들로 링크가 걸린 `cloudflare`, `cloudflare-one`, `gateway-workers` |
 | U-18 | 터미널 LLM CLI | — | — | — | — | **REJECT**. 보관된 저장소이고 에이전트 스킬이 아님 |
-| U-19 | 도구 출력 압축 | 플러그인 | 플러그인 | 컨텍스트 묶음 | — | **ADOPT-REFERENCE**. ELv2(허용 라이선스 아님), 훅 |
-| U-20 | 셸 출력 압축 | 훅 | 훅 | 컨텍스트 묶음 | — | **DEFER**. 셸 훅 → 자동 금지 |
+| U-19 | 도구 출력 압축 | 플러그인 | 플러그인 | 컨텍스트 묶음 | — | **ADOPT-REFERENCE**. ELv2(허용 라이선스 아님), 훅 **2026-11-08 3단계:** 플러그인으로 **넣지 않음**. ELv2는 키트 라이선스 표(`kit/source_add.py` `ALLOWED`)에 없고 `other`로 분류되어 `--accept-license` 없이는 복사도 안 되는 라이선스다. 플러그인 카탈로그는 사용자 PC에 설치까지 이어지므로 같은 기준을 적용해 참조(링크)만 둔다 |
+| U-20 | 셸 출력 압축 | 훅 | 훅 | 컨텍스트 묶음 | — | **DEFER**. 셸 훅 → 자동 금지 **2026-11-08 3단계: MANUAL-GUIDE**(`rtk`, `rtk-oss` 1.1.0을 권장). 셸 훅이라 키트는 실행하지 않음 |
 | U-21 | 스킬 검색·설치 | 그대로 | 그대로 | P4-T8 `add-skill-source`와 같은 목적 | — | **REJECT**. 고정되지 않은 외부 설치로 `sources.lock.json`을 우회함. `add-skill-source`가 대체 |
-| U-22 | 모든 것 모음 | 일부 | 플러그인 | 거의 모든 레포 스킬 | 매우 큼 | **ADOPT-REFERENCE**. 필요한 스킬만 나중에 `kit source add` |
+| U-22 | 모든 것 모음 | 일부 | 플러그인 | 거의 모든 레포 스킬 | 매우 큼 | **ADOPT-REFERENCE**. 필요한 스킬만 나중에 `kit source add` **2026-11-08 검토자 승인:** opt-in 팩 `eng-patterns`(standard만)로 7개 `kit source add`. `docker-patterns`는 뺌(ECC 전용 하네스, 컨테이너 안 `npm install --global`, OAuth 자격 증명 중계) |
 | U-23 | 모델 라우터(claude-code-router) | — | 수동 안내 | — | — | **MANUAL-GUIDE**(**검토자 결정(2026-11-06)**: "수동 안내만"). `catalog/manual.json`의 `claude-code-router` 3.1.3. `kit install/plan --manual claude-code-router`가 설치·키 설정·되돌리기 단계와 위험을 출력만 하고, 키트는 실행·설치하지 않음 |
-| U-24 | Second Brain 링크 모음 | — | — | — | 개인 지식 관리 | **ADOPT-REFERENCE**. 설치할 파일이 없는 링크 모음 |
-| U-25 | 하네스 최적화 연구 | — | — | — | ai-research | **ADOPT-REFERENCE** |
+| U-24 | Second Brain 링크 모음 | — | — | — | 개인 지식 관리 | **ADOPT-REFERENCE**. 설치할 파일이 없는 링크 모음 **2026-11-08:** 링크만(§8.1 문서 전용 목록) |
+| U-25 | 하네스 최적화 연구 | — | — | — | ai-research | **ADOPT-REFERENCE** **2026-11-08:** 링크만(§8.1 문서 전용 목록). Linux 전용 |
 | U-26 | — | — | — | — | — | **EXCLUDED**(검토자 결정) |
-| U-27/U-28/U-29 | Claude Code mods(진행 표시, 파일 트리, 세션 재생) | 해당 없음 | mod·훅 | — | 편의 기능 | **DEFER**(P4-T5 Claude 플러그인·mod 카탈로그. 훅은 기본 비활성, opt-in) |
+| U-27/U-28/U-29 | Claude Code mods(진행 표시, 파일 트리, 세션 재생) | 해당 없음 | mod·훅 | — | 편의 기능 | **DEFER**(P4-T5 Claude 플러그인·mod 카탈로그. 훅은 기본 비활성, opt-in) **2026-11-08 3단계: ADOPT-REFERENCE**. `catalog/plugins.json`의 `savvy-progress`, `filetree`, `replay-theater`(Claude만, medium, 기본 꺼짐, `--plugin NAME`) |
 | U-30 | 짧게 말하기 | 훅 | 훅 | 정책 파일의 보고 형식과 충돌할 수 있음 | 토큰 절약 | **DEFER**. 세션 훅. 키트 파서가 여러 줄 설명을 아직 못 읽음(§5.2) |
-| U-31 | Anthropic 스킬 모음 | 그대로 | 그대로 | — | — | **ADOPT-VENDOR(일부)** = U-01. `webapp-testing`은 R1과 비교한 뒤 DEFER. `skill-creator`, `mcp-builder`는 개발 키트 범위 밖 → REFERENCE |
+| U-31 | Anthropic 스킬 모음 | 그대로 | 그대로 | — | — | **ADOPT-VENDOR(일부)** = U-01. `webapp-testing`은 R1과 비교한 뒤 DEFER. `skill-creator`, `mcp-builder`는 개발 키트 범위 밖 → REFERENCE **2026-11-08:** 승인된 팩 `agent-dev`(`skill-creator`, `mcp-builder`)와 `web-testing`(`webapp-testing`)은 위험 검토에서 경계 사례로 빼고 검토자 결정을 기다린다. 핵심 단계가 빠지는 스크립트(`scripts/*.py`)를 실행하고, `mcp-builder`는 venv 없는 `pip install`을 안내한다 |
 | U-32 | = U-16 | | | | | **ADOPT-VENDOR**(U-16과 같음, A6) |
-| U-33 | 엔지니어링 스킬 39개 | 그대로 | 그대로 | `tdd`, `diagnosing-bugs`, `code-review`가 superpowers·레포 스킬과 겹침 | 큼 | **ADOPT-REFERENCE**. 겹치는 부분은 superpowers(A1)를 고름(§3.2) |
-| U-34 | 에이전트 런타임 | 도구 | 도구 | 오케스트레이션 | — | **DEFER**. 홈 자동 설치, `prepare` |
-| U-35~U-38 | 디자인 레퍼런스 원격 MCP | 원격 MCP | 원격 MCP | — | 유료 계정이 있을 때 | **DEFER**. 원격 MCP는 기본 거부(§15). P4-T5에서 원격 opt-in과 경고를 설계한 뒤 다시 봄 |
-| U-39 | 디자인 레퍼런스 MCP | MCP | MCP | U-35~U-38 | — | **DEFER**. 배포된 버전이 없어 고정할 수 없음 |
+| U-33 | 엔지니어링 스킬 39개 | 그대로 | 그대로 | `tdd`, `diagnosing-bugs`, `code-review`가 superpowers·레포 스킬과 겹침 | 큼 | **ADOPT-REFERENCE**. 겹치는 부분은 superpowers(A1)를 고름(§3.2) **2026-11-08 검토자 승인:** opt-in 팩 `planning-extras`(standard만)로 `domain-modeling`, `to-spec`, `handoff` `kit source add`. `grill-me`(없는 `grilling` 스킬만 부름)와 `triage`(외부 PR을 체크아웃해 테스트 실행)는 뺌 |
+| U-34 | 에이전트 런타임 | 도구 | 도구 | 오케스트레이션 | — | **DEFER**. 홈 자동 설치, `prepare` **2026-11-08 3단계: ADOPT-REFERENCE**(`catalog/mcp.json` `rea`, high, 기본 꺼짐, `--mcp rea`). `rea-agents setup`은 절대 실행하지 않음 |
+| U-35~U-38 | 디자인 레퍼런스 원격 MCP | 원격 MCP | 원격 MCP | — | 유료 계정이 있을 때 | **DEFER**. 원격 MCP는 기본 거부(§15). P4-T5에서 원격 opt-in과 경고를 설계한 뒤 다시 봄 **2026-11-08 3단계:** U-35 Mobbin, U-36 Nicelydone, U-37 Refero는 **MANUAL-GUIDE**(`catalog/manual.json`, `claude mcp add --transport http <name> <url>`을 사람이 실행, OAuth). `catalog/mcp.json`에는 넣지 않음(§15). U-38 Lazyweb은 엔드포인트를 확인하지 못해 **DEFER 유지** |
+| U-39 | 디자인 레퍼런스 MCP | MCP | MCP | U-35~U-38 | — | **DEFER**. 배포된 버전이 없어 고정할 수 없음 **2026-11-08 3단계: ADOPT-REFERENCE**(`catalog/mcp.json` `inspo` 0.2.0, medium, 선택 키가 있어 기본 꺼짐, `--mcp inspo`) |
 | U-40 | 과학 연구 스킬 177개 중 7개 | 그대로 | 그대로 | — | ai-research | **ADOPT-VENDOR**(**검토자 결정(2026-11-06)**: "7개 모두 vendor"). `kit source add`로 `third_party/K-Dense-AI-scientific-agent-skills/`에 반영(lock id `k-dense-ai-scientific-agent-skills`, 커밋 `a25cf9ec00e2`). 새 팩 `research`(standard 전용)를 `ai-research` 프로필에 넣음. 스크립트는 빼고, `pytorch-lightning`의 템플릿 3개만 문서 링크 때문에 `--include` |
 | U-41 | 기계 일러스트 그리기 | 그대로 | 그대로 | — | 드묾 | **ADOPT-REFERENCE** |
-| U-42 | 세션 메모리 | 훅 | 플러그인 + 훅 | — | — | **DEFER**. 세션 내용을 저장 |
-| U-43 | 문서를 마크다운으로 변환 | MCP/CLI | MCP/CLI | — | data, ai-research | **DEFER**(P4-T5에서 `markitdown-mcp` 버전 고정 후 opt-in 후보) |
-| U-44 | 오케스트레이션 플랫폼 | 도구 | 도구 | 오케스트레이션 | — | **DEFER**. 훅과 데몬 |
-| U-45 | 에이전트 사무실 UI | — | — | — | — | **ADOPT-REFERENCE** |
-| U-46 | 보안 경고와 LLM 리뷰 | 해당 없음 | 플러그인(훅) | — | 보안 리뷰 | **ADOPT-REFERENCE**. 플러그인 카탈로그에 수동 opt-in 방법만 둠. 훅이 venv·pip 설치를 하고 diff를 API로 보내므로 자동 설치 금지 |
-| U-47 | 웹 스크래핑 | MCP | MCP | — | — | **DEFER**. 외부 송신 |
+| U-42 | 세션 메모리 | 훅 | 플러그인 + 훅 | — | — | **DEFER**. 세션 내용을 저장 **2026-11-08 3단계: MANUAL-GUIDE**(`claude-mem` 15.12.0). 분석 끄기를 단계에 넣음. 되돌리기는 상류 문서가 일부뿐 |
+| U-43 | 문서를 마크다운으로 변환 | MCP/CLI | MCP/CLI | — | data, ai-research | **DEFER**(P4-T5에서 `markitdown-mcp` 버전 고정 후 opt-in 후보) **2026-11-08 3단계: ADOPT-REFERENCE**(`catalog/mcp.json` `markitdown`, high, 기본 꺼짐, `--mcp markitdown`) |
+| U-44 | 오케스트레이션 플랫폼 | 도구 | 도구 | 오케스트레이션 | — | **DEFER**. 훅과 데몬 **2026-11-08 3단계: MANUAL-GUIDE**(`ruflo` 3.72.2, 상류 예시는 `@latest`라 버전을 직접 고정). 되돌리기는 상류 문서가 일부뿐 |
+| U-45 | 에이전트 사무실 UI | — | — | — | — | **ADOPT-REFERENCE** **2026-11-08 3단계: MANUAL-GUIDE**(`bureau-des-agents` 0.1.0, 커밋 고정 clone) |
+| U-46 | 보안 경고와 LLM 리뷰 | 해당 없음 | 플러그인(훅) | — | 보안 리뷰 | **ADOPT-REFERENCE**. 플러그인 카탈로그에 수동 opt-in 방법만 둠. 훅이 venv·pip 설치를 하고 diff를 API로 보내므로 자동 설치 금지 **2026-11-08:** 고정은 그대로(2.0.17). 2.0.18 훅 변경을 검토하기 전에는 올리지 않음 |
+| U-47 | 웹 스크래핑 | MCP | MCP | — | — | **DEFER**. 외부 송신 **2026-11-08 3단계: ADOPT-REFERENCE(목록만)**. `catalog/mcp.json` `scrapling`, 실행 명령 없음, high |
 | U-48 | 업무용 플러그인 | 해당 없음 | 플러그인 | — | 개발 범위 밖 | **ADOPT-REFERENCE** |
 | U-49 | 개발 방법론 | 그대로 | 그대로(원래 Claude 플러그인) | 레포 스킬 4쌍(§3.2) | 매일 씀 | **ADOPT-VENDOR(일부)**(A1 + 계획 체인 6개는 opt-in 팩 A7, Q1 결정) |
 | U-51 | Codex 워크플로(OMX) | 그대로 | 해당 없음 | 오케스트레이션 | 이 PC 전역에서 이미 씀 | **ADOPT-VENDOR**(A5). 마크다운만, user 범위만. npm CLI는 설치하지 않고 수동 명령만 출력 |
@@ -330,10 +341,86 @@
 | A6 | `karpathy-guidelines`(SKILL.md 1개, 68줄) | `third_party/multica-ai-andrej-karpathy-skills/skills/karpathy-guidelines/` → 두 에이전트 스킬 폴더 | standard, core | 없음 | 없음 | low. 라이선스 근거가 README 표기뿐이라는 점을 NOTICES와 lock에 남김 |
 | A7 | superpowers 계획 체인 6개 | `third_party/obra-superpowers/skills/<n>/` → 두 에이전트 스킬 폴더 | standard, `workflow` 팩(opt-in) | 에이전트가 판단해 실행할 수 있는 것: `brainstorming/scripts/start-server.sh`(Node 로컬 서버, 기본 127.0.0.1), `executing-plans/scripts/task-*`(bash, git), git worktree·브랜치 생성. 키트는 실행하지 않음 | 키트는 없음. 로컬 서버는 루프백만 | medium. 팩 설명과 `plan` 출력에 위 실행 가능성을 적음 |
 
+### 8.1 3단계: MCP·플러그인·수동 도구 반영 (2026-11-08, 검토자 승인)
+
+- 확인 방법: 2026-11-08 조사 노트와, 고정 커밋의 파일을 `raw.githubusercontent.com`에서 읽어 확인(플러그인 4개의 `.claude-plugin/plugin.json`, LICENSE, `markitdown-mcp`의 `__about__.py`, `rea-agents`의 `package.json`, 각 도구 README). 원격 MCP 주소는 각 서비스의 공식 문서 페이지에서 확인했다. 아무것도 clone, 설치, 실행하지 않았다.
+- 키트는 항목을 기록하고 명령을 출력할 뿐이다. 위험도 high이거나 API 키가 필요한 항목은 모두 기본 꺼짐이다(`kit/mcp_catalog.py`가 강제). 키는 환경 변수 **이름만** 적는다(§15).
+- 원격 MCP는 `catalog/mcp.json`에 넣지 않는다(stdio만, §15). `catalog/manual.json`에 사람이 직접 실행할 `claude mcp add --transport http <name> <url>`과 OAuth 로그인만 적고, 토큰이나 헤더 값은 적지 않는다.
+
+**어디에 들어갔나**
+
+| 이름 | 카탈로그 | 위험 | 기본 | lock 커밋 | 환경 변수 | U-ID |
+|---|---|---|---|---|---|---|
+| `codebase-memory` | `catalog/mcp.json`(`uvx codebase-memory-mcp==0.12.1`) | medium | 꺼짐 | `a7158ac2f48c` | — | U-13 |
+| `markitdown` | `catalog/mcp.json`(`uvx markitdown-mcp==0.0.1a8`) | high | 꺼짐 | `21d9c1d01ecc` | — | U-43 |
+| `inspo` | `catalog/mcp.json`(`npx -y inspo-mcp@0.2.0`) | medium | 꺼짐 | `022f80977c1e` | `TOGETHER_API_KEY`(선택) | U-39 |
+| `rea` | `catalog/mcp.json`(`npx -y rea-agents@6.8.0 mcp`) | high | 꺼짐 | `160d821ac9a0` | — | U-34 |
+| `scrapling` | `catalog/mcp.json`(목록만, 명령 없음) | high | 꺼짐 | — | — | U-47 |
+| `filetree` | `catalog/plugins.json`(url) | medium | 꺼짐 | `a3d36b1a56c0` | — | U-28 |
+| `replay-theater` | `catalog/plugins.json`(git-subdir) | medium | 꺼짐 | `569c5283d9a0` | — | U-29 |
+| `savvy-progress` | `catalog/plugins.json`(git-subdir) | medium | 꺼짐 | `c871c153ead5` | — | U-27 |
+| `effortless` | `catalog/plugins.json`(url) | high | 꺼짐 | `7912a6ccdf0a` | `TYPESAFE_API_KEY`(선택) | U-09 |
+| `headroom` | `catalog/manual.json` 0.43.1 | high | — | `2d3ee5184643` | 끄기용 `HEADROOM_TELEMETRY` 등 | U-08 |
+| `rtk` | `catalog/manual.json` rtk-oss 1.1.0 | high | — | `753a3b0e939f` | — | U-20 |
+| `graphify` | `catalog/manual.json` graphifyy 0.9.104 | high | — | `433a57a00290` | — | U-07 |
+| `claude-mem` | `catalog/manual.json` 15.12.0 | high | — | `eb00299a6a74` | `CLAUDE_MEM_ONLINE_OPTIN` | U-42 |
+| `openrig` | `catalog/manual.json` 0.7.9 | high | — | `ddb9d25be74a` | — | U-10 |
+| `ruflo` | `catalog/manual.json` 3.72.2 | high | — | `b7bc909d5f0d` | — | U-44 |
+| `bureau-des-agents` | `catalog/manual.json` 0.1.0 | medium | — | `184daa898cbb` | — | U-45 |
+| `mobbin` | `catalog/manual.json`(원격 MCP 안내) | high | — | — | —(OAuth) | U-35 |
+| `nicelydone` | `catalog/manual.json`(원격 MCP 안내) | high | — | — | —(OAuth) | U-36 |
+| `refero` | `catalog/manual.json`(원격 MCP 안내) | high | — | — | —(OAuth) | U-37 |
+| `claude-code-router` | `catalog/manual.json` 3.1.3(그대로) | high | — | `057abaa1f955` | — | U-23 |
+| `security-guidance` | `catalog/plugins.json`(고정 그대로, 2.0.17) | high | 꺼짐 | `ff920a4094a3` | `ANTHROPIC_API_KEY`(선택) | U-46 |
+
+**넣지 않은 것**
+
+| 항목 | 결정 | 이유 |
+|---|---|---|
+| U-19 context-mode(ELv2) | 링크만 | ELv2는 OSI 오픈소스가 아니다. 키트 라이선스 표(MIT, Apache-2.0, BSD-2/3, ISC, 0BSD, CC-BY-4.0, Unlicense)에 없고 `other`는 `--accept-license`로만 복사한다. 플러그인 항목은 사용자 PC 설치까지 이어지므로 같은 기준으로 플러그인 카탈로그에 넣지 않았다. 참고: `mksglu/context-mode` v2.1.6, 경로 `plugins/claude-code`, 커밋 `e7b84d916570`(조사 노트, 확인하지 않음) |
+| U-38 Lazyweb | DEFER | 공식 문서에서 MCP 엔드포인트와 인증 방식을 확인하지 못했다(UNVERIFIED). `lazyweb.com`은 다른 서비스로 보인다. 확인되면 manual.json에 추가 |
+
+**이전 REJECT 유지와 대안**
+
+| 항목 | 이유(2026-11-08 다시 확인) | 대안 |
+|---|---|---|
+| U-11 graft(`@nanonets/graft`) | `postinstall`이 분리된 프로세스로 텔레메트리를 보냄, PostHog 키가 배포본에 들어 있음, npm 0.29.0이 태그와 맞지 않음 | 코드 색인은 `codebase-memory`(U-13, 기본 꺼짐) 또는 레포 `codebase-explorer` |
+| U-18 mods | 2026-03-09 보관(archived). 후속은 Crush. 설치가 winget/brew/go | 필요하면 후속 프로젝트(Crush)를 따로 평가 |
+| U-21 find-skills | `npx skills add ... -g -y`가 전역·버전 고정 없이 설치하고 텔레메트리가 기본 켜짐 | 키트의 `kit source add`(고정 커밋, 검사, 승인) |
+| U-26 | 라이선스 없음. 제외 유지 | — |
+
+**문서 전용 링크**(설치 대상 아님)
+
+| 항목 | 링크 | 고정 | 메모 |
+|---|---|---|---|
+| U-25 harness2 | https://github.com/google-research/harness2 | HEAD `686881751887` | Linux 전용 |
+| U-14 OpenMontage | https://github.com/OpenMontageInc/OpenMontage | — | AGPL-3.0. 이전 주소 `calesthio/OpenMontage` |
+| U-15 prompts.chat | https://github.com/f/prompts.chat | `ba34d09010de` | 코드 MIT, 프롬프트 CC0 |
+| U-24 Second-Brain | https://github.com/KasperZutterman/Second-Brain | `4302f25c60f5` | 링크 모음 |
+
+**UNVERIFIED로 남긴 것**
+
+- 모든 새 MCP·플러그인의 실제 실행 동작(키트는 실행하지 않음). 특히 `uvx codebase-memory-mcp==0.12.1`과 `npx -y inspo-mcp@0.2.0`이 인자 없이 stdio 서버로 뜨는지.
+- `TOGETHER_API_KEY` 발급 페이지(README에 없음. 카탈로그는 저장소 README를 가리킴).
+- Nicelydone의 Claude Code 명령 문구(로그인 뒤에만 보임. 카탈로그는 Claude Code 일반 형식을 씀).
+- rtk 훅 제거 플래그(Quick Start 문서를 가리킴), claude-mem·openrig·ruflo의 완전한 제거 절차(상류 문서가 일부뿐이라고 항목에 적음).
+- inspo-mcp 0.2.0 의존성의 설치 스크립트.
+
+**secret 스캐너 통일**(같은 날): `kit source add`의 스캔(`kit/source_scan.py`)이 `kit capture`와 같은 규칙(`kit/secrets_scan.py` `LITERAL_PATTERNS`)을 쓴다. 비밀 이름 옆의 실제 값과 `Authorization: Bearer <값>`은 REVIEW(사람 확인, `--accept-risk`), `<your-token>`·`eyJhbGciOi...` 같은 자리표시자는 WARN이다. 토큰 형식(sk-, ghp_ 등)은 그대로 BLOCK.
+
 ## 9. `kit source` 기록
 
 `kit source`가 남기는 기록이다(P4-T8, ADR-021).
 
+2026-11-08 추가(검토자 승인, 조건: "너무 위험한 것은 뺀다"): 다섯 팩은 모두 opt-in이고 standard 정책 전용이다. 기본 팩과 기존 프로필에는 넣지 않았고 restricted에는 들어가지 않는다. 스킬마다 SKILL.md와 함께 들어가는 파일을 읽고 위험 기준(원격 스크립트·전역 설치, 전역 설정 수정, 외부 전송·토큰 파일 저장, 숨은 유니코드·인젝션, 확인 없는 파괴·배포, 빠진 스크립트 의존)으로 걸렀다. 뺀 스킬과 이유는 §3의 U-04, U-06, U-17, U-22, U-31, U-33 행에 있다. `--accept-risk`는 `emilkowalski-skills`에만 썼고, `--accept-license`와 `--include`는 쓰지 않았다. `cloudflare-skills`는 처음 14개로 넣은 뒤 `basin`을 빼기 위해 `source remove`하고 13개로 다시 넣었다(아래 remove·add 줄).
+
 | 날짜 | 동작 | id | 출처@커밋 | 라이선스 | 반영 | 팩 | 겹침 |
 |---|---|---|---|---|---|---|---|
 | 2026-11-06 | add | `k-dense-ai-scientific-agent-skills` | K-Dense-AI/scientific-agent-skills@a25cf9ec00e2 | MIT | vendored-verbatim | research | — |
+| 2026-11-08 | add | `cloudflare-skills` | cloudflare/skills@6eb6c781aa9b | Apache-2.0 | vendored-verbatim | cloudflare | — |
+| 2026-11-08 | add | `emilkowalski-skills` | emilkowalski/skills@c8a79627b59d | MIT | vendored-verbatim | motion | — |
+| 2026-11-08 | add | `mattpocock-skills` | mattpocock/skills@4ae2317ddb22 | MIT | vendored-verbatim | planning-extras | — |
+| 2026-11-08 | add | `dietrichgebert-ponytail` | DietrichGebert/ponytail@96608e078b2d | MIT | vendored-verbatim | lean | — |
+| 2026-11-08 | add | `affaan-m-ecc` | affaan-m/ECC@d2ef2680594f | MIT | vendored-verbatim | eng-patterns | — |
+| 2026-11-08 | remove | `cloudflare-skills` | cloudflare/skills@6eb6c781aa9b | Apache-2.0 | vendored-verbatim | cloudflare | — |
+| 2026-11-08 | add | `cloudflare-skills` | cloudflare/skills@6eb6c781aa9b | Apache-2.0 | vendored-verbatim | cloudflare | — |

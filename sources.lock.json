@@ -720,6 +720,652 @@
         "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
       },
       "license_file": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
+    },
+    {
+      "id": "emilkowalski-skills",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/emilkowalski/skills",
+      "path": "skills/animate, skills/animate-expo, skills/animation-performance, skills/animation-vocabulary, skills/apple-design, skills/ask-sonner, skills/break-ui, skills/choreograph, skills/find-animation-opportunities, skills/improve-animations, skills/mobile-native, skills/pick-ui-library, skills/prototype, skills/remove-animations, skills/review-animations, skills/write-swift",
+      "paths": [
+        "skills/animate",
+        "skills/animate-expo",
+        "skills/animation-performance",
+        "skills/animation-vocabulary",
+        "skills/apple-design",
+        "skills/ask-sonner",
+        "skills/break-ui",
+        "skills/choreograph",
+        "skills/find-animation-opportunities",
+        "skills/improve-animations",
+        "skills/mobile-native",
+        "skills/pick-ui-library",
+        "skills/prototype",
+        "skills/remove-animations",
+        "skills/review-animations",
+        "skills/write-swift"
+      ],
+      "ref": "main",
+      "commit": "c8a79627b59d72d764d6ab6f2c87c09a48169833",
+      "version": null,
+      "license": "MIT",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/emilkowalski-skills/skills/animate",
+        "third_party/emilkowalski-skills/skills/animate-expo",
+        "third_party/emilkowalski-skills/skills/animation-performance",
+        "third_party/emilkowalski-skills/skills/animation-vocabulary",
+        "third_party/emilkowalski-skills/skills/apple-design",
+        "third_party/emilkowalski-skills/skills/ask-sonner",
+        "third_party/emilkowalski-skills/skills/break-ui",
+        "third_party/emilkowalski-skills/skills/choreograph",
+        "third_party/emilkowalski-skills/skills/find-animation-opportunities",
+        "third_party/emilkowalski-skills/skills/improve-animations",
+        "third_party/emilkowalski-skills/skills/mobile-native",
+        "third_party/emilkowalski-skills/skills/pick-ui-library",
+        "third_party/emilkowalski-skills/skills/prototype",
+        "third_party/emilkowalski-skills/skills/remove-animations",
+        "third_party/emilkowalski-skills/skills/review-animations",
+        "third_party/emilkowalski-skills/skills/write-swift"
+      ],
+      "files": {
+        "third_party/emilkowalski-skills/LICENSE": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b",
+        "third_party/emilkowalski-skills/skills/animate-expo/RECIPES.md": "1193cb71334da2e2341778dd92bec9ac79d989cb07fd55d661f324ed5871e718",
+        "third_party/emilkowalski-skills/skills/animate-expo/SKILL.md": "9a01a91701e6563c67677dde6b66ab30f066a5341d42c21a90ba51d99679274a",
+        "third_party/emilkowalski-skills/skills/animate/RECIPES.md": "21ff63d84391db8d96ecdf9170095f55a42c836ccc36fd3269c4772bab031ba2",
+        "third_party/emilkowalski-skills/skills/animate/SKILL.md": "39138996033e0dbe53e73217514116eaeca774bae84a0687c80d445a4e0cc3a6",
+        "third_party/emilkowalski-skills/skills/animation-performance/SKILL.md": "6c60f45ab416ff3f7d7765a5427beead77fab0d82487fe610d2a298397558d0a",
+        "third_party/emilkowalski-skills/skills/animation-vocabulary/SKILL.md": "40d2b27adfdfeb0570a9f20e7d0255109d9233c50603878bcd0dcd04c923fd94",
+        "third_party/emilkowalski-skills/skills/apple-design/SKILL.md": "77bb63b7043bb93aca2ff4ab040c249484eef35682bb6ff7163433c31d30adc7",
+        "third_party/emilkowalski-skills/skills/ask-sonner/API.md": "4bb06f482c5757529e3d7a672a30fbeed42d24919a63e2571384a9ce1549aa7f",
+        "third_party/emilkowalski-skills/skills/ask-sonner/SKILL.md": "39f3ee185b3aa2cf70a689052ff078953ce7ba5915ed7a9391d232e9d4dcf57f",
+        "third_party/emilkowalski-skills/skills/break-ui/CATALOG.md": "7358efcc6bb48e35187be1c064cf60022dcb18c72c18fab58b606dfc5f421f15",
+        "third_party/emilkowalski-skills/skills/break-ui/SKILL.md": "e7eec1d70ac56a04255e9c0dbe98084ea3d544cc04aaad34f32c95d6fa9dff5e",
+        "third_party/emilkowalski-skills/skills/choreograph/RECIPES.md": "b61f03b5c47398cf71ce9db4157cc919617228981b1d74a72d6a5fa27e4aaad2",
+        "third_party/emilkowalski-skills/skills/choreograph/SKILL.md": "815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464",
+        "third_party/emilkowalski-skills/skills/find-animation-opportunities/SKILL.md": "d52a377819b84a71930f0c822cfe2849f40301605a2d5c7eccbfa3b257700df2",
+        "third_party/emilkowalski-skills/skills/improve-animations/AUDIT.md": "63fa8fcf7e7b3a3e252938e55c60e1f399f607e73553163e8dacf9df40f3ebed",
+        "third_party/emilkowalski-skills/skills/improve-animations/PLAN-TEMPLATE.md": "0a08ac8e23fd2082d7ffb86aeed7b789de77328c3cf874b16f1a755f2ef0a6ad",
+        "third_party/emilkowalski-skills/skills/improve-animations/SKILL.md": "73962447464433476343e2c12cd08ab39cc99a9e5f3c118c5fb54ed897574ef6",
+        "third_party/emilkowalski-skills/skills/mobile-native/SKILL.md": "888b7651d66d66dbac4e72b7c554638eb19bd971d686d6cbdf030a5ef3788f55",
+        "third_party/emilkowalski-skills/skills/pick-ui-library/SKILL.md": "675fdce308683256ed617351a9b74d23457a5fbd0a562d9831b9c764b8c5e682",
+        "third_party/emilkowalski-skills/skills/prototype/PICKER.md": "31a55eec94715cc79942e91e172e539e3031dcd5e2e5ee7c1446cf2caee960a6",
+        "third_party/emilkowalski-skills/skills/prototype/SKILL.md": "bba39c955eb1871c5a02733976ceec5d0324198e0812e667604756489c89f7b9",
+        "third_party/emilkowalski-skills/skills/remove-animations/SKILL.md": "dea95b7a7ef81cba312c7f70a3c5c67d7e06a287cb16b16d2f90f2b1fb0afff9",
+        "third_party/emilkowalski-skills/skills/review-animations/SKILL.md": "5f9fb98b69cace7107af8b393a4196fd42fa42d98bce0e5afc1f866ff3b8a41c",
+        "third_party/emilkowalski-skills/skills/review-animations/STANDARDS.md": "8f5fe3f5a04537556dd4e6a37f7a8d6f616d840eb80f2f68b5b594febb170657",
+        "third_party/emilkowalski-skills/skills/write-swift/SKILL.md": "16a4b6adb74e338e55e704ce5753ad54d825438b8a63930eeaede9f3c04c9447"
+      },
+      "content_sha256": "c09845ff5c1b0d90690080274655efad14aad0d6e1d0b462cbf4c94f5defffc0",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-08",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed. Accepted after review: scan findings (--accept-risk)."
+      },
+      "license_file": "third_party/emilkowalski-skills/LICENSE"
+    },
+    {
+      "id": "mattpocock-skills",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/mattpocock/skills",
+      "path": "skills/engineering/domain-modeling, skills/engineering/to-spec, skills/productivity/handoff",
+      "paths": [
+        "skills/engineering/domain-modeling",
+        "skills/engineering/to-spec",
+        "skills/productivity/handoff"
+      ],
+      "ref": "main",
+      "commit": "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "version": null,
+      "license": "MIT",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/mattpocock-skills/skills/engineering/domain-modeling",
+        "third_party/mattpocock-skills/skills/engineering/to-spec",
+        "third_party/mattpocock-skills/skills/productivity/handoff"
+      ],
+      "files": {
+        "third_party/mattpocock-skills/LICENSE": "0e7ac423bf2c6e223b7c5b156f8cf72da49d748e56a1641402c31f22ad07dbb5",
+        "third_party/mattpocock-skills/skills/engineering/domain-modeling/ADR-FORMAT.md": "944c92aa790e8fbdc9199640b170979abb8a34ba8d0fe18c2a01a63bce140ca0",
+        "third_party/mattpocock-skills/skills/engineering/domain-modeling/GLOSSARY-FORMAT.md": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+        "third_party/mattpocock-skills/skills/engineering/domain-modeling/SKILL.md": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+        "third_party/mattpocock-skills/skills/engineering/domain-modeling/agents/openai.yaml": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
+        "third_party/mattpocock-skills/skills/engineering/to-spec/SKILL.md": "43ad9cf318e5e7d3d1fa360253a37021796dc87a0c2e595ad262661a10f85088",
+        "third_party/mattpocock-skills/skills/engineering/to-spec/agents/openai.yaml": "1c5b4d1e3d8e52287ef19cc2742fdbbfae1914ac75d33af3e4c8174f08cc55bb",
+        "third_party/mattpocock-skills/skills/productivity/handoff/SKILL.md": "4cbb043950dad2ffd3662ff1a5a0b51ae676004b5cae10e3787e8ee7a4ee69d3",
+        "third_party/mattpocock-skills/skills/productivity/handoff/agents/openai.yaml": "5c479fd562c691851690e8b18c8501045bef0943c10743d636b2fae26add1d28"
+      },
+      "content_sha256": "4d282d385af3e30782e8808684843fc9f9dfac493954df52bc10adf8a73531b0",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "planning-extras"
+      ],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-08",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/mattpocock-skills/LICENSE"
+    },
+    {
+      "id": "dietrichgebert-ponytail",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/DietrichGebert/ponytail",
+      "path": "skills/ponytail, skills/ponytail-audit, skills/ponytail-debt, skills/ponytail-gain, skills/ponytail-review",
+      "paths": [
+        "skills/ponytail",
+        "skills/ponytail-audit",
+        "skills/ponytail-debt",
+        "skills/ponytail-gain",
+        "skills/ponytail-review"
+      ],
+      "ref": "main",
+      "commit": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "version": null,
+      "license": "MIT",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/DietrichGebert-ponytail/skills/ponytail",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-audit",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-debt",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-gain",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-review"
+      ],
+      "files": {
+        "third_party/DietrichGebert-ponytail/LICENSE": "fb1bc6909ac3ef82d5c22106e32ef682b0cff66788fa915fb9b53b15c9d2f3ab",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-audit/SKILL.md": "2b3223a02c386d1263e1b08343cb8eb3a53e444cdafb1d79e26c8ec2a8fcad28",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-debt/SKILL.md": "b5ec2762f6ba8c4af9ea7173aa6c9f91b88655a25e43f9de0264f6ce8722b25f",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-gain/SKILL.md": "231034a896d6762e4b5c8468287083422c56b499119976ec9f76821f7d083090",
+        "third_party/DietrichGebert-ponytail/skills/ponytail-review/SKILL.md": "33fe4ebe22a460924e5d4a261e223df22e409cc94ab76182bee9fb91a3ef022e",
+        "third_party/DietrichGebert-ponytail/skills/ponytail/SKILL.md": "9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509"
+      },
+      "content_sha256": "94f769291eda6a5216ab3a50e927fe20f15b9368eb09d11cf1c27511bfc19be0",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-08",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/DietrichGebert-ponytail/LICENSE"
+    },
+    {
+      "id": "affaan-m-ecc",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/affaan-m/ECC",
+      "path": "skills/accessibility, skills/api-design, skills/architecture-decision-records, skills/database-migrations, skills/error-handling, skills/python-testing, skills/regex-vs-llm-structured-text",
+      "paths": [
+        "skills/accessibility",
+        "skills/api-design",
+        "skills/architecture-decision-records",
+        "skills/database-migrations",
+        "skills/error-handling",
+        "skills/python-testing",
+        "skills/regex-vs-llm-structured-text"
+      ],
+      "ref": "main",
+      "commit": "d2ef2680594f9a17526a6e1a2e18b3d242c5d17b",
+      "version": null,
+      "license": "MIT",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/affaan-m-ECC/skills/accessibility",
+        "third_party/affaan-m-ECC/skills/api-design",
+        "third_party/affaan-m-ECC/skills/architecture-decision-records",
+        "third_party/affaan-m-ECC/skills/database-migrations",
+        "third_party/affaan-m-ECC/skills/error-handling",
+        "third_party/affaan-m-ECC/skills/python-testing",
+        "third_party/affaan-m-ECC/skills/regex-vs-llm-structured-text"
+      ],
+      "files": {
+        "third_party/affaan-m-ECC/LICENSE": "326146379f01bb137c0a5d3c54770c1aa31076705c8b88a7f6b26a460f6221b2",
+        "third_party/affaan-m-ECC/skills/accessibility/SKILL.md": "2762f21d09d199009ed4f95b28c911436b367c30963dc5ddb48b8e1ad7fc1585",
+        "third_party/affaan-m-ECC/skills/api-design/SKILL.md": "250e464413a13c0eb93cc73447b423df1f9aa8e4f80e5e68c41f895b2c33e352",
+        "third_party/affaan-m-ECC/skills/architecture-decision-records/SKILL.md": "263b20e81801aa5fa7e75eaec6c38345c0ac028ca0edbd67b1b9071c5fcbe11f",
+        "third_party/affaan-m-ECC/skills/database-migrations/SKILL.md": "dad2f1964295eee14a96e06213ce3f60992bbcdc1f37a50c828bbc2e1abd79dd",
+        "third_party/affaan-m-ECC/skills/error-handling/SKILL.md": "e8eec6756c950b570486493e64e3bf14c12baf6bf0858bf3928097fe2bfeaf79",
+        "third_party/affaan-m-ECC/skills/python-testing/SKILL.md": "8f8c24020abbf953727c5995abce8aabeb28d2a593cbc39b7e5de36cf5002abd",
+        "third_party/affaan-m-ECC/skills/regex-vs-llm-structured-text/SKILL.md": "5d7d04591ad656ba7b8064b2fa25e83936f8bd077449dac6cc599b4c41ce662a"
+      },
+      "content_sha256": "df3caf607f177558a2d44514d9d6b6596c5d0c8e574581cccf2a0687eaeb38d4",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-08",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/affaan-m-ECC/LICENSE"
+    },
+    {
+      "id": "cloudflare-skills",
+      "kind": "skill-bundle",
+      "origin": "https://github.com/cloudflare/skills",
+      "path": "skills/agents-sdk, skills/cloudflare-app-bootstrap, skills/cloudflare-one-migrations, skills/durable-objects, skills/frameworks-on-cloudflare, skills/k2, skills/sandbox-migrate-to-next, skills/sandbox-next, skills/sandbox-stable, skills/workers-best-practices, skills/workers-development, skills/workers-profiling, skills/wrangler",
+      "paths": [
+        "skills/agents-sdk",
+        "skills/cloudflare-app-bootstrap",
+        "skills/cloudflare-one-migrations",
+        "skills/durable-objects",
+        "skills/frameworks-on-cloudflare",
+        "skills/k2",
+        "skills/sandbox-migrate-to-next",
+        "skills/sandbox-next",
+        "skills/sandbox-stable",
+        "skills/workers-best-practices",
+        "skills/workers-development",
+        "skills/workers-profiling",
+        "skills/wrangler"
+      ],
+      "ref": "main",
+      "commit": "6eb6c781aa9b6438e0c7307bd102788a75fe1a6d",
+      "version": null,
+      "license": "Apache-2.0",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/cloudflare-skills/skills/agents-sdk",
+        "third_party/cloudflare-skills/skills/cloudflare-app-bootstrap",
+        "third_party/cloudflare-skills/skills/cloudflare-one-migrations",
+        "third_party/cloudflare-skills/skills/durable-objects",
+        "third_party/cloudflare-skills/skills/frameworks-on-cloudflare",
+        "third_party/cloudflare-skills/skills/k2",
+        "third_party/cloudflare-skills/skills/sandbox-migrate-to-next",
+        "third_party/cloudflare-skills/skills/sandbox-next",
+        "third_party/cloudflare-skills/skills/sandbox-stable",
+        "third_party/cloudflare-skills/skills/workers-best-practices",
+        "third_party/cloudflare-skills/skills/workers-development",
+        "third_party/cloudflare-skills/skills/workers-profiling",
+        "third_party/cloudflare-skills/skills/wrangler"
+      ],
+      "files": {
+        "third_party/cloudflare-skills/LICENSE": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+        "third_party/cloudflare-skills/skills/agents-sdk/SKILL.md": "9bda4bd3adc5ab09e30c19ea6b9a0bf673f0a4b190bf7624fc1b0dc5f1fcf9c1",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/browse-the-web.md": "c78beb4ce000b40284f7fc90988471d06ac4db3c553878f29cc3276bbbfecfeb",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/callable.md": "42e1c0496022b0cacd3647510d2ca3afc87159d825f7072089ccbaf2307c641a",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/client-sdk.md": "efda15f0562b05832cc7017da1d3398764c1d4f125ea03f68df149e074c107e6",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/codemode.md": "bcc04b7787a7dc3ac6d2f35eb2889ac5ef88e7bece273a575e0cfe027b443f48",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/configuration.md": "4da1deb6c0f6e143b9bea5e048fa5de3b418f6b723912ad5c2b3434195f9991c",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/durable-execution.md": "782a3e886707b363e53bf9e93b2c62b24d95500aade0fd65f13029bd46dee604",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/email.md": "71eadd3631a7763dec0ce0b3d06316d1a70663e4cd1e16f8f8f5527d785d149d",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/human-in-the-loop.md": "275aec5f411c94134c7841bb9f31f1c5a07a759ec9dda14df8d3ed4b96acee1a",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/mcp.md": "fdc0cb2e434da4750e892bfee9fd325a25d6bf113578892b0b4a3eaa4aded394",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/observability.md": "34e33ba3343320254b80c729e3c87f9eb3efa0be554875b18571cbb7d3530695",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/queue-retries.md": "966e7cbe309f46c7ed39f8a6e8fcd9beea0eeedc248a9005073a1266c188cf4d",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/routing.md": "a6d82c736eac8815c87b1d2203eec23e2d252f3de10d5c574c9d6e2a69c729d3",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/server-driven-messages.md": "fb12b6e818ee46a9a9ef8a78492d5d01d93ac6da01fa1da5e551bd44d91ce671",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/skill-feedback.md": "4398b5597999dba7d0887bb62c30b8f917e78ab11600e2c8038dfe7a4d617392",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/state-scheduling.md": "76fca096c36f01b8c5420391de71bd22838bf0914adda303d384fecb99c79684",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/streaming-chat.md": "210ae4fafe0b4b553b98717c0df020a35d1ad2b9742e2083e406564200902174",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/think.md": "9ad3c294f7feef292cdbe6ece0ac916054e4604af00e91fd02a4216fc4ad9df5",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/voice.md": "ef23a2e20cdce96f606008f29d2d77145e04b0c73491505e5d971ec130bbe05f",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/webhooks-push.md": "0ec967c03a5701d04505b1d1e47d056dcaf30c8326299a014b3e3e84ed4ed22f",
+        "third_party/cloudflare-skills/skills/agents-sdk/references/workflows.md": "0cdf5b5fd935f0986c8c1b61306e8294bfe9b710ca856428cfb45296ab181aec",
+        "third_party/cloudflare-skills/skills/cloudflare-app-bootstrap/SKILL.md": "0e844a5d3fc39f922a51b906b4e48892610132a207c5e994521a8b0eb7535d91",
+        "third_party/cloudflare-skills/skills/cloudflare-app-bootstrap/references/skill-feedback.md": "cb38d9741cade60e8c50c44499de08537415432e1b984781ca067083620c853e",
+        "third_party/cloudflare-skills/skills/cloudflare-one-migrations/SKILL.md": "3ecfe6dba6056996af6ba0b7b7f7d180640bea1fd7a5b3187623494ce1297868",
+        "third_party/cloudflare-skills/skills/cloudflare-one-migrations/references/skill-feedback.md": "cb427d9fefe47c5f6b676980939901b0ff2f7c080168568242e4edcdd19334c9",
+        "third_party/cloudflare-skills/skills/durable-objects/SKILL.md": "ef690603d7d998a25ba9748c79f399bb75d943fe1955ba258167116c101ef98c",
+        "third_party/cloudflare-skills/skills/durable-objects/references/rules.md": "8ec51f1270d6014763139236c3fb9f3a21a3bed4054c99b101f392eb5cb363bf",
+        "third_party/cloudflare-skills/skills/durable-objects/references/skill-feedback.md": "f46d58cf1c577d576e544a674cd61f5665f4fa9d1e4bffa40e0dcdecf223ba9f",
+        "third_party/cloudflare-skills/skills/durable-objects/references/testing.md": "1a99e6a2e1bd7f2fa34573b07ad036e3c2ddcf97df6a42926d737eb2d87b3168",
+        "third_party/cloudflare-skills/skills/durable-objects/references/workers.md": "96577e193083aac62a5450a0d75eb6bbfd26477c156114fde2d6718236c75202",
+        "third_party/cloudflare-skills/skills/frameworks-on-cloudflare/SKILL.md": "0edfc9c8090988c32b76a0be007264073a67be1c8623b72c172976d510eccda4",
+        "third_party/cloudflare-skills/skills/frameworks-on-cloudflare/references/skill-feedback.md": "cef5673f1445b52c6da179d2e87471bc46a035f81844cb5e5fddcaaefcd03bf9",
+        "third_party/cloudflare-skills/skills/k2/SKILL.md": "b1e621615e7c73bd9c5966f79b965380b4f73418cbe1ed98bb9d953853168d66",
+        "third_party/cloudflare-skills/skills/k2/references/skill-feedback.md": "a15f88d0d9bdc1f1e748102f78e4e7bbe35fc77a5bae91a7d20d5130a6ff4051",
+        "third_party/cloudflare-skills/skills/sandbox-migrate-to-next/SKILL.md": "a3afd0eccaf4100ff48613f985c201469365fa58b1747006c49486aecdc5564c",
+        "third_party/cloudflare-skills/skills/sandbox-migrate-to-next/references/skill-feedback.md": "65f81b0a00f9414010eb1d57c2da17e34e8f485f8ae12b25facc37ca5f065042",
+        "third_party/cloudflare-skills/skills/sandbox-next/SKILL.md": "86e00416e89acf7f77b4d3926301345725abbc6e3dedec81493fd62ee69f1104",
+        "third_party/cloudflare-skills/skills/sandbox-next/references/api-quick-ref.md": "b1f2c78d26b0e01a816ea20d47faa64062b8c4055a0236b0e739fa6fb9c63676",
+        "third_party/cloudflare-skills/skills/sandbox-next/references/examples.md": "08d1e6776e16931dec2bb637b82a425679ff217081ac1d50182ab94de40f4fc6",
+        "third_party/cloudflare-skills/skills/sandbox-next/references/skill-feedback.md": "9c69010915f718e00ab9cb65d7ee61af69aaf507ad886446928f582276363ac9",
+        "third_party/cloudflare-skills/skills/sandbox-stable/SKILL.md": "be65d5c94fc2baf862b5025a9782188af226778e1a2126dfe8681e2501d8ae0a",
+        "third_party/cloudflare-skills/skills/sandbox-stable/references/skill-feedback.md": "4714fe1e2695aff4182fa6eac6b2f0c1e1a7f3b248a08e32a68b64d7cc33f296",
+        "third_party/cloudflare-skills/skills/workers-best-practices/SKILL.md": "01c452fd0b6b3caeb4c3b06f87893e52d8e95e32f691911c1644060e00dafa0e",
+        "third_party/cloudflare-skills/skills/workers-best-practices/references/configuration.md": "d6153120cb3b5301652ca3dcafe5f729be1723a7d8b099c866e66be314c78de0",
+        "third_party/cloudflare-skills/skills/workers-best-practices/references/platform-apis.md": "9ca9f5a7a82f92de45d310f5e2ee05aa464ddb7a63a737529caa17fff3660f28",
+        "third_party/cloudflare-skills/skills/workers-best-practices/references/runtime-patterns.md": "1c9b106ec5a5887376844f7c1d427adc2f4801d3579ad4c81328f7d2a2b53d04",
+        "third_party/cloudflare-skills/skills/workers-best-practices/references/skill-feedback.md": "7bc7ac3c0ba025e3d89d4672c734d5359f748cdfc70628028e27e626422a0655",
+        "third_party/cloudflare-skills/skills/workers-development/SKILL.md": "322df9f4013457c2a3ff2790ab7b553e301c418d8de7e5b6e2d560e5ac800b1e",
+        "third_party/cloudflare-skills/skills/workers-development/references/skill-feedback.md": "2e195be5de7ec0ac741d8a8d843b476e19e8dc89ebca16e0ca4e6c8c387d98d1",
+        "third_party/cloudflare-skills/skills/workers-profiling/SKILL.md": "fec05a080c90f019e1e93e5e1ca3416bb89362655dfc158458301f461cb29839",
+        "third_party/cloudflare-skills/skills/workers-profiling/references/skill-feedback.md": "d0f67417b1e4cb11a4fb9d51d75c442e33d1d838022ad5fd56940a3b7172c8c2",
+        "third_party/cloudflare-skills/skills/wrangler/SKILL.md": "a39de5c69f50e88759736a6ec7ad07f402c15f7a58a3224bcf979dce42013b13",
+        "third_party/cloudflare-skills/skills/wrangler/references/skill-feedback.md": "f24d02c8beebbc7484c7c9d42e957e7b58c92bcf80798e8b86111b850913a57a"
+      },
+      "content_sha256": "cfbbdf224feea6ac81d977182f090395fe604e913286791a2d4fbeb4a40fe74f",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "risk": "low",
+      "added": "2026-11-08",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-08",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/cloudflare-skills/LICENSE"
+    },
+    {
+      "id": "codebase-memory-mcp",
+      "kind": "mcp",
+      "origin": "https://github.com/DeusData/codebase-memory-mcp",
+      "path": "PyPI package codebase-memory-mcp",
+      "ref": "v0.12.1",
+      "commit": "a7158ac2f48ca646b4527341b76f930f2aeff87e",
+      "version": "0.12.1",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied. catalog/mcp.json 'codebase-memory' runs `uvx codebase-memory-mcp==0.12.1`, off by default (--mcp codebase-memory). uvx instead of npm because the npm package has a postinstall. First start downloads a native binary from GitHub Releases and runs a daemon (cache ~/.cache/codebase-memory-mcp). LICENSE (MIT) read at the commit. Runtime behaviour UNVERIFIED (the kit runs nothing)."
+      }
+    },
+    {
+      "id": "markitdown-mcp",
+      "kind": "mcp",
+      "origin": "https://github.com/microsoft/markitdown",
+      "path": "packages/markitdown-mcp (PyPI markitdown-mcp)",
+      "ref": "v0.1.9",
+      "commit": "21d9c1d01ecc12538dab19811fd247ef2f96ef60",
+      "version": "0.0.1a8",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "high",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied. catalog/mcp.json 'markitdown' runs `uvx markitdown-mcp==0.0.1a8` (alpha), off by default (--mcp markitdown). __about__.py at the commit says 0.0.1a8; LICENSE MIT. High: reads any file and fetches any URL the agent names."
+      }
+    },
+    {
+      "id": "inspo-mcp",
+      "kind": "mcp",
+      "origin": "https://github.com/Nutlope/inspo",
+      "path": "npm package inspo-mcp",
+      "ref": "npm gitHead of inspo-mcp@0.2.0",
+      "commit": "022f80977c1e84d86284b17c928ab4b29f37f3ed",
+      "version": "0.2.0",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied. catalog/mcp.json 'inspo' runs `npx -y inspo-mcp@0.2.0`, off by default (--mcp inspo). The commit is the npm gitHead of 0.2.0 (research). Optional TOGETHER_API_KEY by name only; where to create it is UNVERIFIED. Downloads a ~14 MB catalogue from Vercel Blob storage."
+      }
+    },
+    {
+      "id": "rea-agents",
+      "kind": "mcp",
+      "origin": "https://github.com/morluto/rea",
+      "path": "npm package rea-agents",
+      "ref": "rea-agents@6.8.0",
+      "commit": "160d821ac9a0310afcb8d1fc427862dd6508add5",
+      "version": "6.8.0",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "high",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied. catalog/mcp.json 'rea' runs `npx -y rea-agents@6.8.0 mcp` (project-scope stdio), off by default (--mcp rea). package.json at the commit: rea-agents 6.8.0, MIT. Never run `rea-agents setup` (installs into the user home)."
+      }
+    },
+    {
+      "id": "filetree",
+      "kind": "plugin",
+      "origin": "https://github.com/data-goblin/claude-code-filetree",
+      "path": ".",
+      "ref": "v0.8.2",
+      "commit": "a3d36b1a56c0d982b307a58ef88fd3e857c977e6",
+      "version": "0.8.2",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied and not installed by the kit. catalog/plugins.json declares it (url source pinned to the commit) only with --plugin filetree. .claude-plugin/plugin.json at the commit says 0.8.2; needs Claude Code 2.1.306+. No home-settings writes or network found in the 2026-11-08 read."
+      }
+    },
+    {
+      "id": "replay-theater",
+      "kind": "plugin",
+      "origin": "https://github.com/anthropics/claude-code-playground",
+      "path": "claude-code/mods/replay-theater",
+      "ref": "main",
+      "commit": "569c5283d9a0a7ee7938df85bb32e4f48cbb8c86",
+      "version": "0.1.0",
+      "license": "Apache-2.0",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied and not installed by the kit. Declared (git-subdir pinned to the commit) only with --plugin replay-theater. Root LICENSE Apache-2.0 read at the commit; plugin.json 0.1.0; needs Claude Code 2.1.287+. Hooks."
+      }
+    },
+    {
+      "id": "savvy-progress",
+      "kind": "plugin",
+      "origin": "https://github.com/JohnnyVizz/claude-kit",
+      "path": "plugins/savvy-progress",
+      "ref": "main",
+      "commit": "c871c153ead54ad9547cc717d0f3e5a676c73986",
+      "version": "1.2.1",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "medium",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied and not installed by the kit. Declared (git-subdir pinned to the commit) only with --plugin savvy-progress. plugin.json 1.2.1, LICENSE MIT at the commit. No home-settings writes or network found in the 2026-11-08 read."
+      }
+    },
+    {
+      "id": "effortless",
+      "kind": "plugin",
+      "origin": "https://github.com/HeyCubit/effortless",
+      "path": ".",
+      "ref": "main",
+      "commit": "7912a6ccdf0a562274a74f1f06f1306722c163db",
+      "version": "1.72.0",
+      "license": "MIT",
+      "license_file": null,
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "high",
+      "added": "2026-11-08",
+      "added_by": "step 3 (MCP/plugins/manual)",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "2026-11-08 research + raw.githubusercontent.com read at the commit",
+        "at": "2026-11-08",
+        "notes": "Not copied and not installed by the kit. Declared (url source pinned to the commit) only with --plugin effortless. plugin.json 1.72.0, LICENSE MIT at the commit. High: Haiku call per prompt, in-app Update bypasses the pin, plain-text key file ~/.config/jev/.env, needs CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 in user settings. Optional TYPESAFE_API_KEY by name only."
+      }
     }
   ]
 }

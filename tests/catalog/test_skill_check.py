@@ -31,7 +31,34 @@ def warnings(files, agent="codex", name="demo", kit_rules=True):
 # ---------------------------------------------------------------- the real skills
 
 
-KNOWN_WARNINGS = {"emil-design-eng": ["SKILL.md is longer than 500 lines"]}  # upstream, 677 lines
+LONG = ["SKILL.md is longer than 500 lines"]
+KNOWN_WARNINGS = {  # upstream files, vendored verbatim
+    "emil-design-eng": LONG,  # 677 lines
+    "api-design": LONG,  # eng-patterns pack (2026-11-08)
+    "python-testing": LONG,
+}
+
+
+def _codex_only(name):
+    return [f"agents/openai.yaml is Codex-only; move it to codex/skills/{name}/"]
+
+
+def _claude_only(name, *fields):
+    return [f"field '{f}' is Claude Code only; move it to claude/skills/{name}/" for f in fields]
+
+
+# opt-in packs added 2026-11-08: agent-specific frontmatter fields and files, kept verbatim
+AGENT_WARNINGS = {
+    ("codex", "pick-ui-library"): _claude_only("pick-ui-library", "disable-model-invocation"),
+    ("codex", "prototype"): _claude_only("prototype", "disable-model-invocation"),
+    ("codex", "review-animations"): _claude_only("review-animations", "disable-model-invocation"),
+    ("codex", "to-spec"): _claude_only("to-spec", "disable-model-invocation"),
+    ("codex", "handoff"): _claude_only("handoff", "argument-hint", "disable-model-invocation"),
+    ("codex", "ponytail"): _claude_only("ponytail", "argument-hint"),
+    ("claude", "domain-modeling"): _codex_only("domain-modeling"),
+    ("claude", "to-spec"): _codex_only("to-spec"),
+    ("claude", "handoff"): _codex_only("handoff"),
+}
 
 
 @pytest.mark.parametrize("agent", ["codex", "claude"])
@@ -44,10 +71,13 @@ def test_every_catalog_skill_is_clean(kit_root, agent, policy):
             continue
         report = source.check(name)
         assert report.errors == [], name
-        assert report.warnings == KNOWN_WARNINGS.get(name, []), name
+        expected = KNOWN_WARNINGS.get(name, []) + AGENT_WARNINGS.get((agent, name), [])
+        assert report.warnings == expected, name
         checked += 1
-    # standard: +7 research pack (U-40), +task-approval (P5-T2), +launch-compliance-check
-    assert checked == {"restricted": 11, "standard": 35}[policy]
+    # standard: +7 research pack (U-40), +task-approval (P5-T2), +launch-compliance-check,
+    # +44 opt-in pack skills (2026-11-08: eng-patterns 7, lean 5, cloudflare 13, motion 16,
+    # planning-extras 3)
+    assert checked == {"restricted": 11, "standard": 79}[policy]
 
 
 # ---------------------------------------------------------------- spec rules (both agents)

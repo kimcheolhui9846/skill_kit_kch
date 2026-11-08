@@ -51,8 +51,9 @@ class GitHub:
                 raise LookupError(url) from None
             if exc.code in (403, 429):
                 raise NetworkError(
-                    f"GitHub refused the request (HTTP {exc.code}, rate limit?); "
-                    "set GITHUB_TOKEN or try later"
+                    f"GitHub refused the request (HTTP {exc.code}, rate limit?). Requests "
+                    "without a token are limited to 60 an hour; setting GITHUB_TOKEN in the "
+                    "environment raises the limit (the value is never printed). Or try later."
                 ) from None
             raise NetworkError(f"GitHub answered HTTP {exc.code}") from None
         except (urllib.error.URLError, OSError) as exc:

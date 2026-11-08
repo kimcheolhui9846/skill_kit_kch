@@ -48,6 +48,13 @@ def scan_file(rel: str, data: bytes) -> List[Finding]:
     except UnicodeDecodeError:
         return [Finding("BLOCK", f"{rel}: binary file (not UTF-8)")]
     out = [Finding("BLOCK", f"{rel}: {label} (line {n})") for label, n in secrets_scan.find(text)]
+    # the literal rules `kit capture` uses (one rule set): a person decides, since downloaded
+    # docs show placeholders such as `TOKEN=<your-token>` or a truncated "Bearer eyJhbGciOi..."
+    for label, n, placeholder in secrets_scan.find_literal(text):
+        if placeholder:
+            out.append(Finding("WARN", f"{rel}: {label}, looks like a placeholder (line {n})"))
+        else:
+            out.append(Finding("REVIEW", f"{rel}: {label} with a literal value (line {n})"))
     body = text[1:] if text.startswith("\ufeff") else text
     for number, line in enumerate(body.splitlines(), start=1):
         if any(p.search(line) for p in _REMOTE_EXEC):

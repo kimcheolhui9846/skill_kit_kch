@@ -74,23 +74,43 @@ class Report:
 
 
 def parse_frontmatter(text: str) -> Dict[str, Value]:
-    """YAML subset used by skills: `key: value`, and one level of `key:` + indented
-    `sub: value` (map) or `- item` (list). Raises ValueError on anything else."""
+    """YAML subset used by skills: `key: value`, one level of `key:` + indented `sub: value`
+    (map) or `- item` (list), block scalars (`key: >`, `>-`, `>+`, `|`, `|-`, `|+`) and plain
+    multi-line values (indented continuation lines). Raises ValueError on anything else."""
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
         raise ValueError("frontmatter must start with '---' on the first line")
     data: Dict[str, Value] = {}
     current = None
-    for line in lines[1:]:
+    raw = None  # `current`'s value as written, while more lines may continue it
+    plain: List[str] = []  # the lines of a multi-line plain value of `current`
+    blanks = 0  # blank lines right after `current`'s first line
+    index = 1
+    while index < len(lines):
+        line = lines[index]
+        index += 1
         if line.strip() == "---":
+            _end_plain(data, current, plain)
             return data
-        if not line.strip() or line.lstrip().startswith("#"):
+        if not line.strip():
+            if plain:
+                plain.append("")
+            blanks += 1
             continue
+        if line.lstrip().startswith("#"):
+            continue
+        skipped, blanks = blanks, 0
         if line[0] in " \t":
-            if current is None:
-                raise ValueError(f"indented line without a parent key: {line!r}")
+            if current is None or (raw is None and isinstance(data[current], str)):
+                if current is None:
+                    raise ValueError(f"indented line without a parent key: {line!r}")
+                raise ValueError(f"bad frontmatter line: {line!r}")  # after a block scalar
             item = line.strip()
-            if item.startswith("- "):
+            if plain or (isinstance(data[current], str) and not is_entry(item)):
+                if not plain:  # `key: first words` or `key:` then the value on the next lines
+                    plain += [raw] + [""] * skipped
+                plain.append(item)
+            elif item.startswith("- "):
                 value = data[current] if isinstance(data[current], list) else []
                 value.append(_scalar(item[2:]))
                 data[current] = value
@@ -102,15 +122,119 @@ def parse_frontmatter(text: str) -> Dict[str, Value]:
                 mapping[key.strip()] = _scalar(value)
                 data[current] = mapping
             continue
+        _end_plain(data, current, plain)
         key, sep, value = line.partition(":")
         if not sep:
             raise ValueError(f"bad frontmatter line: {line!r}")
         key = key.strip()
         if key in data:
             raise ValueError(f"duplicate key '{key}'")
-        data[key] = _scalar(value)
+        header = block_header(value)
+        if header is not None:
+            data[key], index = read_block(lines, index, header)
+            raw = None
+        else:
+            data[key] = _scalar(value)
+            raw = value.strip()
         current = key
     raise ValueError("frontmatter is not closed with '---'")
+
+
+# ---------------------------------------------------------------- multi-line values
+# The YAML rules for the simple cases skills use (YAML 1.2 §8.1 block scalars, §7.3.3 plain).
+
+_BLOCK = re.compile(r"^([|>])(?:([1-9])?([+-])?|([+-])([1-9]))(?:\s+#.*)?$")
+_ENTRY = re.compile(r"^(?:- |-$|[^\s#'\"][^:]*:(?:\s|$))")
+
+
+def is_entry(item: str) -> bool:
+    """An indented `sub: value`, `sub:` or `- item` line (a map or list, not more text)."""
+    return bool(_ENTRY.match(item))
+
+
+def block_header(value: str) -> Optional[Tuple[str, str, Optional[int]]]:
+    """(style, chomping, indent) for a block scalar header such as `>`, `|-` or `>+ # note`."""
+    match = _BLOCK.match(value.strip())
+    if not match:
+        return None
+    style, digit, chomp, chomp2, digit2 = match.groups()
+    indent = digit or digit2
+    return style, chomp or chomp2 or "", int(indent) if indent else None
+
+
+def read_block(
+    lines: List[str], index: int, header: Tuple[str, str, Optional[int]]
+) -> Tuple[str, int]:
+    """The block scalar starting at lines[index] and the index of the first line after it."""
+    style, chomp, indent = header
+    body: List[str] = []
+    while index < len(lines):
+        line = lines[index]
+        if line.strip():
+            width = len(line) - len(line.lstrip(" "))
+            if indent is None:
+                if width == 0:
+                    break
+                indent = width
+            if width < indent:
+                break
+            body.append(line[indent:])
+        else:
+            body.append(line[indent:] if indent is not None else "")
+        index += 1
+    return fold_block(body, style, chomp), index
+
+
+def fold_block(body: List[str], style: str, chomp: str) -> str:
+    """Join block scalar lines (indentation removed): `|` keeps line breaks, `>` folds them."""
+    end = len(body)
+    while end and not body[end - 1].strip():
+        end -= 1
+    content, trailing = body[:end], end and len(body) - end
+    if not content:
+        return "\n" * len(body) if chomp == "+" else ""
+    if style == "|":
+        text = "\n".join(content)
+    else:
+        text, blanks, previous = "", 0, None
+        for line in content:
+            if not line.strip():
+                blanks += 1
+                continue
+            if previous is None:
+                text = "\n" * blanks + line
+            else:
+                more = line[0] in " \t" or previous[0] in " \t"
+                if blanks:
+                    text += "\n" * (blanks + (1 if more else 0)) + line
+                else:
+                    text += ("\n" if more else " ") + line
+            blanks, previous = 0, line
+    if chomp == "-":
+        return text
+    if chomp == "+":
+        return text + "\n" + "\n" * trailing
+    return text + "\n"
+
+
+def fold_plain(parts: List[str]) -> str:
+    """A plain value over several lines: line breaks become spaces, blank lines newlines."""
+    text, blanks = "", 0
+    for part in parts:
+        if not part:
+            blanks += 1
+            continue
+        if text:
+            text += "\n" * blanks if blanks else " "
+        text += part
+        blanks = 0
+    return text
+
+
+def _end_plain(data: Dict[str, Value], key: Optional[str], plain: List[str]) -> None:
+    if plain and key is not None:
+        data[key] = _scalar(fold_plain(plain))
+    plain.clear()
 
 
 def _scalar(value: str) -> str:

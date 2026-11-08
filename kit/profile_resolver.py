@@ -23,7 +23,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Callable, Dict, Iterable, List, Optional, Tuple
 
 from .model import UsageError
 from .profiles import KINDS, REQUIRED_TOOL_KEYS, Profile, ProfileError
@@ -442,23 +442,41 @@ def _check_references(
 # ---------------------------------------------------------------- showing
 
 
-def render_show(resolved: ResolvedProfile, agents: Optional[List[str]] = None) -> str:
-    """Text for `kit profiles show` (REQ-PROF-005). Read-only."""
+def render_show(
+    resolved: ResolvedProfile,
+    agents: Optional[List[str]] = None,
+    policy: Optional[str] = None,
+    skills_for: Optional[Callable[[AgentView], tuple]] = None,
+) -> str:
+    """Text for `kit profiles show` (REQ-PROF-005). Read-only.
+
+    Without `skills_for` the skills are the profile files' lists. The CLI passes the planner's
+    catalog step (B-1): `skills_for(view)` -> (skills, required, skipped, replaced).
+    """
     lines = [
         f"Profile: {resolved.label}",
         f"Description: {resolved.description}",
         f"Order: {' -> '.join(resolved.order)}",
-        f"Policy: {resolved.policy or 'default'}",
+        f"Policy: {policy or resolved.policy or 'default'}",
     ]
+    if policy is not None:
+        lines += [f"Warning: {w}" for w in resolved.policy_warnings(policy)]
     if resolved.report_only:
         lines.append("Report only: yes (installs no tools)")
     for agent in agents or known_agents():
         view = resolved.for_agent(agent)
         profile = view.profile
+        skills, required = profile.skills, profile.required_skills
+        skipped: List[str] = []
+        replaced: List[str] = []
+        if skills_for is not None:
+            skills, required, skipped, replaced = skills_for(view)
         lines.append("")
         lines.append(f"[{agent}]")
-        lines.append(f"  Skills ({len(profile.skills)}): {', '.join(profile.skills) or '-'}")
-        lines.append(f"  Required: {', '.join(profile.required_skills) or '-'}")
+        lines.append(f"  Skills ({len(skills)}): {', '.join(skills) or '-'}")
+        lines.append(f"  Required: {', '.join(required) or '-'}")
+        lines += [f"  replaced: {r}" for r in replaced]
+        lines += [f"  skipped: {s}" for s in skipped]
         lines.append(f"  Tools: {', '.join(t['name'] for t in profile.tools) or '-'}")
         lines.append(f"  MCP: {', '.join(profile.mcp) or '-'}")
         if view.checks:

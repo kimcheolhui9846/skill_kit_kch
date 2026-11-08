@@ -23,7 +23,15 @@ from kit import commands  # noqa: E402
 
 OUT = ROOT / "docs" / "CATALOG.md"
 PROFILES = ("core", "python", "data", "web", "full", "hackathon", "fullstack", "ai-research")
-PACK_COMBOS = ("core,workflow", "core,research")
+PACK_COMBOS = (
+    "core,workflow",
+    "core,research",
+    "core,eng-patterns",
+    "core,lean",
+    "core,cloudflare",
+    "core,motion",
+    "core,planning-extras",
+)
 POLICIES = ("restricted", "standard")
 HOME_VARS = ("HOME", "USERPROFILE", "CODEX_HOME", "CLAUDE_CONFIG_DIR")
 

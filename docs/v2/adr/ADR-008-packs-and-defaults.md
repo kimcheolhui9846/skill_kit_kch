@@ -16,6 +16,13 @@
 - `launch-compliance-check`는 `launch` 팩에 넣고, 새 경로의 `web`·`fullstack` 조합에 포함한다(REQ-SKILL-001).
 - 사용자 목록에서 채택한 외부 스킬은 P4-T3 평가 결과에 따라 팩에 배정한다(REQ-SRC-007).
 
+## 개정 (2026-11-08)
+검토자가 구현을 그대로 두기로 정했다. 위 결정 중 "새 스킬은 팩으로만 묶는다"를 다음과 같이 고친다.
+- `task-approval`, `session-recovery`는 standard 정책의 `core` 팩에 들어간다(`catalog/skills.json`). 그래서 `hitl`을 고르지 않는 프로필(`python`, `web`, `data`)도 standard 정책에서는 이 두 스킬을 받는다.
+- `hitl` 팩은 스킬을 나열하지 않는다(`profiles/packs/hitl.json`의 `skills`가 비어 있다). 이 팩이 맡는 것은 `kit task/req/trace/report/ce/recover` 명령과 정책 문구다.
+- restricted 정책의 설치 내용은 바뀌지 않는다.
+- 기본값 `core,hitl`은 그대로다.
+
 ## 근거
 - 기존 프로필 파일을 건드리지 않으면 REQ-COMPAT-003이 구조적으로 보장된다.
 - `core,hitl`을 제안하는 이유: v2의 핵심 기능이 HITL이고, 새 경로를 쓰는 사람은 v2 기능을 기대한다.

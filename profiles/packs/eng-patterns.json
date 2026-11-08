@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "eng-patterns",
+  "kind": "pack",
+  "description": "Opt-in engineering reference skills from affaan-m/ECC (standard policy only, never restricted): accessibility, api-design, architecture-decision-records, database-migrations, error-handling, python-testing, regex-vs-llm-structured-text. Text only; docker-patterns was left out (repo-specific harness with global npm install and credential relay).",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

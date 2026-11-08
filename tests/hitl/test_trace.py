@@ -395,5 +395,8 @@ def test_standard_task_router_asks_for_requirement_ids(workspace, isolated_home)
     text = (workspace / ".claude/skills/task-router/SKILL.md").read_text(encoding="utf-8")
     assert "## Kit additions: requirement IDs" in text and "kit req sync" in text
     original = (KIT_ROOT / ".agents/skills/task-router/SKILL.md").read_text(encoding="utf-8")
-    assert text.startswith(original.rstrip("\n"))
+    renamed = original.replace("tdd-automator", "test-driven-development").replace(
+        "submission-validator", "verification-before-completion"
+    )  # standard names the replacements (follow-up A)
+    assert text.startswith(renamed.rstrip("\n"))
     assert "kit req sync" not in original  # restricted keeps the original skill

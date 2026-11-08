@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Protocol
+from typing import Dict, List, Optional, Protocol
 
 from ..fsops import State
 from ..model import ItemResult
@@ -69,6 +69,18 @@ class AgentAdapter(Protocol):
 
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None) -> ItemResult:
         """Security audit of this agent's MCP config (default rules: mcp/allowlist.json)."""
+        ...
+
+    def audit_planned(
+        self,
+        target: Path,
+        kit_root: Path,
+        allowlist: Optional[dict],
+        planned: Dict[str, Optional[bytes]],
+    ) -> Optional[ItemResult]:
+        """The same audit of the MCP config a run would leave behind, before it writes (B-3):
+        planned maps a target-relative path to its planned bytes (None = removed); a path
+        not in it is read from disk."""
         ...
 
     def stale_mcp(self, target: Path) -> Optional[ItemResult]:

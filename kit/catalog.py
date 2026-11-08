@@ -16,7 +16,8 @@ Other catalog fields (P4-T4):
 - "include": {"<path in the skill>": "<kit file>"} adds single files to the base layer, e.g.
   the upstream LICENSE next to a vendored skill.
 - "replaces": on the policies this entry serves, it takes the place of these skills in a
-  profile (D-20 replace-in-standard).
+  profile (D-20 replace-in-standard). The kit's own skills then name the replacement: their
+  Markdown mentions of a replaced skill are rewritten when installed (rename_mentions).
 - "requires": skills that must be installed with this one (its links or scripts reach into
   ../<name>/). The checker then allows such links.
 - "packs": the skill joins any selected profile or pack with one of these names, when it is
@@ -31,6 +32,7 @@ The legacy path never reads this module; it copies .agents/skills as before (gol
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -225,6 +227,49 @@ def load_all(kit_root: Path) -> Dict[str, List[SkillEntry]]:
     return entries
 
 
+def renames(entries: Dict[str, SkillEntry], agent: str, policy: str) -> Dict[str, str]:
+    """old -> new for every skill this agent/policy cannot have and another entry replaces
+    (the same choice commands._catalog_skills makes). Empty on restricted today."""
+    out: Dict[str, str] = {}
+    for name, entry in entries.items():
+        if entry.available(agent, policy) is None:
+            continue
+        sub = next(
+            (
+                e.name
+                for e in entries.values()
+                if name in e.replaces and e.available(agent, policy) is None
+            ),
+            None,
+        )
+        if sub is not None:
+            out[name] = sub
+    return out
+
+
+TEXT_SUFFIXES = (".md",)
+
+
+def rename_mentions(files, mapping: Dict[str, str]) -> List[Tuple[str, bytes]]:
+    """Point a kit skill's text at the skills that are actually installed: each whole-word
+    mention of a replaced skill (`tdd-automator`, `../tdd-automator/...`) becomes its
+    replacement. Only Markdown files; the kit's own skills only (never vendored text)."""
+    if not mapping:
+        return list(files)
+    pattern = re.compile(
+        r"(?<![\w-])("
+        + "|".join(re.escape(n) for n in sorted(mapping, key=len, reverse=True))
+        + r")(?![\w-])"
+    )
+    out = []
+    for rel, data in files:
+        if rel.endswith(TEXT_SUFFIXES):
+            text = data.decode("utf-8")
+            data = pattern.sub(lambda m: mapping[m.group(1)], text).encode("utf-8")
+        out.append((rel, data))
+    return out
+
+
 def is_build_artifact(rel: Path) -> bool:
     """Bytecode a run of a bundled script leaves behind (P5-T6): never installed or checked."""
     return "__pycache__" in rel.parts or rel.suffix in (".pyc", ".pyo")
@@ -286,6 +331,7 @@ class SkillSource:
         self.agent = agent
         self.policy = policy
         self.entries = load(kit_root, policy)
+        self.renames = renames(self.entries, agent, policy)
         self.planned: Optional[set] = None  # skills installed together (set by the planner)
         self._cache: Dict[str, List[Tuple[str, bytes]]] = {}
         self._lock = None
@@ -293,7 +339,10 @@ class SkillSource:
     def __call__(self, name: str) -> List[Tuple[str, bytes]]:
         if name not in self._cache:
             entry = self.entries[name]
-            self._cache[name] = skill_files(self.kit_root, entry, self.agent, self.policy)
+            files = skill_files(self.kit_root, entry, self.agent, self.policy)
+            if entry.origin == "kit":  # follow-up A: no mention of a skill that is not there
+                files = rename_mentions(files, self.renames)
+            self._cache[name] = files
         return self._cache[name]
 
     def vendored_files(self, name: str) -> List[str]:

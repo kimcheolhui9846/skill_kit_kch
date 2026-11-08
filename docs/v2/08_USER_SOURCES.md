@@ -101,3 +101,20 @@
 | codebase-explorer | 코드 인덱싱 묶음 | 외부 후보는 모두 훅이나 인덱스를 설치한다 → 비교한 뒤 결정 |
 | counterexample-hunter, algorithm-options | — | 원문 REQ-CE-001과 REQ-ALGO-001을 이 두 스킬을 확장해서 처리한다(Q7 승인) |
 | algorithm-optimizer, benchmark | — | 유지 |
+
+## 2026-11-08 정정 (3단계)
+
+조사 노트와 고정 커밋의 파일을 다시 읽은 결과다. 결정과 반영 위치는 `07_SOURCES_EVALUATION.md` §8.1에 있다.
+
+| ID | 정정 |
+|---|---|
+| U-13 | npm 패키지 `codebase-memory-mcp`에 `postinstall`이 있다. 카탈로그는 PyPI(`uvx codebase-memory-mcp==0.12.1`)를 쓴다 |
+| U-14 | 저장소가 `OpenMontageInc/OpenMontage`로 옮겨졌다(AGPL-3.0, 링크만) |
+| U-20 | 라이선스가 Apache-2.0 하나가 아니다. 기본 `rtk` 바이너리는 Apache-2.0 + BUSL-1.1, `rtk-oss`만 Apache-2.0이다 |
+| U-27, U-28 | 고정 커밋의 코드에서 홈 설정 쓰기와 네트워크 호출을 찾지 못했다 |
+| U-28 | v0.8.2는 Claude Code **2.1.306** 이상이 필요하다(위 표의 2.1.287은 v0.8.0 기준) |
+| U-34 | 홈 설치는 `rea-agents setup`일 때뿐이다. `rea-agents mcp`로 프로젝트 범위 stdio 서버를 쓸 수 있다 |
+| U-35~U-37 | Mobbin, Nicelydone, Refero 모두 OAuth로 로그인할 수 있다(Refero는 Bearer 토큰 헤더도 받지만 키트 안내는 OAuth만 쓴다). U-38 Lazyweb은 엔드포인트를 확인하지 못했다(UNVERIFIED) |
+| U-39 | npm `inspo-mcp@0.2.0`이 배포되어 이제 버전을 고정할 수 있다 |
+| U-46 | 키트 고정(2.0.17, `ff920a4094a3`)은 HEAD(2.0.18)보다 한 버전 뒤다. 2.0.18의 훅 변경은 검토 뒤에 반영한다 |
+| 버전 | U-07 graphify 0.9.104, U-10 openrig 0.7.9, U-19 context-mode 2.1.6, U-42 claude-mem 15.12.0, U-44 ruflo 3.72.2 |

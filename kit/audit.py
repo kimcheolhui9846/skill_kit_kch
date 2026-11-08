@@ -150,10 +150,22 @@ def _fail(problems: list[str], suffix: str = "") -> ItemResult:
 def audit_target(target: Path, kit_root: Path, allowlist: dict | None = None) -> ItemResult:
     path = target / mcpconfig.CONFIG_REL
     if not path.is_file():
+        return audit_toml_data(None, kit_root, allowlist)
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        return ItemResult(LABEL, True, True, False, FAIL, f"cannot read config: {exc}")
+    return audit_toml_data(raw, kit_root, allowlist)
+
+
+def audit_toml_data(raw: bytes | None, kit_root: Path, allowlist: dict | None = None) -> ItemResult:
+    """The TOML audit of given bytes (None = no file). B-3: the v2 path passes the config it
+    plans to leave behind, before it writes; audit_target passes the file on disk."""
+    if raw is None:
         return ItemResult(LABEL, True, True, True, PASS, f"no {mcpconfig.CONFIG_REL}")
     try:
-        text = path.read_bytes().decode("utf-8")
-    except (OSError, UnicodeDecodeError) as exc:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
         return ItemResult(LABEL, True, True, False, FAIL, f"cannot read config: {exc}")
     status, data, error = mcpconfig.parse_toml(text)
     allowlist = allowlist or mcpconfig.load_allowlist(kit_root)
@@ -180,10 +192,25 @@ def audit_mcp_json(target: Path, kit_root: Path, allowlist: dict | None = None) 
     """Same rules as the TOML audit, applied to Claude Code's .mcp.json (P3-T4)."""
     path = target / MCP_JSON_REL
     if not path.is_file():
+        return audit_mcp_json_data(None, kit_root, allowlist)
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        return ItemResult(
+            LABEL, True, True, False, UNVERIFIED, f"cannot audit {MCP_JSON_REL}: {exc}"
+        )
+    return audit_mcp_json_data(raw, kit_root, allowlist)
+
+
+def audit_mcp_json_data(
+    raw: bytes | None, kit_root: Path, allowlist: dict | None = None
+) -> ItemResult:
+    """The .mcp.json audit of given bytes (None = no file); see audit_toml_data."""
+    if raw is None:
         return ItemResult(LABEL, True, True, True, PASS, f"no {MCP_JSON_REL}")
     try:
-        data = json.loads(path.read_bytes().decode("utf-8"))
-    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        data = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, ValueError) as exc:
         return ItemResult(
             LABEL, True, True, False, UNVERIFIED, f"cannot audit {MCP_JSON_REL}: {exc}"
         )

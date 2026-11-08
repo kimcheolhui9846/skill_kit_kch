@@ -6,7 +6,7 @@
 
 ## 최종 실행 (P7-T2, 2026-11-08)
 
-최종 검증 보고서는 `docs/v2/FINAL_REPORT.md`다. 후속 1~4(중간 승인 조건, 표준 라이브러리 검사, 재설치 정리, `launch-compliance-check`)를 반영한 마지막 전체 실행은 **1790 passed, 2 skipped**(`docs/v2/regression/raw/f4-pytest.txt`, `f4-junit.xml`)이고, ruff 172개 파일과 shellcheck 4개가 깨끗했다. 아래 표는 P7-T1 시점의 실행이다.
+최종 검증 보고서는 `docs/v2/FINAL_REPORT.md`다. 후속 1~4, 후속 A·B-1, 외부 출처 1~3단계, B-3(쓰기 전 감사)를 반영한 마지막 전체 실행은 **1997 passed, 2 skipped**(`docs/v2/regression/raw/fb3-pytest.txt`, `fb3-junit.xml`)이고, ruff 180개 파일이 깨끗했다. shellcheck는 후속 4 때 4개가 깨끗했고 그 뒤 `.sh` 변경은 없다. 아래 표는 P7-T1 시점의 실행이다.
 
 ### P7-T1 실행
 

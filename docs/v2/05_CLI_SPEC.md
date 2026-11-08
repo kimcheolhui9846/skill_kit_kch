@@ -65,8 +65,10 @@ kit doctor    [--target DIR]                      # 읽기 전용: 설치된 에
 kit update    --agent A [--scope …] [--dry-run] [--yes]   # 키트 소유 항목만 현재 버전으로 갱신
 kit uninstall --agent A [--scope …] [--dry-run] [--yes]   # 매니페스트 소유이고 해시가 같은 것만 삭제
 kit restore   --backup <stamp> [--scope …] [--dry-run] [--yes]
-kit profiles  list | show <a[,b…]> [--agent A]
+kit profiles  list | show <a[,b…]> [--agent A] [--policy standard|restricted]
 ```
+
+- `profiles show` (B-1): 그 프로필 조합·에이전트·정책으로 `install`/`plan`이 실제로 설치하는 스킬 목록을 보여 준다. planner와 같은 함수(`_catalog_skills`)로 정책·카탈로그(대체, 제외, 팩 스킬 합류)를 적용한다. 에이전트마다 `Skills (N)`, `Required`, `replaced: 옛 -> 새`, `skipped: 이름 (이유)`, `Tools`, `MCP` 줄을 낸다. Tools·MCP는 프로필 파일의 목록이다. `--policy`가 없으면 `install`과 같은 규칙(프로필의 정책, 없으면 `standard`)으로 고르고 `Policy:` 줄에 그 값을 적는다. 프로필이 다른 정책을 권하면 `Warning:` 줄이 붙는다. 잘못된 `--policy`는 64다. 읽기 전용이며 JSON 출력은 없다.
 
 - `--mcp`·`--plugin`으로 고른 것은 매니페스트 항목의 `opt_in`에 남는다. `verify`·`update`는 이 기록을 그대로 쓰므로 플래그를 다시 줄 필요가 없다. 한 번에 설치한 에이전트는 같은 `opt_in`을 기록하므로 `verify --agent both --json`은 JSON 문서 하나를 낸다.
 - `--scope user`에서는 `--dry-run`이 아니면 항상 확인을 받는다. 비대화형이면 `--yes`가 필요하고, 없으면 64로 끝나며 이유를 출력한다(ADR-018).
@@ -100,7 +102,7 @@ kit source remove <id> [--yes]
   - `add`의 추가 옵션:
     - `--include PATH`: 기본으로 빼는 스크립트(`.sh .ps1 .py .js` 등)를 파일 단위로 넣는다.
     - `--replaces SKILL` / `--keep-both`: 겹침 판정에 대한 결정.
-    - `--accept-risk`: REVIEW 판정(원격 스크립트 실행 한 줄, 숨은 유니코드, 프롬프트 인젝션 문구)을 사람이 확인했다는 표시. lock의 `risk`가 medium이 되고 `verification.notes`에 남는다.
+    - `--accept-risk`: REVIEW 판정(원격 스크립트 실행 한 줄, 숨은 유니코드, 프롬프트 인젝션 문구, 비밀 이름 옆의 실제 값이나 `Authorization: Bearer <값>`)을 사람이 확인했다는 표시. 비밀값 규칙은 `kit capture`와 같은 `kit/secrets_scan.py`를 쓴다: 토큰 형식(sk-, ghp_ 등)은 BLOCK, `<your-token>`·`eyJhbGciOi...` 같은 자리표시자는 WARN(2026-11-08). lock의 `risk`가 medium이 되고 `verification.notes`에 남는다.
     - `--overlap-threshold F`: 기본 0.5.
   - `update`도 `--accept-license`, `--accept-risk`를 받는다. `--offline`과 함께 주면 64다.
   - `--yes`가 없으면 터미널에서 `Apply? [y/N]`을 묻는다. 터미널이 없거나 `--json`이면 계획만 내고 0으로 끝난다.
@@ -114,6 +116,16 @@ kit source remove <id> [--yes]
   - `list [--json]`은 id, 종류, 반영 방식, 라이선스, 커밋, 출처를 보여 준다.
   - **큰 저장소(2026-11-06, U-40).** 저장소 전체 압축본이 `MAX_BYTES`(20 MiB)를 넘고 `--path`가 있으면, GitHub API의 트리 목록(`git/trees/<커밋>?recursive=1`)에서 고른 폴더의 파일과 그 위 폴더들의 라이선스 파일만 하나씩(`git/blobs/<sha>`) 받는다. 압축본과 같은 규칙을 쓴다: 경로 탈출과 서브모듈 같은 특수 항목은 1, 링크는 기록, 고른 파일 합계도 `MAX_BYTES`까지, 받은 크기가 목록과 다르면 1. 트리 목록이 잘리면(truncated) 1이다. `--path`가 없으면 `…; name the folders with --path`로 1이다. 접속하는 호스트는 그대로 `api.github.com`뿐이다.
   - 스킬의 `SKILL.md` frontmatter `license`가 찾은 라이선스 파일과 다르면 `Note:` 줄로 보여 준다(판정은 라이선스 파일 기준 그대로).
+  - **실제 저장소 점검 뒤 고친 것(2026-11-08, S-1).**
+    - 크기: 받은 압축본이 20 MiB보다 작아도 풀었을 때 20 MiB를 넘으면 위의 큰 저장소와 같이 처리한다. `--path`가 있으면 폴더별로 받고, 없으면 `…; name the folders with --path`로 1이다. 실제로 받는 파일 합계의 상한은 그대로다.
+    - `--path P`에 스킬이 여러 개 있으면 `--all` 없이 P 아래 스킬을 모두 고른다. `--path` 없이 스킬이 여러 개면 전처럼 2다.
+    - 라이선스: 스킬 폴더마다 가장 가까운 라이선스 파일(폴더 안, 없으면 위 폴더, 마지막으로 저장소 루트)을 찾는다. 모두 같은 라이선스면 vendored로 넣고, 스킬마다 자기 라이선스 파일을 함께 설치한다. lock 항목 하나는 라이선스를 하나만 적을 수 있으므로, 폴더마다 라이선스가 다르거나 일부에만 있으면 전체를 referenced로 두고 `Note:`에 폴더별 라이선스를 적는다. 같은 라이선스끼리 따로 실행하면 된다.
+    - 고른 폴더 두 곳이 같은 스킬 이름이면(예: `skills/x`, `.openclaw/skills/x`) BLOCK이다(1). `--path`로 하나를 고른다.
+    - 종류 판별: README에 `mcpServers`가 있다는 것만으로는 MCP 서버로 보지 않는다. `package.json`·`pyproject.toml` 같은 매니페스트의 MCP SDK 의존성이나 서버 코드의 import가 있어야 한다. 없으면 종류 판별 불가(2)이고, 이유에 그 점을 적는다.
+    - 겹침: 카탈로그에 같은 이름의 스킬이 있으면 유사도와 상관없이 `Overlap:`에 적는다(결정 요청은 이름 충돌 안내 하나만 낸다).
+    - 형제 스킬 링크: `../<다른 스킬>/...` 링크는 그 스킬을 같은 실행에서 함께 고르면 허용하고, 새 카탈로그 항목의 `requires`에 적는다(`Catalog:` 줄에 `requires …`). 함께 고르지 않았으면 BLOCK 그대로이고, 메시지에 넣을 `--path`를 적는다.
+    - SKILL.md frontmatter의 여러 줄 값(`>`, `>-`, `|`, `|-` 블록과 들여 쓴 이어지는 줄)을 YAML 규칙대로 읽는다(`kit/skill_check.py`, `kit/skills.py`).
+    - GitHub가 403/429로 거절하면, 토큰 없는 요청은 시간당 60회로 제한되며 환경 변수 `GITHUB_TOKEN`을 두면 한도가 올라간다고 안내한다. 토큰 값은 출력하지 않는다.
 
 ### 4.3 capture (ADR-019)
 
@@ -276,7 +288,7 @@ Next action:  …
 |---|---|---|
 | 0 | READY | 완료, 또는 dry-run/plan 표시. 검사 명령이면 모두 PASS |
 | 1 | PARTIAL | 일부 실패, 검사 FAIL(`verify`, `source check`, `trace check`), 비밀값 스캔 적중(`capture`), 소스 보안 검사 차단 |
-| 2 | BLOCKED | `CONFLICT`, `NEEDS_HUMAN`(소스 종류 판별 불가, 로컬 수정된 vendored 파일 update), 네트워크 필요 작업의 네트워크 실패, 예상치 못한 예외 |
+| 2 | BLOCKED | `CONFLICT`, `NEEDS_HUMAN`(소스 종류 판별 불가, 로컬 수정된 vendored 파일 update), 네트워크 필요 작업의 네트워크 실패, 쓰기 전 보안 감사 FAIL(B-3, `plan`·`--dry-run` 포함), 예상치 못한 예외 |
 | 64 | USAGE | 잘못된 인수, 조합 오류(`--scope user` + `--target`, `add` + `--offline`), 비대화형인데 `--yes` 없이 user 범위 쓰기, 셸 전용 모드에서 서브커맨드 사용 |
 | 65 | TARGET | 대상 오류(없는 경로, 키트 자신, 쓸 수 없는 HOME), 입력 데이터 오류(알 수 없는 상위 schema, 없는 GitHub 저장소) |
 
@@ -284,8 +296,8 @@ Next action:  …
 
 | 명령 | 0 | 1 | 2 | 64 | 65 |
 |---|---|---|---|---|---|
-| install/update | 완료 | 일부 항목 실패 | 충돌·차단 | 인수 | 대상 |
-| plan/doctor/profiles/list | 항상(오류 제외) | — | — | 인수 | 대상·schema |
+| install/update | 완료 | 일부 항목 실패 | 충돌·차단(보안 감사 차단이면 아무것도 쓰지 않음) | 인수 | 대상 |
+| plan/doctor/profiles/list | 항상(오류 제외) | — | `plan`: 보안 감사 차단(B-3) | 인수 | 대상·schema |
 | verify | 모두 PASS | FAIL 있음 | 검사 불가 | 인수 | 대상 |
 | uninstall/restore | 완료 | 일부 남음 | 사용자 수정 항목 있음 | 인수 | 백업 없음 |
 | source add/update | 완료·plan | 보안·형식 차단 | NEEDS_HUMAN·네트워크 실패 | 인수 | 저장소 없음 |
@@ -297,6 +309,7 @@ Next action:  …
 
 1. 두 Adapter의 plan을 **먼저 모두** 계산한다. 이 단계는 순수 계산이며 쓰기가 없다.
 2. 같은 경로에 쓰는 Action이 두 Adapter에서 겹치면 64로 끝난다. 정상 설계에서는 생기지 않는다.
+   - 보안 감사(B-3, 2026-11-08): 이어서 에이전트마다 MCP 설정(`.codex/config.toml`, `.mcp.json`)을 감사한다. 대상은 디스크의 파일 위에 1의 계획(쓸 내용과 정리 대상 처리)을 메모리에서 겹친 결과다. 한쪽이라도 FAIL이면 두 에이전트 모두 아무것도 쓰지 않고 2로 끝난다. 백업, 상태 파일, 매니페스트, `.kit/logs/` 로그도 남기지 않는다. 확인 질문과 네트워크 질문도 하지 않는다. `plan`·`--dry-run`은 같은 항목과 `Status: BLOCKED`를 `DRY RUN` 줄 앞에 보이고 2로 끝난다. 감사는 쓰기 뒤에도 한 번 더 한다(6의 검사). 기존 경로는 v1처럼 쓰기 뒤에만 감사한다.
 3. 확인과 백업은 한 번에 한다(하나의 `<stamp>`).
 4. 적용 순서는 codex → claude다.
 5. 적용 중 어느 한쪽에서 쓰기가 실패하면 **이번 실행 전체**를 백업으로 되돌린다. 두 에이전트 모두 되돌리며, 한쪽만 설치된 중간 상태를 남기지 않는다.
@@ -319,5 +332,5 @@ Next action:  …
 ## 9. 출력과 로그 규칙
 
 - 사람용 출력은 stdout, 오류는 stderr로 보낸다. `--json`이면 stdout에는 JSON 하나만 출력한다.
-- 로그는 project 범위에서 `.kit/logs/`, user 범위에서 `~/.kit-state/logs/`에 쓴다. 기존 마스킹(`kit/logs.py:10-26`)을 적용하고, 토큰 패턴은 `kit/secrets_scan.py`와 같은 목록을 쓴다.
+- 로그는 project 범위에서 `.kit/logs/`, user 범위에서 `~/.kit-state/logs/`에 쓴다. 쓰기 전 보안 감사로 막힌 실행(B-3)은 작업 공간을 그대로 두기 위해 로그를 쓰지 않는다. 보고서는 출력과 `--report-json`에만 나온다. 기존 마스킹(`kit/logs.py:10-26`)을 적용하고, 토큰 패턴은 `kit/secrets_scan.py`와 같은 목록을 쓴다.
 - 네트워크를 쓰는 모든 Action은 plan과 보고서의 `Network:` 줄에 에이전트별로 표시한다(D-14).

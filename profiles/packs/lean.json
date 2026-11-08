@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "lean",
+  "kind": "pack",
+  "description": "Opt-in 'smallest complete change' skills from DietrichGebert/ponytail (standard policy only, never restricted): ponytail (session mode: lite/full/ultra), ponytail-review, ponytail-audit, ponytail-debt, ponytail-gain. Reports change no code; ponytail-help was left out (plugin-only commands, global update instructions).",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

@@ -373,7 +373,9 @@ def test_doctor_suggests_detected_agents(run_kit, monkeypatch):
 def test_profiles_show_matches_resolver(run_kit, kit_root):
     code, out = run_kit("profiles", "show", "core,hitl", "--agent", "claude")
     assert code == EXIT_READY
-    assert out == render_show(resolve(kit_root, "core,hitl"), ["claude"])
+    resolved = resolve(kit_root, "core,hitl")
+    skills = commands._shown_skills(kit_root, resolved, "standard")  # B-1: after the policy
+    assert out == render_show(resolved, ["claude"], "standard", skills)
     assert "hitl       pack" in run_kit("profiles", "list")[1]
 
 

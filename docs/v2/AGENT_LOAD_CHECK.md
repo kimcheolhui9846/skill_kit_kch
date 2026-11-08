@@ -75,6 +75,8 @@ cd "$WS"
 | L-08 | 플러그인 (선택, `--plugin`을 쓴 경우만) | 셸에서 `claude plugin list`, 대화에서 `/plugin`(**Errors** 탭) | 선언한 플러그인이 보이고 Errors 탭에 오류가 없다. 카탈로그의 유일한 플러그인 `security-guidance`는 위험도 high이고 기본으로 꺼져 있다. 그래서 이 점검에서는 설치하지 않는 것을 권한다 | CC-PL | | |
 | L-09 | 사용자 범위 (M-06을 적용한 경우만) | 홈에서 `claude`를 열고 `/skills`, `/context all` | `~/.claude/skills`의 스킬과 `~/.claude/CLAUDE.md`가 보인다 | CC-SK, CC-MEM | | |
 
+**참고 기록(결과 칸을 대신하지 않음):** 2026-11-08에 사용자가 연습 폴더(`fullstack` 프로필, standard, `--agent both`, 후속 A 이전 키트)에서 Claude Code `/skills`를 열고 "스킬 다 보여"라고 보고했다. L-02와 설치 조건(기본 프로필, `--hooks`)이 다르고 중복 여부는 따로 보지 않았으므로, L-02는 여전히 검토자가 채운다. Codex(C-01~C-07)는 아직 기록이 없다.
+
 ## 3. 정리
 
 ```powershell

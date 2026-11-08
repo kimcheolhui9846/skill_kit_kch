@@ -8,16 +8,24 @@ Pipeline for one GitHub address:
 - resolve/pin/fetch use the GitHub REST API and codeload with urllib (R-08). The ref becomes a
   40-character commit SHA. GITHUB_TOKEN is sent to api.github.com when set; it is never printed.
 - The tarball is unpacked in memory only. Nothing from it is executed or written before the
-  approval. Paths that escape, special files and archives over MAX_BYTES stop the add; links
-  stop it only when they lie inside a chosen skill folder.
+  approval. Paths that escape and special files stop the add; links stop it only when they lie
+  inside a chosen skill folder. An archive over MAX_BYTES, packed or unpacked, is fetched
+  folder by folder when --path names the folders (the kept bytes are still capped at MAX_BYTES).
 - License table (D-09): MIT, Apache-2.0, BSD-2/3, ISC, 0BSD, CC-BY-4.0 and Unlicense are copied
   (vendored-verbatim) into third_party/<owner>-<repo>/<repo path>. Anything else, or no license,
-  is recorded as `referenced` (no files). `other` is copied only with --accept-license.
-- Scan: secrets and binary files block (exit 1). Remote-execution one-liners, hidden Unicode and
-  prompt-injection phrases need a person (exit 2) unless --accept-risk. User paths only warn.
+  is recorded as `referenced` (no files). `other` is copied only with --accept-license. Each
+  skill keeps the license file nearest to its folder; one source records one license, so
+  folders whose licenses differ are recorded as referenced.
+- Siblings: a link to `../<skill>/...` is allowed when that skill is chosen in the same run; the
+  catalog entry then `requires` it. Two chosen folders with one skill name block the add.
+- Scan: secrets in a token format and binary files block (exit 1). Remote-execution one-liners,
+  hidden Unicode, prompt-injection phrases and literal values next to a secret name or in a
+  Bearer header (the rule set `kit capture` uses, kit.secrets_scan) need a person (exit 2)
+  unless --accept-risk. Placeholders such as `<your-token>` and user paths only warn.
 - Validate: the official skill limits only (kit.skill_check with kit_rules=False, R-7).
 - Overlap (D-20): a name the catalog already has needs a person (verbatim files cannot be
-  renamed). Token Jaccard similarity >= threshold needs --replaces NAME or --keep-both.
+  renamed) and is always listed as an overlap. Token Jaccard similarity >= threshold needs
+  --replaces NAME or --keep-both.
 - Apply writes third_party files, sources.lock.json, catalog/skills.json (policies: standard
   only, so the restricted path and the .agents/skills mirror never change), THIRD_PARTY_NOTICES.md
   and a row in docs/v2/07_SOURCES_EVALUATION.md. Any failure, including the final
@@ -31,6 +39,7 @@ import hashlib
 import io
 import json
 import os
+import posixpath
 import re
 import tarfile
 from dataclasses import dataclass, field
@@ -140,6 +149,10 @@ class SourceBlocked(Exception):
     """A security or format check stops the add (exit 1)."""
 
 
+class ArchiveTooLarge(SourceBlocked):
+    """The unpacked archive is over the limit; with --path the add fetches folder by folder."""
+
+
 @dataclass
 class Archive:
     files: Dict[str, bytes]  # repo-relative path -> bytes
@@ -213,7 +226,7 @@ def unpack(data: bytes, limit: int = MAX_BYTES) -> Archive:
     except (OSError, EOFError) as exc:
         raise SourceBlocked(f"archive is not a gzip file: {exc}") from None
     if len(raw) > cap:
-        raise SourceBlocked(f"archive is larger than {_size(limit)}")
+        raise ArchiveTooLarge(f"archive is larger than {_size(limit)}")
     try:
         with tarfile.open(fileobj=io.BytesIO(raw), mode="r:") as tar:
             for member in tar:
@@ -231,7 +244,7 @@ def unpack(data: bytes, limit: int = MAX_BYTES) -> Archive:
                     raise SourceBlocked(f"special file in the archive: {name}")
                 total += member.size
                 if total > limit:
-                    raise SourceBlocked(f"archive is larger than {_size(limit)}")
+                    raise ArchiveTooLarge(f"archive is larger than {_size(limit)}")
                 if not rel:
                     continue
                 handle = tar.extractfile(member)
@@ -260,19 +273,47 @@ def find_skills(archive: Archive, paths: List[str]) -> List[str]:
     return found
 
 
+# An MCP server is shown by its manifest or code (an SDK dependency or import), not by a README
+# that mentions "mcpServers": agent collections often show how to set up someone else's server.
+_MCP_SERVER = re.compile(
+    r"@modelcontextprotocol/sdk|modelcontextprotocol/go-sdk|mark3labs/mcp-go|\brmcp\b"
+    r"|\bFastMCP\b|\bMcpServer\b|^\s*(?:from|import)\s+(?:mcp|fastmcp)\b"
+    r"|^\s*[\"']?(?:mcp|fastmcp)(?:\[[^\]]*\])?\s*(?:[<>=~!]=|[\"'],?\s*$|$)",
+    re.M,
+)
+_MANIFESTS = {
+    "package.json",
+    "pyproject.toml",
+    "requirements.txt",
+    "setup.py",
+    "go.mod",
+    "cargo.toml",
+}
+_SERVER_CODE = {".py", ".ts", ".mts", ".js", ".mjs", ".cjs", ".go", ".rs", ".java", ".kt", ".cs"}
+
+
 def detect_kind(archive: Archive, paths: List[str]) -> Optional[str]:
     """For a repo with no skill: plugin, mcp, or None (cannot tell)."""
     inside = [r for r in archive.files if not paths or any(_under(r, p) for p in paths)]
     names = {PurePosixPath(r).as_posix() for r in inside}
     if any(r.endswith(".claude-plugin/plugin.json") or r == "plugin.json" for r in names):
         return "plugin"
-    for rel in inside:
-        low = rel.lower()
-        if PurePosixPath(low).name in ("readme.md", "package.json", "pyproject.toml"):
+    for rel in sorted(inside):
+        pure = PurePosixPath(rel.lower())
+        if pure.name in _MANIFESTS or pure.suffix in _SERVER_CODE:
             text = archive.files[rel].decode("utf-8", "replace")
-            if "mcpServers" in text or "modelcontextprotocol" in text:
+            if _MCP_SERVER.search(text):
                 return "mcp"
     return None
+
+
+def _mentions_mcp(archive: Archive, paths: List[str]) -> bool:
+    return any(
+        PurePosixPath(rel.lower()).name == "readme.md"
+        and b"mcpServers" in data
+        and (not paths or any(_under(rel, p) for p in paths))
+        for rel, data in archive.files.items()
+    )
 
 
 def license_from_text(text: str) -> str:
@@ -354,6 +395,8 @@ class SkillPick:
     folder: str  # repo-relative ("" = root)
     files: Dict[str, bytes]  # repo-relative path -> bytes (taken)
     left_out: List[str]  # repo-relative scripts not taken
+    license: License = field(default_factory=lambda: License("none", None))  # nearest to it
+    requires: List[str] = field(default_factory=list)  # sibling skills its links reach
 
 
 @dataclass
@@ -472,7 +515,7 @@ def build(
 
     try:
         archive = unpack(client.tarball(owner, repo, commit))
-    except DownloadTooLarge as exc:
+    except (DownloadTooLarge, ArchiveTooLarge) as exc:  # packed or unpacked over MAX_BYTES
         if not spec.paths:
             raise SourceBlocked(f"{exc}; name the folders with --path") from None
         try:  # a large repository: fetch only the chosen folders
@@ -491,18 +534,30 @@ def build(
             raise _Needs(
                 f"no SKILL.md, plugin.json or MCP server found in {owner}/{repo}"
                 + (f" under {', '.join(spec.paths)}" if spec.paths else "")
+                + (
+                    " (the README mentions mcpServers, but there is no server code or "
+                    "MCP SDK dependency)"
+                    if _mentions_mcp(archive, spec.paths)
+                    else ""
+                )
             )
         plan_kind = kind
-    elif len(folders) > 1 and not opts.all_skills and previous is None:
+    elif len(folders) > 1 and not opts.all_skills and not spec.paths and previous is None:
         listing = ", ".join(f or "(root)" for f in folders)
         raise _Needs(
-            f"{len(folders)} skills found: {listing}. Pick with --path (repeatable) or --all"
+            f"{len(folders)} skills found: {listing}. Pick with --path (repeatable; a folder "
+            "takes every skill under it) or --all"
         )  # noqa: E501
     if len(folders) > 1:
         plan_kind = "skill-bundle"
 
-    lic = find_license(archive, folders[0] if len(folders) == 1 else _common(folders), info["spdx"])
-    vendored = plan_kind in ("skill", "skill-bundle") and vendorable(lic, opts.accept_license)
+    licenses = {f: find_license(archive, f, info["spdx"]) for f in folders}
+    lic, mixed = _overall_license(archive, folders, licenses, info["spdx"], opts.accept_license)
+    vendored = (
+        plan_kind in ("skill", "skill-bundle")
+        and not mixed
+        and vendorable(lic, opts.accept_license)
+    )
     source_id = previous.id if previous else _choose_id(lock, spec, folders, opts.name, archive)
     plan = Plan(spec, commit, ref, source_id, plan_kind, lic, vendored)
     if info["archived"]:
@@ -511,7 +566,14 @@ def build(
         plan.notes.append(f"--accept-license has no effect on {lic.spdx} (only on 'other')")
     if lic.note:
         plan.notes.append(f"license: {lic.note}")
-    if plan_kind in ("skill", "skill-bundle") and not vendored:
+    if mixed:
+        listing = ", ".join(f"{f or '/'}: {licenses[f].spdx}" for f in folders)
+        plan.notes.append(
+            f"the chosen folders have different licenses ({listing}); one source records one "
+            "license, so it is recorded as referenced. Add the folders with the same license "
+            "in one run and the others separately."
+        )
+    elif plan_kind in ("skill", "skill-bundle") and not vendored:
         plan.notes.append(
             f"license {lic.spdx} is not on the copy list: recorded as referenced, no files copied"
         )
@@ -536,13 +598,15 @@ def build(
                     left.append(rel)
                     continue
                 taken[rel] = data
-            plan.picks.append(SkillPick(name, folder, taken, left))
+            own = licenses[folder]
+            plan.picks.append(SkillPick(name, folder, taken, left, own))
             declared = _declared_license(archive, folder)
-            if declared and not declared.lower().startswith(lic.spdx.lower()):
+            if declared and not declared.lower().startswith(own.spdx.lower()):
                 plan.notes.append(
                     f"{name}: SKILL.md says 'license: {declared}'; "
-                    f"the license file found is {lic.spdx} ({lic.rel or 'none'})"
+                    f"the license file found is {own.spdx} ({own.rel or 'none'})"
                 )
+        _same_names(plan)
         unknown = includes - {r for p in plan.picks for r in p.files}
         if unknown:
             raise UsageError(
@@ -551,11 +615,12 @@ def build(
         for pick in plan.picks:
             for rel, data in pick.files.items():
                 plan.writes[f"{base}/{rel}"] = data
-        if lic.rel:
-            plan.writes[f"{base}/{lic.rel}"] = archive.files[lic.rel]
+        for pick in plan.picks:  # each skill's own license file (D-09)
+            if pick.license.rel:
+                plan.writes[f"{base}/{pick.license.rel}"] = archive.files[pick.license.rel]
         for rel, data in sorted(plan.writes.items()):
             plan.findings += scan_file(rel, data)
-        _validate(plan)
+        _validate(plan, archive)
         _overlap(kit_root, plan, opts, previous)
         _clashes(kit_root, plan, lock, previous)
     _entries(kit_root, plan, opts, previous, base)
@@ -583,6 +648,44 @@ def _root_name(archive: Archive, repo: str) -> str:
         return _slug(repo)
     name = meta.get("name")
     return name if isinstance(name, str) and name else _slug(repo)
+
+
+def _overall_license(
+    archive: Archive,
+    folders: List[str],
+    licenses: Dict[str, License],
+    api_spdx: Optional[str],
+    accept: bool,
+) -> Tuple[License, bool]:
+    """The source's one license from each folder's own (nearest) license, and whether they
+    disagree. Folders with the same license may keep different license files (each skill gets
+    its own); one source cannot record two licenses, nor copy some folders and not others."""
+    if not folders:
+        return find_license(archive, "", api_spdx), False
+    found = [licenses[f] for f in folders]
+    kinds = {(lic.spdx, vendorable(lic, accept)) for lic in found}
+    if len(kinds) > 1:
+        return find_license(archive, _common(folders), api_spdx), True
+    rels = [lic.rel for lic in found]
+    primary = min(set(rels), key=lambda r: (-rels.count(r), r or ""))
+    note = next((lic.note for lic in found if lic.rel == primary and lic.note), "")
+    return License(found[0].spdx, primary, note), False
+
+
+def _same_names(plan: Plan) -> None:
+    """Two chosen folders that install under one name (e.g. skills/x and .openclaw/skills/x)."""
+    seen: Dict[str, str] = {}
+    for pick in plan.picks:
+        if pick.name in seen:
+            plan.findings.append(
+                Finding(
+                    "BLOCK",
+                    f"two skills are named '{pick.name}': {seen[pick.name] or '/'} and "
+                    f"{pick.folder or '/'}; pick one with --path",
+                )
+            )
+        else:
+            seen[pick.name] = pick.folder
 
 
 class _Needs(Exception):
@@ -623,22 +726,63 @@ def _choose_id(lock, spec: Spec, folders: List[str], name: Optional[str], archiv
     return candidate
 
 
-def _validate(plan: Plan) -> None:
+_OUTSIDE = re.compile(r"^(?P<rel>.+): link '(?P<link>[^']*)' points outside the skill$")
+
+
+def _installed_files(pick: SkillPick) -> List[Tuple[str, bytes]]:
+    """The skill's files as installed: paths inside its folder, plus its license file."""
+    files = [
+        (PurePosixPath(rel).relative_to(pick.folder).as_posix() if pick.folder else rel, data)
+        for rel, data in pick.files.items()
+    ]
+    if pick.license.rel and not _under(pick.license.rel, pick.folder):
+        files.append(("LICENSE", b"license"))  # the catalog includes it next to the skill
+    return files
+
+
+def _validate(plan: Plan, archive: Archive) -> None:
+    """Official limits only. A link to `../<sibling>/<file>` is allowed when that sibling is
+    chosen in the same run: the catalog entry then `requires` it, so they install together."""
+    installed: Dict[str, set] = {}
     for pick in plan.picks:
-        files = [
-            (PurePosixPath(rel).relative_to(pick.folder).as_posix() if pick.folder else rel, data)
-            for rel, data in pick.files.items()
-        ]
-        if plan.license.rel and not _under(plan.license.rel, pick.folder):
-            files.append(("LICENSE", b"license"))  # the catalog includes it next to the skill
+        installed.setdefault(pick.name, {rel for rel, _ in _installed_files(pick)})
+    for pick in plan.picks:
+        files = _installed_files(pick)
+        used: set = set()
+
+        def sibling(other: str, path: str, me: str = pick.name, used: set = used) -> bool:
+            if other != me and path in installed.get(other, ()):
+                used.add(other)
+                return True
+            return False
+
         for agent in AGENTS:
-            report = skill_check.check(pick.name, files, agent, kit_rules=False)
+            report = skill_check.check(pick.name, files, agent, kit_rules=False, sibling=sibling)
             plan.findings += [
-                Finding("BLOCK", f"{pick.name} ({agent}): {e}") for e in report.errors
-            ]  # noqa: E501
+                Finding("BLOCK", f"{pick.name} ({agent}): {_hint(e, pick, archive)}")
+                for e in report.errors
+            ]
             plan.findings += [
                 Finding("WARN", f"{pick.name} ({agent}): {w}") for w in report.warnings
             ]
+        pick.requires = sorted(used)
+
+
+def _hint(error: str, pick: SkillPick, archive: Archive) -> str:
+    """For a link into a sibling skill that is not chosen: name the --path that takes it."""
+    match = _OUTSIDE.match(error)
+    if not match or not pick.folder:
+        return error
+    target = match.group("link").split("#", 1)[0]
+    joined = posixpath.normpath(posixpath.join(posixpath.dirname(match.group("rel")), target))
+    parts = joined.split("/", 2)
+    if len(parts) < 3 or parts[0] != "..":
+        return error
+    parent = str(PurePosixPath(pick.folder).parent) if "/" in pick.folder else ""
+    folder = f"{parent}/{parts[1]}" if parent else parts[1]
+    if f"{folder}/SKILL.md" not in archive.files:
+        return error
+    return f"{error}; it is the skill in {folder}: add --path {folder} to take both"
 
 
 def _overlap(kit_root: Path, plan: Plan, opts: Options, previous) -> None:
@@ -652,9 +796,10 @@ def _overlap(kit_root: Path, plan: Plan, opts: Options, previous) -> None:
             raise UsageError(f"--replaces: unknown skill '{bad}'")
     for pick in plan.picks:
         mine = _tokens(pick.files[f"{pick.folder}/SKILL.md" if pick.folder else "SKILL.md"])
-        for other, words in sorted(existing.items()):
-            score = round(similarity(mine, words), 2)
-            if score < opts.threshold:
+        for other in sorted(set(existing) | ({pick.name} & names)):
+            score = round(similarity(mine, existing.get(other, set())), 2)
+            same_name = other == pick.name  # always an overlap, whatever the words say
+            if score < opts.threshold and not same_name:
                 continue
             if other in opts.replaces:
                 decision = "replace-in-standard"
@@ -662,6 +807,7 @@ def _overlap(kit_root: Path, plan: Plan, opts: Options, previous) -> None:
                 decision = "keep-both"
             else:
                 decision = None
+            if decision is None and not same_name:  # a same name is asked about in _clashes
                 plan.needs.append(
                     f"{pick.name} overlaps {other} (similarity {score}); "
                     f"re-run with --replaces {other} or --keep-both"
@@ -746,7 +892,7 @@ def _entries(kit_root: Path, plan: Plan, opts: Options, previous, base: str) -> 
     }
     if plan.vendored:
         entry["license_file"] = f"{base}/{plan.license.rel}" if plan.license.rel else None
-        if not plan.license.rel:
+        if not plan.license.rel or any(not p.license.rel for p in plan.picks):
             plan.findings.append(Finding("BLOCK", "no license file to keep next to the files"))
     plan.entry = entry
     if plan.vendored:
@@ -759,8 +905,8 @@ def _entries(kit_root: Path, plan: Plan, opts: Options, previous, base: str) -> 
                 "packs": packs,
                 "policies": ["standard"],
             }
-            if plan.license.rel and not _under(plan.license.rel, pick.folder):
-                item["include"] = {"LICENSE": entry["license_file"]}
+            if pick.license.rel and not _under(pick.license.rel, pick.folder):
+                item["include"] = {"LICENSE": f"{base}/{pick.license.rel}"}
             mine = sorted(
                 {
                     o["with"]
@@ -770,6 +916,8 @@ def _entries(kit_root: Path, plan: Plan, opts: Options, previous, base: str) -> 
             )
             if mine:
                 item["replaces"] = mine
+            if pick.requires:  # its links reach these sibling skills (installed together)
+                item["requires"] = list(pick.requires)
             plan.catalog_entries.append(item)
     if previous is not None:
         plan.deletes = sorted(set(previous.files) - set(files) - _shared(kit_root, previous.id))
@@ -855,7 +1003,9 @@ def _notice_block(plan: Plan) -> str:
     spec = plan.spec
     names = ", ".join(p.name for p in plan.picks)
     used = ", ".join(f"`{p.folder or '/'}`" for p in plan.picks)
-    lic = plan.entry.get("license_file")
+    base = f"{sources.THIRD_PARTY}/{folder_of(spec)}"
+    files = sorted({f"{base}/{p.license.rel}" for p in plan.picks if p.license.rel})
+    lic = "`, `".join(files) or plan.entry.get("license_file")
     return (
         f"<!-- kit-source:begin {plan.source_id} -->\n"
         f"### {spec.owner}/{spec.repo} — {names}\n\n"

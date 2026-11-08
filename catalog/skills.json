@@ -680,6 +680,798 @@
       "include": {
         "LICENSE": "third_party/K-Dense-AI-scientific-agent-skills/LICENSE.md"
       }
+    },
+    {
+      "name": "animate",
+      "location": "third_party/emilkowalski-skills/skills/animate",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "animate-expo",
+      "location": "third_party/emilkowalski-skills/skills/animate-expo",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "animation-performance",
+      "location": "third_party/emilkowalski-skills/skills/animation-performance",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "animation-vocabulary",
+      "location": "third_party/emilkowalski-skills/skills/animation-vocabulary",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "apple-design",
+      "location": "third_party/emilkowalski-skills/skills/apple-design",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "ask-sonner",
+      "location": "third_party/emilkowalski-skills/skills/ask-sonner",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "break-ui",
+      "location": "third_party/emilkowalski-skills/skills/break-ui",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "choreograph",
+      "location": "third_party/emilkowalski-skills/skills/choreograph",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "find-animation-opportunities",
+      "location": "third_party/emilkowalski-skills/skills/find-animation-opportunities",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "improve-animations",
+      "location": "third_party/emilkowalski-skills/skills/improve-animations",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "mobile-native",
+      "location": "third_party/emilkowalski-skills/skills/mobile-native",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "pick-ui-library",
+      "location": "third_party/emilkowalski-skills/skills/pick-ui-library",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "prototype",
+      "location": "third_party/emilkowalski-skills/skills/prototype",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "remove-animations",
+      "location": "third_party/emilkowalski-skills/skills/remove-animations",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "review-animations",
+      "location": "third_party/emilkowalski-skills/skills/review-animations",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "write-swift",
+      "location": "third_party/emilkowalski-skills/skills/write-swift",
+      "origin": "source:emilkowalski-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "motion"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/emilkowalski-skills/LICENSE"
+      }
+    },
+    {
+      "name": "domain-modeling",
+      "location": "third_party/mattpocock-skills/skills/engineering/domain-modeling",
+      "origin": "source:mattpocock-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "planning-extras"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/mattpocock-skills/LICENSE"
+      }
+    },
+    {
+      "name": "to-spec",
+      "location": "third_party/mattpocock-skills/skills/engineering/to-spec",
+      "origin": "source:mattpocock-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "planning-extras"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/mattpocock-skills/LICENSE"
+      }
+    },
+    {
+      "name": "handoff",
+      "location": "third_party/mattpocock-skills/skills/productivity/handoff",
+      "origin": "source:mattpocock-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "planning-extras"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/mattpocock-skills/LICENSE"
+      }
+    },
+    {
+      "name": "ponytail",
+      "location": "third_party/DietrichGebert-ponytail/skills/ponytail",
+      "origin": "source:dietrichgebert-ponytail",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/DietrichGebert-ponytail/LICENSE"
+      }
+    },
+    {
+      "name": "ponytail-audit",
+      "location": "third_party/DietrichGebert-ponytail/skills/ponytail-audit",
+      "origin": "source:dietrichgebert-ponytail",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/DietrichGebert-ponytail/LICENSE"
+      }
+    },
+    {
+      "name": "ponytail-debt",
+      "location": "third_party/DietrichGebert-ponytail/skills/ponytail-debt",
+      "origin": "source:dietrichgebert-ponytail",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/DietrichGebert-ponytail/LICENSE"
+      }
+    },
+    {
+      "name": "ponytail-gain",
+      "location": "third_party/DietrichGebert-ponytail/skills/ponytail-gain",
+      "origin": "source:dietrichgebert-ponytail",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/DietrichGebert-ponytail/LICENSE"
+      }
+    },
+    {
+      "name": "ponytail-review",
+      "location": "third_party/DietrichGebert-ponytail/skills/ponytail-review",
+      "origin": "source:dietrichgebert-ponytail",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "lean"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/DietrichGebert-ponytail/LICENSE"
+      }
+    },
+    {
+      "name": "accessibility",
+      "location": "third_party/affaan-m-ECC/skills/accessibility",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "api-design",
+      "location": "third_party/affaan-m-ECC/skills/api-design",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "architecture-decision-records",
+      "location": "third_party/affaan-m-ECC/skills/architecture-decision-records",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "database-migrations",
+      "location": "third_party/affaan-m-ECC/skills/database-migrations",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "error-handling",
+      "location": "third_party/affaan-m-ECC/skills/error-handling",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "python-testing",
+      "location": "third_party/affaan-m-ECC/skills/python-testing",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "regex-vs-llm-structured-text",
+      "location": "third_party/affaan-m-ECC/skills/regex-vs-llm-structured-text",
+      "origin": "source:affaan-m-ecc",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "eng-patterns"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/affaan-m-ECC/LICENSE"
+      }
+    },
+    {
+      "name": "agents-sdk",
+      "location": "third_party/cloudflare-skills/skills/agents-sdk",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "cloudflare-app-bootstrap",
+      "location": "third_party/cloudflare-skills/skills/cloudflare-app-bootstrap",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "cloudflare-one-migrations",
+      "location": "third_party/cloudflare-skills/skills/cloudflare-one-migrations",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "durable-objects",
+      "location": "third_party/cloudflare-skills/skills/durable-objects",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "frameworks-on-cloudflare",
+      "location": "third_party/cloudflare-skills/skills/frameworks-on-cloudflare",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "k2",
+      "location": "third_party/cloudflare-skills/skills/k2",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "sandbox-migrate-to-next",
+      "location": "third_party/cloudflare-skills/skills/sandbox-migrate-to-next",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "sandbox-next",
+      "location": "third_party/cloudflare-skills/skills/sandbox-next",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "sandbox-stable",
+      "location": "third_party/cloudflare-skills/skills/sandbox-stable",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "workers-best-practices",
+      "location": "third_party/cloudflare-skills/skills/workers-best-practices",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "workers-development",
+      "location": "third_party/cloudflare-skills/skills/workers-development",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "workers-profiling",
+      "location": "third_party/cloudflare-skills/skills/workers-profiling",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "wrangler",
+      "location": "third_party/cloudflare-skills/skills/wrangler",
+      "origin": "source:cloudflare-skills",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "cloudflare"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
     }
   ]
 }
