@@ -23,9 +23,9 @@
 git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch
 ```
 
-**미검증(P7-T1):**
-- v2는 아직 `main`에 병합되지 않았다. 그래서 이 명령은 이번에 실행하지 않았다.
-- 병합 전에는 v2 브랜치(`feat/v2-multi-agent`)를 받는다.
+**미검증(P7-T1 자동 기록 밖):**
+- 네트워크가 필요한 명령이라 문서 명령 기록(`P7-T1-doc-commands.md`)에는 없다.
+- v2를 `main`에 병합한 뒤(2026-11-09, PR #10) 직접 clone해서 `install --agent both`와 `verify`가 READY인 것을 확인했다.
 - v1의 같은 명령은 `docs/TEST_REPORT.md`(v1)에 실행 기록이 있다.
 
 ## 2. 미리 보기
