@@ -75,7 +75,12 @@ cd "$WS"
 | L-08 | 플러그인 (선택, `--plugin`을 쓴 경우만) | 셸에서 `claude plugin list`, 대화에서 `/plugin`(**Errors** 탭) | 선언한 플러그인이 보이고 Errors 탭에 오류가 없다. 카탈로그의 유일한 플러그인 `security-guidance`는 위험도 high이고 기본으로 꺼져 있다. 그래서 이 점검에서는 설치하지 않는 것을 권한다 | CC-PL | | |
 | L-09 | 사용자 범위 (M-06을 적용한 경우만) | 홈에서 `claude`를 열고 `/skills`, `/context all` | `~/.claude/skills`의 스킬과 `~/.claude/CLAUDE.md`가 보인다 | CC-SK, CC-MEM | | |
 
-**참고 기록(결과 칸을 대신하지 않음):** 2026-11-08에 사용자가 연습 폴더(`fullstack` 프로필, standard, `--agent both`, 후속 A 이전 키트)에서 Claude Code `/skills`를 열고 "스킬 다 보여"라고 보고했다. L-02와 설치 조건(기본 프로필, `--hooks`)이 다르고 중복 여부는 따로 보지 않았으므로, L-02는 여전히 검토자가 채운다. Codex(C-01~C-07)는 아직 기록이 없다.
+**참고 기록(결과 칸을 대신하지 않음):** 2026-11-08에 사용자가 연습 폴더(`fullstack` 프로필, standard, `--agent both`, 후속 A 이전 키트)에서 Claude Code `/skills`를 열고 "스킬 다 보여"라고 보고했다. L-02와 설치 조건(기본 프로필, `--hooks`)이 다르고 중복 여부는 따로 보지 않았으므로, L-02는 여전히 검토자가 채운다.
+
+**참고 기록, Codex(결과 칸을 대신하지 않음):** 2026-11-08에 codex-cli 0.167.0으로, 이 점검표와 달리 `--no-mcp`(훅 없음) 기본 설치를 임시 폴더에 하고 TUI 대신 `codex exec --ephemeral -s read-only`로 물었다. 폴더 신뢰 기록은 남지 않았다.
+- C-02에 해당: 모델이 받은 스킬 목록에 키트 스킬 17개가 모두 한 번씩 있었고, `.claude/skills` 사본이 따로 보이지 않았다. 사용자 전역 스킬도 함께 보였다.
+- C-01에 해당: 모델이 받은 지침에 전역 지침과 함께 작업 공간의 `AGENTS.md`(`# Codex Project Policy`, `## Principles`)가 있었다.
+- 모델의 자기 보고이므로 TUI의 `/skills`·`$` 확인(C-02, C-03)과 MCP·훅(C-04~C-06)은 여전히 검토자가 한다.
 
 ## 3. 정리
 
