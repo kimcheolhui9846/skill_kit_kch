@@ -32,6 +32,8 @@ $k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } els
 
 bash (Linux, macOS, Git Bash, WSL):
 
+> Windows에서는 위의 PowerShell 줄을 쓴다. PowerShell 창에 아래 bash 줄을 넣거나 `bash ...`를 실행하면 WSL의 bash가 떠서 경로가 어긋난다. 그러면 `No such file or directory`가 나온다.
+
 ```bash
 k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both
 ```
