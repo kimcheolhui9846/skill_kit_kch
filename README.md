@@ -17,13 +17,34 @@
 
 ## 빠른 시작
 
-키트는 작업 공간 **밖**(형제 폴더 `../skill_kit_kch`)에 받는다. 그래야 키트 폴더가 제출물에 섞이지 않는다. 아래 명령은 작업 공간 안에서 실행한다.
+**작업 폴더 안의 터미널에서** 아래 한 줄을 실행한다. 이 명령 하나가 다음을 모두 한다.
 
-```bash
-git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch
+1. 키트를 작업 폴더 **밖**(형제 폴더 `../skill_kit_kch`)에 받는다. 이미 받아 두었으면 최신으로 갱신한다.
+2. Codex와 Claude Code 양쪽에 설치한다.
+
+키트를 밖에 두는 것은 키트 폴더가 제출물에 섞이지 않게 하려는 것이다. 그래서 작업 폴더 안에 bootstrap 파일이 없는 것은 정상이다.
+
+Windows PowerShell:
+
+```powershell
+$k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\bootstrap.ps1" install --agent both }
 ```
 
-이 clone 명령은 네트워크가 필요해서 자동 문서 명령 기록에는 들어 있지 않다(미검증 목록). 대신 v2를 `main`에 병합한 뒤(2026-11-09) 직접 clone해서 `install --agent both`와 `verify`가 READY인 것을 확인했다.
+bash (Linux, macOS, Git Bash, WSL):
+
+```bash
+k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both
+```
+
+- 끝의 `--agent both`를 `--agent codex`나 `--agent claude`로 바꾸면 한쪽에만 설치한다. 같은 줄을 다시 실행하면 키트를 갱신하고 다시 적용한다.
+- 끝에 `Status:       READY`가 나오면 끝난 것이다.
+- **에이전트에게 실행을 맡길 때:** 에이전트 샌드박스는 보통 네트워크가 막혀 있다. 그러면 clone이 실패해서 "bootstrap 파일이 없다"는 말이 나온다. 터미널에서 직접 실행하거나, 에이전트에게 네트워크 사용을 허락한다.
+- 이 두 줄은 네트워크가 필요해서 자동 문서 명령 기록에는 들어 있지 않다(미검증 목록). 대신 2026-11-09에 Windows PowerShell 5.1과 Git Bash에서 세 경우를 직접 실행했다.
+  - 빈 작업 폴더: 받고 설치해서 `READY`.
+  - 두 번째 실행: `Already up to date` 뒤 다시 `READY`.
+  - git이 아닌 `../skill_kit_kch` 폴더가 있을 때: 안내 문구를 내고 설치하지 않음.
+
+이미 받아 둔 키트로 다시 설치하거나 한쪽만 설치하려면 아래 명령을 쓴다.
 
 ### Codex
 
@@ -188,12 +209,14 @@ git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git ..\skil
 작업 폴더 안에서 실행한다. 키트는 형제 폴더 `..\skill_kit_kch`에 받는다.
 
 ```powershell
-git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ..\skill_kit_kch; ..\skill_kit_kch\bootstrap.ps1
+$k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { & "$k\bootstrap.ps1" }
 ```
 
 ```bash
-git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch && bash ../skill_kit_kch/bootstrap.sh
+k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh"
 ```
+
+이미 받아 둔 키트가 있으면 clone 대신 갱신한다. 그래서 두 번 실행해도 "already exists"로 멈추지 않는다.
 
 `--target`을 빼면 현재 폴더에 설치한다. 프로필은 끝에 `--profile python`처럼 붙인다. 이 방법은 당일 GitHub에 접속할 수 있어야 한다.
 
