@@ -46,6 +46,37 @@ k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [
   - 두 번째 실행: `Already up to date` 뒤 다시 `READY`.
   - git이 아닌 `../skill_kit_kch` 폴더가 있을 때: 안내 문구를 내고 설치하지 않음.
 
+### 스킬과 MCP를 더 받기
+
+위 한 줄은 기본 묶음만 설치한다. 기본 묶음은 키트 Skill과 superpowers의 디버깅·TDD·완료 전 검증이고, MCP는 없다. superpowers의 계획 체인, ponytail, MCP는 고를 때만 들어간다. 같은 한 줄 끝에 옵션을 붙여 다시 실행하면 키트를 갱신하고 추가로 설치한다.
+
+| 원하는 것 | 붙일 옵션 | 들어가는 것 |
+|---|---|---|
+| superpowers 계획 체인 | `--profile ...,workflow` | brainstorming, writing-plans, executing-plans, subagent-driven-development, using-git-worktrees, requesting/receiving-code-review, finishing-a-development-branch |
+| ponytail | `--profile ...,lean` | ponytail, ponytail-review, ponytail-audit, ponytail-debt, ponytail-gain |
+| 기본 MCP와 파이썬 도구 | `--profile python,...` | sequential-thinking MCP, pytest와 ruff(없을 때만 설치) |
+| MCP 하나씩 | `--mcp <이름>` (여러 번 가능) | `playwright`, `context7`, `fetch`, `git`, `filesystem`, `markitdown` 등. 목록과 위험도는 `docs/CATALOG.md` |
+
+예: 계획 체인, ponytail, MCP 3개(sequential-thinking, playwright, context7)를 Codex와 Claude Code 양쪽에 넣는다.
+
+Windows PowerShell:
+
+```powershell
+$k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\bootstrap.ps1" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7 }
+```
+
+bash:
+
+```bash
+k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7
+```
+
+- Claude Code와 Codex에 따로 실행할 필요는 없다. `--agent both`가 양쪽에 한 번에 넣는다. MCP는 Claude의 `.mcp.json`과 Codex의 `.codex/config.toml`에 들어간다.
+- 설치 뒤에는 에이전트 세션을 **새로** 연다. 그다음 `/skills`와 `/mcp`로 확인한다.
+- MCP 서버는 처음 켤 때 npm에서 내려받는다. playwright는 에이전트가 여는 사이트에 접속하고, context7는 조회할 때마다 외부 서비스를 쓴다. 둘 다 위험도 medium이다.
+- `python` 프로필이 pytest와 ruff를 설치하는 게 싫으면 `python` 대신 `core`를 쓰고, `--mcp sequential-thinking`을 붙인다.
+- 이 두 줄도 네트워크가 필요해서 자동 문서 명령 기록에는 없다(미검증 목록). 같은 옵션의 `plan`(바뀔 내용만 보기)은 2026-11-09에 이 저장소에서 실행했다. 결과는 종료 코드 0, 에이전트마다 Skill 28개와 MCP 3개였다.
+
 이미 받아 둔 키트로 다시 설치하거나 한쪽만 설치하려면 아래 명령을 쓴다.
 
 ### Codex

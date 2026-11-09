@@ -20,6 +20,8 @@ RECORD = KIT_ROOT / "docs" / "v2" / "regression" / "P7-T1-doc-commands.md"
 UNVERIFIED = {
     "git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch",
     "kit install --agent both --scope user --yes",
+    '$k=\'..\\skill_kit_kch\'; if (Test-Path "$k\\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\\bootstrap.ps1" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7 }',
+    'k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7',
     # the one-line download-and-install commands need the network; run by hand on 2026-11-09
     # (fresh folder, second run, non-git folder), see README "빠른 시작"
     '$k=\'..\\skill_kit_kch\'; if (Test-Path "$k\\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\\bootstrap.ps1" install --agent both }',
