@@ -3,17 +3,17 @@
 <!-- devtools/run_doc_commands.py가 만든다. 손으로 고치지 않는다. -->
 
 - 환경: Windows 11, Python 3.12.10
-- 방식: 명령마다 새 `python -I run_kit.py` 프로세스, 터미널 없음, 임시 작업 공간과 임시 HOME(`<home>`), 네트워크 없음. 문서의 설치 명령 중 네트워크를 쓸 수 있는 것은 `--offline`을 붙여 실행했다.
+- 방식: 명령별 별도 프로세스, 임시 작업 공간과 사용자 설정, 네트워크 없음. 네트워크를 쓸 수 있는 설치 명령에는 `--offline`을 붙였다. 프로젝트 설치는 예시의 상대 경로 대신 로컬 키트 경로를 사용했다.
 - 결과: 95개 실행, 기대와 다른 종료 코드 0개.
 
 | 문서 | 명령 | 기대 | 실제 | Status 줄 | 판정 |
 |---|---|---|---|---|---|
-| README.md | `bash ../skill_kit_kch/bootstrap.sh install --agent codex (+ --offline)` | 0 | 0 | READY | PASS |
-| README.md | `bash ../skill_kit_kch/bootstrap.sh install --agent claude (+ --offline)` | 0 | 0 | READY | PASS |
-| README.md | `bash ../skill_kit_kch/bootstrap.sh install --agent both (+ --offline)` | 0 | 0 | READY | PASS |
-| README.md | `..\skill_kit_kch\bootstrap.ps1 install --agent both (+ --offline)` | 0 | 0 | READY | PASS |
-| README.md | `kit install --agent both` | 0 | 0 | READY | PASS |
-| README.md | `kit help` | 0 | 0 | - | PASS |
+| README.md | `cd skill_kit_kch` | 0 | 0 | - | PASS |
+| README.md | `python devtools/install_agent_workflow.py` | 0 | 0 | - | PASS |
+| README.md | `python devtools/install_agent_workflow.py --apply` | 0 | 0 | - | PASS |
+| README.md | `python ../skill_kit_kch/run_kit.py install --agent both` | 0 | 0 | READY | PASS |
+| README.md | `python ../skill_kit_kch/run_kit.py verify --agent both` | 0 | 0 | READY | PASS |
+| EXAM_V1.md | `python ../skill_kit_kch/run_kit.py --offline` | 0 | 0 | READY | PASS |
 | INSTALL.md | `kit plan --agent both` | 0 | 0 | - | PASS |
 | INSTALL.md | `kit install --agent both --dry-run` | 0 | 0 | - | PASS |
 | INSTALL.md | `kit install --agent codex` | 0 | 0 | READY | PASS |
@@ -25,9 +25,9 @@
 | INSTALL.md | `kit uninstall --agent both --dry-run` | 0 | 0 | - | PASS |
 | INSTALL.md | `kit uninstall --agent both` | 0 | 0 | READY | PASS |
 | INSTALL.md | `kit install --agent codex --offline` | 0 | 0 | READY | PASS |
-| INSTALL.md | `kit restore --backup 20261108-142230 --dry-run` | 0 | 0 | - | PASS |
-| INSTALL.md | `kit restore --backup 20261108-142230` | 0 | 0 | READY | PASS |
-| INSTALL.md | `kit restore --agent codex --backup 20261108-142230` | 64 | 64 | usage error | PASS |
+| INSTALL.md | `kit restore --backup 20261118-224451 --dry-run` | 0 | 0 | - | PASS |
+| INSTALL.md | `kit restore --backup 20261118-224451` | 0 | 0 | READY | PASS |
+| INSTALL.md | `kit restore --agent codex --backup 20261118-224451` | 64 | 64 | usage error | PASS |
 | INSTALL.md | `kit install --agent both --offline` | 0 | 0 | READY | PASS |
 | INSTALL.md | `kit doctor` | 0 | 0 | - | PASS |
 | INSTALL.md | `kit profiles list` | 0 | 0 | - | PASS |

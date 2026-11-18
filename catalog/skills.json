@@ -541,6 +541,21 @@
       ]
     },
     {
+      "name": "grounded-answer",
+      "location": "shared/skills/grounded-answer",
+      "origin": "kit",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "core"
+      ],
+      "policies": [
+        "standard"
+      ]
+    },
+    {
       "name": "data-quality-validator",
       "location": "shared/skills/data-quality-validator",
       "origin": "kit",
@@ -1471,6 +1486,42 @@
       ],
       "include": {
         "LICENSE": "third_party/cloudflare-skills/LICENSE"
+      }
+    },
+    {
+      "name": "skillevaluator",
+      "location": "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator",
+      "origin": "source:skillevaluator",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "skill-tooling"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/NVIDIA-SkillEvaluator/LICENSE"
+      }
+    },
+    {
+      "name": "skill-inspector",
+      "location": "third_party/NVIDIA-SkillSpector/skills/skill-inspector",
+      "origin": "source:skill-inspector",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "packs": [
+        "skill-tooling"
+      ],
+      "policies": [
+        "standard"
+      ],
+      "include": {
+        "LICENSE": "third_party/NVIDIA-SkillSpector/LICENSE"
       }
     }
   ]

@@ -13,7 +13,7 @@ kit install --agent codex --mcp context7 --hooks  # MCP와 승인 훅을 함께
 | 파일 | 내용 | 키트가 쓰는 범위 |
 |---|---|---|
 | `AGENTS.md` | 작업 정책 | `<!-- hackathon-kit:begin -->` … `end` 구간만 |
-| `.agents/skills/<이름>/` | 스킬(기본 17개, restricted 11개) | 키트가 만든 파일만 |
+| `.agents/skills/<이름>/` | 스킬(기본 18개, restricted 11개) | 키트가 만든 파일만 |
 | `.codex/config.toml` | MCP 서버(프로필이나 `--mcp`로 고른 것) | `# hackathon-kit:begin` … `end` 구간만 |
 | `.codex/hooks.json`, `.codex/hooks/kit_approval.py` | 승인 훅(`--hooks`만) | 키트 소유 키만 |
 
@@ -41,6 +41,9 @@ Codex는 프로젝트의 `.codex/` 층(`config.toml`의 MCP, `hooks.json`)을 **
 - 이 명령들은 에이전트 안에서만 결과를 볼 수 있다. 이번 문서 작업에서는 실행하지 않았다(**미검증**).
 - 검토자가 실행하고 결과를 적는 표가 `docs/v2/AGENT_LOAD_CHECK.md` 1절이다.
 - 키트의 `verify`는 파일 상태만 확인한다. 그래서 `Load UNVERIFIED (run /skills in Codex)`로 나온다.
+- 저장소 작업 스킬은 `.codex/skills/<이름>/SKILL.md`에 둔다. Codex 0.170.0의
+  `skills/list`에서 이 경로가 `scope=repo`로 로드되는 것을 확인했다. 시험용
+  호환 기준인 `.agents/skills/`의 11개는 그대로 유지한다.
 
 ## 4. 사용자 범위
 

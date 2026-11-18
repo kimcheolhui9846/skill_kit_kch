@@ -14,7 +14,7 @@ kit --help
 - v1 설치기는 Codex 전용이고, 스킬 11개, `restricted` 정책이다.
 - 결과 트리와 보고서는 v1과 바이트 단위로 같다. 골든 테스트 `tests/golden/`가 매번 확인한다.
 - `kit --help`의 출력도 v1 그대로다. 새 명령의 도움말은 `kit help`다.
-- 시험 당일 절차(README의 "시험 당일 설치")도 그대로 쓸 수 있다.
+- 시험 당일에는 [시험 환경과 v1 설치 안내](EXAM_V1.md)를 따른다.
 
 **호환되는 것:**
 - 마커가 같다. `AGENTS.md`의 `<!-- hackathon-kit:begin -->` … `end`, `.codex/config.toml`의 `# hackathon-kit:begin` … `end`를 v2도 그대로 쓴다.
@@ -26,7 +26,7 @@ kit --help
 | | v1 | v2 (명령이 있는 호출) |
 |---|---|---|
 | 에이전트 | Codex | Codex, Claude Code, 둘 다(`--agent`) |
-| 기본 정책 | restricted(스킬 11개) | standard(스킬 17개: 외부 스킬 포함, `tdd-automator`→`test-driven-development`, `submission-validator`→`verification-before-completion`) |
+| 기본 정책 | restricted(스킬 11개) | standard(스킬 18개: 외부 스킬 포함, `tdd-automator`→`test-driven-development`, `submission-validator`→`verification-before-completion`) |
 | 설치 기록 | `.kit/state.json` | `.kit/state/install-manifest.json`(에이전트별 소유 항목) |
 | 수명 주기 | 설치, 검증 | 설치, 미리 보기, 검증, 업데이트, 제거, 백업 복원, 진단 |
 | 작업 흐름 | 없음 | Task 승인, 요구사항 추적, 테스트 보고, 반례, 세션 복구(`HITL_WORKFLOW.md`) |

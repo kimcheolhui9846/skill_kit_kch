@@ -2,7 +2,7 @@
 
 devtools/run_doc_commands.py runs the commands and writes the record
 docs/v2/regression/P7-T1-doc-commands.md. This test reads the code blocks of the guides and
-the v2 part of README and fails when a command there is not in the record (rerun the script
+README and fails when a command there is not in the record (rerun the script
 after changing a guide), or when the record has a command whose exit code was not expected.
 Commands the guides mark as not run (미검증) are listed in UNVERIFIED.
 """
@@ -15,17 +15,40 @@ import pytest
 
 from tests.conftest import KIT_ROOT
 
-GUIDES = ["INSTALL.md", "CODEX.md", "CLAUDE_CODE.md", "HITL_WORKFLOW.md", "MIGRATION_V1_TO_V2.md"]
+GUIDES = [
+    "INSTALL.md",
+    "CODEX.md",
+    "CLAUDE_CODE.md",
+    "HITL_WORKFLOW.md",
+    "MIGRATION_V1_TO_V2.md",
+    "EXAM_V1.md",
+]
 RECORD = KIT_ROOT / "docs" / "v2" / "regression" / "P7-T1-doc-commands.md"
+KIT_URL = "https://github.com/kimcheolhui9846/skill_kit_kch"
+PS_ONE_LINE = (
+    r"""$k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } """
+    """elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. """
+    f"""지우거나 옮긴 뒤 다시 실행하세요." }} else {{ git clone --depth 1 {KIT_URL}.git $k }}; """
+    "if ($? -and $LASTEXITCODE -eq 0) "
+)
+SH_ONE_LINE = (
+    'k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; '
+    'elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다.{advice}" '
+    f'>&2; false; else git clone --depth 1 {KIT_URL}.git "$k"; fi && bash "$k/bootstrap.sh"'
+)
 UNVERIFIED = {
-    "git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch",
-    "kit install --agent both --scope user --yes",
-    '$k=\'..\\skill_kit_kch\'; if (Test-Path "$k\\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\\bootstrap.ps1" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7 }',
-    'k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both --profile python,workflow,lean --mcp playwright --mcp context7',
-    # the one-line download-and-install commands need the network; run by hand on 2026-11-09
-    # (fresh folder, second run, non-git folder), see README "빠른 시작"
-    '$k=\'..\\skill_kit_kch\'; if (Test-Path "$k\\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\\bootstrap.ps1" install --agent both }',
-    'k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both',
+    # Public clone uses the network. INSTALL.md carries the note for README's clone.
+    f"git clone {KIT_URL}.git": "INSTALL.md",
+    "kit install --agent both --scope user --yes": "INSTALL.md",
+    PS_ONE_LINE + r'{ powershell -NoProfile -ExecutionPolicy Bypass -File "$k\bootstrap.ps1"'
+    " install --agent both }": "INSTALL.md",
+    SH_ONE_LINE.format(advice=" 지우거나 옮긴 뒤 다시 실행하세요.")
+    + " install --agent both": "INSTALL.md",
+    PS_ONE_LINE + r'{ & "$k\bootstrap.ps1" }': "EXAM_V1.md",
+    SH_ONE_LINE.format(advice=""): "EXAM_V1.md",
+    rf"git clone {KIT_URL} C:\kit": "EXAM_V1.md",
+    r"function kit { python C:\kit\run_kit.py @args }": "EXAM_V1.md",
+    r"function kit-update { git -C C:\kit pull --ff-only }": "EXAM_V1.md",
 }
 STAMP = re.compile(r"\b\d{8}-\d{6}(-\d+)?\b")
 
@@ -60,8 +83,7 @@ def _documented():
         text = (KIT_ROOT / "docs" / "guides" / name).read_text(encoding="utf-8")
         found += [(name, cmd) for cmd in _blocks(text)]
     readme = (KIT_ROOT / "README.md").read_text(encoding="utf-8")
-    v2_part = readme[: readme.index("# 기존 사용자 안내")]
-    found += [("README.md", cmd) for cmd in _blocks(v2_part)]
+    found += [("README.md", cmd) for cmd in _blocks(readme)]
     return found
 
 
@@ -81,9 +103,25 @@ def test_each_documented_command_was_run(doc, cmd):
 
 
 def test_unverified_commands_are_marked_in_the_guides():
-    for cmd in UNVERIFIED:
-        holders = [d for d, c in _documented() if c == cmd]
-        assert holders, cmd
-        for doc in holders:
-            path = KIT_ROOT / ("README.md" if doc == "README.md" else f"docs/guides/{doc}")
-            assert "미검증" in path.read_text(encoding="utf-8"), doc
+    documented = {cmd for _, cmd in _documented()}
+    for cmd, guide in UNVERIFIED.items():
+        assert cmd in documented
+        assert "미검증" in (KIT_ROOT / "docs" / "guides" / guide).read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "README.md",
+        "docs/guides/INSTALL.md",
+        "docs/guides/EXAM_V1.md",
+        "docs/guides/DEVELOPMENT.md",
+        "docs/guides/MIGRATION_V1_TO_V2.md",
+        "user/workflow/README.md",
+    ],
+)
+def test_quick_start_guide_links_exist(path):
+    doc = KIT_ROOT / path
+    for link in re.findall(r"\[[^\]]+\]\(([^)]+)\)", doc.read_text(encoding="utf-8")):
+        if "://" not in link:
+            assert (doc.parent / link.split("#", 1)[0]).exists(), (path, link)

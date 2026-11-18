@@ -2,11 +2,9 @@
 
     uv run python devtools/run_doc_commands.py
 
-Writes docs/v2/regression/P7-T1-doc-commands.md. Every kit call is a fresh
-`python -I run_kit.py ...` process with no terminal and HOME pointed at a temporary folder,
-in temporary workspaces; nothing outside them is written and the network is not used (the
-commands that would use it are run with --offline or --dry-run, or are marked unverified in the
-guides). Paths in the record are shown as <ws>, <home> and <kit>.
+Writes docs/v2/regression/P7-T1-doc-commands.md. Runs commands as separate processes with
+temporary workspaces and home/config directories. Commands that could use the network are
+run with --offline or --dry-run, or are marked unverified in the guides.
 """
 
 from __future__ import annotations
@@ -273,7 +271,7 @@ def migration_doc(r: Runner) -> None:
     r.kit(d, "install --agent codex --offline")
     r.kit(d, "verify --agent codex --offline")
     skills = sorted(p.name for p in (ws / ".agents" / "skills").iterdir())
-    assert len(skills) == 17, skills  # install cleans up what v1 wrote (follow-up 3)
+    assert len(skills) == 18, skills  # install cleans up what v1 wrote (follow-up 3)
     r.kit(d, "uninstall --agent codex")  # 4. going back
     r.kit(d, "--offline")
     ws = r.workspace("v1-b")
@@ -286,28 +284,52 @@ def migration_doc(r: Runner) -> None:
 
 def readme(r: Runner) -> None:
     d = "README.md"
-    bash = shutil.which("bash")
-    for agent in ("codex", "claude", "both"):
-        r.workspace(f"readme-{agent}")
-        if bash:
-            r.shell(
-                d,
-                f"bash ../skill_kit_kch/bootstrap.sh install --agent {agent} (+ --offline)",
-                [bash, (ROOT / "bootstrap.sh").as_posix(), "install", "--agent", agent]
-                + ["--offline"],
-            )
+    setup = r.workspace("readme-setup")
+    kit = setup / "skill_kit_kch"
+    kit.mkdir()
     if WINDOWS:
-        r.workspace("readme-ps1")
-        ps1 = str(ROOT / "bootstrap.ps1")
+        cd = [
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "$ErrorActionPreference='Stop'; cd skill_kit_kch",
+        ]
+    else:
+        cd = ["sh", "-c", "cd skill_kit_kch"]
+    r.shell(d, "cd skill_kit_kch", cd)
+
+    shutil.copytree(ROOT / "user" / "workflow", kit / "user" / "workflow")
+    (kit / "devtools").mkdir()
+    script = "devtools/install_agent_workflow.py"
+    shutil.copy2(ROOT / script, kit / script)
+    env = r.env
+    r.env = {
+        **env,
+        "CODEX_HOME": str(setup / "codex-config"),
+        "CLAUDE_CONFIG_DIR": str(setup / "claude-config"),
+    }
+    r.ws = kit
+    try:
+        r.shell(d, f"python {script}", [sys.executable, script])
+        r.shell(d, f"python {script} --apply", [sys.executable, script, "--apply"])
+    finally:
+        r.env = env
+
+    r.workspace("readme-project")
+    for command in ("install", "verify"):
+        args = [command, "--agent", "both"]
         r.shell(
             d,
-            "..\\skill_kit_kch\\bootstrap.ps1 install --agent both (+ --offline)",
-            ["powershell", "-NoProfile", "-Command", f"& '{ps1}' install --agent both --offline;"
-             " exit $LASTEXITCODE"],
-        )  # fmt: skip
-        r.workspace("readme-py")
-        r.kit(d, "install --agent both", extra=["--offline"])
-    r.kit(d, "help")
+            f"python ../skill_kit_kch/run_kit.py {' '.join(args)}",
+            [sys.executable, str(ROOT / "run_kit.py"), *args],
+        )
+
+    r.workspace("exam-offline")
+    r.shell(
+        "EXAM_V1.md",
+        "python ../skill_kit_kch/run_kit.py --offline",
+        [sys.executable, str(ROOT / "run_kit.py"), "--offline"],
+    )
 
 
 def write(r: Runner) -> int:
@@ -318,9 +340,9 @@ def write(r: Runner) -> int:
         "<!-- devtools/run_doc_commands.py가 만든다. 손으로 고치지 않는다. -->",
         "",
         f"- 환경: {platform.system()} {platform.release()}, Python {platform.python_version()}",
-        "- 방식: 명령마다 새 `python -I run_kit.py` 프로세스, 터미널 없음, 임시 작업 공간과 "
-        "임시 HOME(`<home>`), 네트워크 없음. 문서의 설치 명령 중 네트워크를 쓸 수 있는 것은 "
-        "`--offline`을 붙여 실행했다.",
+        "- 방식: 명령별 별도 프로세스, 임시 작업 공간과 사용자 설정, 네트워크 없음. "
+        "네트워크를 쓸 수 있는 설치 명령에는 `--offline`을 붙였다. "
+        "프로젝트 설치는 예시의 상대 경로 대신 로컬 키트 경로를 사용했다.",
         f"- 결과: {len(r.rows)}개 실행, 기대와 다른 종료 코드 {len(bad)}개.",
         "",
         "| 문서 | 명령 | 기대 | 실제 | Status 줄 | 판정 |",

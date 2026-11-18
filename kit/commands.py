@@ -125,7 +125,7 @@ Install for one agent:
 Commands:
   install   --agent codex|claude|both [--profile a,b] [--policy standard|restricted]
             [--target DIR] [--dry-run] [--offline] [--yes] [--no-mcp] [--verbose]
-            [--mcp NAME]... [--plugin NAME]... [--manual NAME]... [--hooks]
+            [--mcp NAME]... [--plugin NAME]... [--manual NAME]... [--hooks] [--skills-only]
             [--json | --report-json FILE]
   plan      same arguments as install; never writes
   verify    --agent codex|claude|both [--target DIR] [--offline] [--yes] [--no-mcp]
@@ -170,6 +170,9 @@ by default (verify and update keep what install chose).
 --manual prints the steps and risks of a tool in catalog/manual.json; the kit never runs it.
 --hooks (project scope) adds the approval hook: a reply that is only an approval word
     records the SUBMITTED task as approved (by human-hook); the agent cannot approve.
+--skills-only (--scope user) writes only the profile's skills to ~/.codex/skills and
+    ~/.claude/skills: your AGENTS.md/CLAUDE.md, OMX, config.toml, settings and MCP stay as
+    they are. update and verify keep the choice.
 --yes allows network use (installing missing tools, MCP handshake).
 Without a command, the legacy installer runs (Codex, restricted policy); see --help.
 
@@ -207,6 +210,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--plugin", action="append", default=[], metavar="NAME")
         p.add_argument("--manual", action="append", default=[], metavar="NAME")
         p.add_argument("--hooks", action="store_true")
+        p.add_argument("--skills-only", action="store_true")
     _common(sub.add_parser("verify", add_help=False), profile=False)
     for name in ("update", "uninstall", "restore"):
         p = sub.add_parser(name, add_help=False)
@@ -255,6 +259,7 @@ class Ctx:
     plugin_opt_in: List[str] = field(default_factory=list)  # --plugin
     manual: List[str] = field(default_factory=list)  # --manual: guides only (U-23)
     hooks: bool = False  # --hooks: approval hook, project scope (P5-T2b, ADR-011 L2)
+    skills_only: bool = False  # --skills-only: --scope user writes only the profile's skills
     verbose: bool = False
     json: bool = False
     report_json: Optional[Path] = None
@@ -313,11 +318,16 @@ def _ctx(ns: argparse.Namespace, cwd: Path, kit_root: Path) -> Ctx:
             )
         if getattr(ns, "hooks", False):
             raise UsageError("--hooks is for --scope project (reviewer decision 2026-11-07)")
+    elif getattr(ns, "skills_only", False):
+        raise UsageError("--skills-only is for --scope user")
     if ns.offline and ns.yes:
         raise UsageError("--offline and --yes cannot be combined")
     mcp_opt_in = _unique(getattr(ns, "mcp", []))
     if mcp_opt_in and ns.no_mcp:
         raise UsageError("--mcp and --no-mcp cannot be combined")
+    skills_only = getattr(ns, "skills_only", False)
+    if mcp_opt_in and skills_only:
+        raise UsageError("--mcp and --skills-only cannot be combined")
     if ns.command == "restore":
         if ns.agent is not None:
             raise UsageError("restore works on a backup, not an agent; drop --agent")
@@ -349,11 +359,12 @@ def _ctx(ns: argparse.Namespace, cwd: Path, kit_root: Path) -> Ctx:
         verify_only=ns.command == "verify",
         offline=ns.offline,
         yes=ns.yes,
-        no_mcp=ns.no_mcp,
+        no_mcp=ns.no_mcp or skills_only,  # --skills-only never touches MCP
         mcp_opt_in=mcp_opt_in,
         plugin_opt_in=_unique(getattr(ns, "plugin", [])),
         manual=_unique(getattr(ns, "manual", [])),
         hooks=getattr(ns, "hooks", False),
+        skills_only=skills_only,
         verbose=ns.verbose,
         json=ns.json,
         report_json=report_json,
@@ -362,7 +373,9 @@ def _ctx(ns: argparse.Namespace, cwd: Path, kit_root: Path) -> Ctx:
 
 
 def _adapter(ctx: Ctx, name: str):
-    return user_adapters.adapter_for(name, ctx.target) if ctx.user else registry.get(name)
+    if ctx.user:
+        return user_adapters.adapter_for(name, ctx.target, skills_only=ctx.skills_only)
+    return registry.get(name)
 
 
 def _confirm_user(ctx: Ctx, plan_text: str) -> None:
@@ -642,8 +655,22 @@ def _network_lines(gate: NetworkGate, done: bool) -> List[str]:
 # ---------------------------------------------------------------- manifest
 
 
+def _profile_skill_record(item: dict, entry: dict) -> bool:
+    owner = item.get("owner")
+    if owner is not None:
+        return isinstance(owner, str) and owner.startswith("skill:")
+    # Older full installs did not identify file ownership within the skill root.
+    return (entry.get("opt_in") or {}).get("skills_only") is True
+
+
 def _entry(
-    plan: AgentPlan, names: List[str], policy: str, stamp: str, target: Path, opt_in: tuple
+    plan: AgentPlan,
+    names: List[str],
+    policy: str,
+    stamp: str,
+    target: Path,
+    opt_in: tuple,
+    previous: Optional[dict] = None,
 ) -> dict:
     adapter = plan.adapter
     files, blocks, json_keys = [], [], []
@@ -659,10 +686,24 @@ def _entry(
         elif change.rel in (adapter.policy.rel, adapter.mcp_config.rel):
             blocks.append({"path": change.rel, "marker": "hackathon-kit", "sha256": change.record})
         else:
-            files.append({"path": change.rel, "sha256": change.record})
+            item = {"path": change.rel, "sha256": change.record}
+            if getattr(adapter, "scope", None) == "user":
+                item["owner"] = change.owner
+            files.append(item)
     choices = {"mcp": list(opt_in[0]), "plugins": list(opt_in[1])}
     if len(opt_in) > 2 and opt_in[2]:
         choices["hooks"] = True
+    if len(opt_in) > 3 and opt_in[3]:
+        choices["skills_only"] = True
+        if previous:
+            planned = {change.rel for change in plan.changes}
+            files.extend(
+                {"owner": "legacy", **item}
+                for item in previous.get("files", [])
+                if item["path"] not in planned and not _profile_skill_record(item, previous)
+            )
+            blocks.extend(previous.get("blocks", []))
+            json_keys.extend(previous.get("json_keys", []))
     return {
         "agent": adapter.name,
         "profiles": names,
@@ -699,7 +740,8 @@ def _load_manifest(ctx: Ctx) -> manifest_mod.Manifest:
 
 
 def _installed_spec(ctx: Ctx, man: manifest_mod.Manifest, agent: str) -> Optional[tuple]:
-    """(profile spec, policy, mcp opt-ins, plugin opt-ins, hooks) recorded for an agent.
+    """(profile spec, policy, mcp opt-ins, plugin opt-ins, hooks, skills only) recorded for an
+    agent.
 
     v1 state counts for codex.
     """
@@ -712,13 +754,14 @@ def _installed_spec(ctx: Ctx, man: manifest_mod.Manifest, agent: str) -> Optiona
             tuple(opt.get("mcp") or ()),
             tuple(opt.get("plugins") or ()),
             opt.get("hooks") is True,
+            opt.get("skills_only") is True,
         )
     if agent == "codex" and not ctx.user:
         try:
             data = json.loads((ctx.target / STATE_REL).read_text(encoding="utf-8"))
             if isinstance(data.get("profile"), str):
                 # legacy path = restricted (ADR-015)
-                return data["profile"], "restricted", (), (), False
+                return data["profile"], "restricted", (), (), False, False
         except (OSError, ValueError, AttributeError):
             pass
     return None
@@ -767,9 +810,16 @@ def _run_verify(ctx: Ctx, man: manifest_mod.Manifest, out: TextIO) -> int:
     for agent, spec in specs.items():
         groups.setdefault(spec, []).append(agent)
     runs = []
-    for (spec, policy, mcp, plugins, hooks), agents in groups.items():
+    for (spec, policy, mcp, plugins, hooks, skills_only), agents in groups.items():
         resolved = profile_resolver.resolve(ctx.kit_root, spec, policy_override=policy)
-        group = replace(ctx, mcp_opt_in=list(mcp), plugin_opt_in=list(plugins), hooks=hooks)
+        group = replace(
+            ctx,
+            mcp_opt_in=list(mcp),
+            plugin_opt_in=list(plugins),
+            hooks=hooks,
+            skills_only=skills_only,
+            no_mcp=ctx.no_mcp or skills_only,
+        )
         runs.append((group, resolved, policy, agents))
     held = False
     if not ctx.verify_only and len(runs) > 1:
@@ -939,8 +989,9 @@ def _execute(
         _plugins(ctx, man, plan, gate, wrote)
     if wrote:
         for plan in plans:
-            opt_in = (ctx.mcp_opt_in, ctx.plugin_opt_in, ctx.hooks)
-            man.record(_entry(plan, resolved.names, policy, stamp, ctx.target, opt_in))
+            opt_in = (ctx.mcp_opt_in, ctx.plugin_opt_in, ctx.hooks, ctx.skills_only)
+            previous = man.install_for(plan.adapter.name) if ctx.skills_only else None
+            man.record(_entry(plan, resolved.names, policy, stamp, ctx.target, opt_in, previous))
         try:
             manifest_mod.save(_manifest_path(ctx), man)
         except OSError as exc:
@@ -1072,6 +1123,8 @@ def _stale_removal(ctx: Ctx, man: manifest_mod.Manifest, plan: AgentPlan):
     if plan.include_mcp:
         rels.add(plan.adapter.mcp_config.rel)  # partly owned file: compare per key
     stale = lifecycle.stale_part(entry, rels, keys)
+    if ctx.skills_only:
+        stale = {"files": [f for f in stale["files"] if _profile_skill_record(f, entry)]}
     removal = lifecycle.plan_removal(ctx.target, stale, plan.adapter)
     removal.conflicts += [c for c in adoption_conflicts if c.partition(": ")[0] not in rels]
     return removal
@@ -1302,10 +1355,10 @@ def _agent_summary(plan: AgentPlan) -> str:
     mcp_item = by_name.get("mcp-config") or by_name.get(adapter.mcp_config.rel)
     if not plan.view.profile.mcp:
         mcp = "none"
-    elif getattr(adapter, "mcp_manual", False):
-        mcp = f"{len(plan.view.profile.mcp)} to add by hand (claude mcp add --scope user)"
     elif not plan.include_mcp:
         mcp = "off (--no-mcp)"
+    elif getattr(adapter, "mcp_manual", False):
+        mcp = f"{len(plan.view.profile.mcp)} to add by hand (claude mcp add --scope user)"
     elif mcp_item is not None and mcp_item.verified == PASS:
         mcp = f"{len(plan.view.profile.mcp)} registered in {adapter.mcp_config.rel}"
     else:

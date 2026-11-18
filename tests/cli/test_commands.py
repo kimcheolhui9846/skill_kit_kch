@@ -25,7 +25,8 @@ def files(ws):
 # core on the standard policy: 11 kit skills - 3 replaced/varied by superpowers + 3 of them
 # + requesting-code-review, receiving-code-review, karpathy-guidelines (P4-T4)
 STANDARD_CORE = (
-    17  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7)
+    18  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7),
+    # +grounded-answer (2026-11-17)
 )
 
 
@@ -46,7 +47,7 @@ def test_codex_install_writes_only_codex_files(run_kit, workspace, isolated_home
     text = (workspace / "AGENTS.md").read_text(encoding="utf-8")
     assert "# Codex Project Policy" in text and "Restrictions" not in text
     assert "`.agents/skills/`" in text and "Claude" not in text
-    assert "Agent codex:  AGENTS.md INSTALLED | Skills 17/17 verified in .agents/skills/" in out
+    assert "Agent codex:  AGENTS.md INSTALLED | Skills 18/18 verified in .agents/skills/" in out
     assert (
         "replaced skills: tdd-automator -> test-driven-development, "
         "submission-validator -> verification-before-completion" in out
@@ -66,7 +67,7 @@ def test_claude_install_writes_only_claude_files(run_kit, workspace, isolated_ho
     assert "Codex" not in text
     mcp = json.loads((workspace / ".mcp.json").read_text(encoding="utf-8"))
     assert list(mcp["mcpServers"]) == ["sequential-thinking"]
-    assert "Agent claude: CLAUDE.md INSTALLED | Skills 17/17 verified in .claude/skills/" in out
+    assert "Agent claude: CLAUDE.md INSTALLED | Skills 18/18 verified in .claude/skills/" in out
     assert "Run /mcp in Claude Code" in out and "Agent codex" not in out
     assert not (workspace / ".claude/settings.local.json").exists()
     assert not any(isolated_home.rglob("*"))
@@ -358,7 +359,7 @@ def test_doctor_is_read_only(run_kit, workspace):
     before = tree_digest(workspace, exclude=())
     code, out = run_kit("doctor")
     assert code == EXIT_READY
-    assert "CLAUDE.md kit block yes | 17 skill(s) in .claude/skills/ | manifest yes" in out
+    assert "CLAUDE.md kit block yes | 18 skill(s) in .claude/skills/ | manifest yes" in out
     assert "AGENTS.md kit block no | 0 skill(s)" in out
     assert tree_digest(workspace, exclude=()) == before
     data = json.loads(run_kit("doctor", "--json")[1])

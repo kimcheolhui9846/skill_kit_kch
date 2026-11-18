@@ -1,0 +1,22 @@
+{
+  "schema": 2,
+  "name": "skill-tooling",
+  "kind": "pack",
+  "description": "Opt-in skill-authoring tools from NVIDIA (standard policy only, never restricted): skillevaluator (run and read SkillEvaluator benchmarks of a SKILL.md; needs the skillevaluator CLI, Python 3.12-3.14, and Docker plus an LLM key for live runs) and skill-inspector (review a skill before installing it with SkillSpector). The kit installs neither CLI.",
+  "agents": [
+    "codex",
+    "claude"
+  ],
+  "policy": null,
+  "skills": {
+    "shared": []
+  },
+  "required_skills": {
+    "shared": []
+  },
+  "mcp": {
+    "shared": []
+  },
+  "tools": [],
+  "checks": []
+}

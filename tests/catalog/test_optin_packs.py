@@ -60,6 +60,7 @@ PACKS = {
         "write-swift",
     ],
     "planning-extras": ["domain-modeling", "handoff", "to-spec"],
+    "skill-tooling": ["skill-inspector", "skillevaluator"],
 }
 NEW = sorted({name for names in PACKS.values() for name in names})
 ROOTS = (".agents/skills", ".claude/skills")
@@ -145,11 +146,12 @@ def test_vendored_files_match_the_lock(kit_root):
             by_pack.setdefault(pack, []).append(entry)
     for pack in PACKS:
         entries = by_pack[pack]
-        assert len(entries) == 1, pack
-        entry = entries[0]
-        assert entry["risk"] in ("low", "medium")
-        assert entry["added_by"] == "source add"
-        assert entry["integration"] == "vendored-verbatim"
-        assert len(entry["commit"]) == 40
-        for rel in entry["files"]:
-            assert (kit_root / rel).is_file(), rel
+        # skill-tooling takes one skill from each of two NVIDIA repositories
+        assert len(entries) == (2 if pack == "skill-tooling" else 1), pack
+        for entry in entries:
+            assert entry["risk"] in ("low", "medium")
+            assert entry["added_by"] == "source add"
+            assert entry["integration"] == "vendored-verbatim"
+            assert len(entry["commit"]) == 40
+            for rel in entry["files"]:
+                assert (kit_root / rel).is_file(), rel

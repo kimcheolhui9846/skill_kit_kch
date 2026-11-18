@@ -48,8 +48,8 @@ def test_v1_then_standard_install_leaves_no_v1_files(run_kit, workspace):
     assert set(V1_ONLY) <= set(skill_dirs(workspace))
     code, out = run_kit("install", "--agent", "codex", "--offline")
     assert code == EXIT_READY, out
-    assert "Skills 17/17" in out
-    assert len(skill_dirs(workspace)) == 17
+    assert "Skills 18/18" in out
+    assert len(skill_dirs(workspace)) == 18
     assert not set(V1_ONLY) & set(skill_dirs(workspace))
     assert not (workspace / ".agents/skills/systematic-debugging/examples/example.md").exists()
     assert "removed (no longer in the profile):" in out
@@ -90,7 +90,7 @@ def test_a_smaller_profile_removes_what_it_dropped(run_kit, workspace, agent, ro
     code, out = run_kit("install", "--agent", agent, "--offline")
     assert code == EXIT_READY, out
     narrow = set(skill_dirs(workspace, root))
-    assert len(wide) == 23 and len(narrow) == 17 and narrow < wide
+    assert len(wide) == 24 and len(narrow) == 18 and narrow < wide
     assert_everything_is_recorded(workspace)
 
 
@@ -170,7 +170,7 @@ def test_the_other_agent_keeps_its_files(run_kit, workspace):
     run_kit("install", "--agent", "codex", "--offline")
     after = {k: v for k, v in tree_digest(workspace, exclude=NOT_KIT).items() if ".claude" in k}
     assert after == claude
-    assert len(skill_dirs(workspace)) == 17
+    assert len(skill_dirs(workspace)) == 18
 
 
 def test_partly_owned_files_lose_only_the_kit_parts(run_kit, workspace):

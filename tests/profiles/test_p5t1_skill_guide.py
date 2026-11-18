@@ -58,8 +58,9 @@ def test_every_hyphenated_word_in_the_guide_is_a_skill():
     words = {w for w in NAME.findall(text) if "-" in w}
     assert words - known == set()
     assert (
-        len(guide_skills()) == 17
-    )  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7)
+        len(guide_skills()) == 18
+    )  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7),
+    # +grounded-answer (2026-11-17)
 
 
 @pytest.mark.parametrize(

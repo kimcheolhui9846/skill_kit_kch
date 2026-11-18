@@ -17,7 +17,8 @@ from tests.userscope.pc_fixture import USER, kit_run, make_pc, put
 OMX_SKILLS = 29
 OMX_PROMPTS = 32
 STANDARD_CORE = (
-    17  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7)
+    18  # +task-approval (P5-T2), +data-quality-validator (P5-T6), +session-recovery (P5-T7),
+    # +grounded-answer (2026-11-17)
 )
 CODEX_BLOCK = "## Rules\n- Work from `${HOME}\\work`.\n"
 CLAUDE_BLOCK = "# Global\n- Commit as the user.\n"
