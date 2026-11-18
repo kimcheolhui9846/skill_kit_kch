@@ -115,6 +115,24 @@
           "get_it": "https://typesafe.ai"
         }
       ]
+    },
+    "ralph-loop": {
+      "agents": ["claude"],
+      "policies": ["standard"],
+      "license": "Apache-2.0",
+      "version": "1.0.1",
+      "origin": "https://github.com/anthropics/claude-plugins-official",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-plugins-official",
+        "path": "plugins/ralph-loop",
+        "sha": "fd30cee3ecd5a8ee772733c5d20c0f2bae2da2f0"
+      },
+      "risk": "low",
+      "enabled_by_default": false,
+      "disabled_reason": "its Stop hook keeps the session going with the same prompt while .claude/ralph-loop.local.md exists; without --max-iterations or --completion-promise the loop never ends. Opt in with --plugin ralph-loop",
+      "network_egress": "none found when its scripts were read (2026-11-17)",
+      "file_access": "writes and deletes .claude/ralph-loop.local.md in the workspace; reads the session transcript; needs bash, jq and perl"
     }
   }
 }

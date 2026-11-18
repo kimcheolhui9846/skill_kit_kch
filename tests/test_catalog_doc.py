@@ -24,6 +24,6 @@ def test_catalog_doc_is_current():
 
 
 def test_default_install_matches_the_catalog_doc():
-    """The default (core,hitl, standard) is what README promises: 17 skills for each agent."""
+    """The default (core,hitl, standard) is what README promises: 18 skills for each agent."""
     text = (KIT_ROOT / "docs" / "CATALOG.md").read_text(encoding="utf-8")
-    assert "| `core` | 11 | 17 |" in text
+    assert "| `core` | 11 | 18 |" in text

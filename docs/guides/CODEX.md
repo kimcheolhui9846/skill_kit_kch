@@ -13,7 +13,7 @@ kit install --agent codex --mcp context7 --hooks  # MCP와 승인 훅을 함께
 | 파일 | 내용 | 키트가 쓰는 범위 |
 |---|---|---|
 | `AGENTS.md` | 작업 정책 | `<!-- hackathon-kit:begin -->` … `end` 구간만 |
-| `.agents/skills/<이름>/` | 스킬(기본 17개, restricted 11개) | 키트가 만든 파일만 |
+| `.agents/skills/<이름>/` | 스킬(기본 18개, restricted 11개) | 키트가 만든 파일만 |
 | `.codex/config.toml` | MCP 서버(프로필이나 `--mcp`로 고른 것) | `# hackathon-kit:begin` … `end` 구간만 |
 | `.codex/hooks.json`, `.codex/hooks/kit_approval.py` | 승인 훅(`--hooks`만) | 키트 소유 키만 |
 

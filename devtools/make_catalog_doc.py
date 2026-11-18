@@ -31,6 +31,7 @@ PACK_COMBOS = (
     "core,cloudflare",
     "core,motion",
     "core,planning-extras",
+    "core,skill-tooling",
 )
 POLICIES = ("restricted", "standard")
 HOME_VARS = ("HOME", "USERPROFILE", "CODEX_HOME", "CLAUDE_CONFIG_DIR")
