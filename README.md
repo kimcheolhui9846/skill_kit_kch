@@ -4,7 +4,7 @@ Git과 Python 3.9 이상이 필요합니다. `python3`로 설치했다면 아래
 
 ## 1. 새 기기에서 한 번
 
-작업할 프로젝트의 **부모 폴더**에서 실행합니다. 키트는 프로젝트 옆 `skill_kit_kch` 폴더에 받습니다. 이미 그 위치에 받았다면 `git clone`만 건너뛰세요.
+작업할 프로젝트의 **부모 폴더**에서 실행합니다. 이미 그 위치에 `skill_kit_kch`의 `main`을 받아 두었다면 아래 `git clone` 대신 `git -C skill_kit_kch pull --ff-only`로 갱신하세요.
 
 ```bash
 git clone https://github.com/kimcheolhui9846/skill_kit_kch.git
