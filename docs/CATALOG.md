@@ -6,7 +6,7 @@
 
 ## 1. 스킬 (`catalog/skills.json`)
 
-82개. 출처 `kit`은 이 저장소의 스킬이고, `source:`는 `third_party/`에 고정 커밋으로 들여온 외부 스킬이다(라이선스는 `THIRD_PARTY_NOTICES.md`, 해시는 `sources.lock.json`).
+85개. 출처 `kit`은 이 저장소의 스킬이고, `source:`는 `third_party/`에 고정 커밋으로 들여온 외부 스킬이다(라이선스는 `THIRD_PARTY_NOTICES.md`, 해시는 `sources.lock.json`).
 
 | 스킬 | 출처 | 에이전트 | 팩 | 정책 |
 |---|---|---|---|---|
@@ -45,6 +45,7 @@
 | `finishing-a-development-branch` | source:superpowers-workflow | codex, claude | workflow | standard |
 | `frameworks-on-cloudflare` | source:cloudflare-skills | codex, claude | cloudflare | standard |
 | `frontend-design` | source:anthropics-frontend-design | codex, claude | web, fullstack | standard |
+| `grounded-answer` | kit | codex, claude | core | standard |
 | `handoff` | source:mattpocock-skills | codex, claude | planning-extras | standard |
 | `implementation-review` | kit | codex, claude | core | restricted, standard |
 | `improve-animations` | source:emilkowalski-skills | codex, claude | motion | standard |
@@ -72,6 +73,8 @@
 | `scientific-critical-thinking` | source:k-dense-ai-scientific-agent-skills | codex, claude | research | standard |
 | `scikit-learn` | source:k-dense-ai-scientific-agent-skills | codex, claude | research | standard |
 | `session-recovery` | kit | codex, claude | core | standard |
+| `skill-inspector` | source:skill-inspector | codex, claude | skill-tooling | standard |
+| `skillevaluator` | source:skillevaluator | codex, claude | skill-tooling | standard |
 | `statistical-analysis` | source:k-dense-ai-scientific-agent-skills | codex, claude | research | standard |
 | `statistical-power` | source:k-dense-ai-scientific-agent-skills | codex, claude | research | standard |
 | `subagent-driven-development` | source:superpowers-workflow | codex, claude | workflow | standard |
@@ -99,54 +102,57 @@
 
 | 프로필 | restricted | standard |
 |---|---|---|
-| `core` | 11 | 17 |
-| `python` | 11 | 17 |
-| `data` | 11 | 17 |
-| `web` | 11 | 21 |
-| `full` | 11 | 17 |
-| `hackathon` | 11 | 17 |
-| `fullstack` | 11 | 21 |
-| `ai-research` | 11 | 24 |
-| `core,workflow` | 11 | 23 |
-| `core,research` | 11 | 24 |
-| `core,eng-patterns` | 11 | 24 |
-| `core,lean` | 11 | 22 |
-| `core,cloudflare` | 11 | 30 |
-| `core,motion` | 11 | 33 |
-| `core,planning-extras` | 11 | 20 |
+| `core` | 11 | 18 |
+| `python` | 11 | 18 |
+| `data` | 11 | 18 |
+| `web` | 11 | 22 |
+| `full` | 11 | 18 |
+| `hackathon` | 11 | 18 |
+| `fullstack` | 11 | 22 |
+| `ai-research` | 11 | 25 |
+| `core,workflow` | 11 | 24 |
+| `core,research` | 11 | 25 |
+| `core,eng-patterns` | 11 | 25 |
+| `core,lean` | 11 | 23 |
+| `core,cloudflare` | 11 | 31 |
+| `core,motion` | 11 | 34 |
+| `core,planning-extras` | 11 | 21 |
+| `core,skill-tooling` | 11 | 20 |
 
 목록:
 
 - `core` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `core` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `python` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `python` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `python` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `data` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `data` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `data` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `web` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `web` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, emil-design-eng, frontend-design, implementation-review, karpathy-guidelines, launch-compliance-check, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, web-design-guidelines
+- `web` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, emil-design-eng, frontend-design, grounded-answer, implementation-review, karpathy-guidelines, launch-compliance-check, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, web-design-guidelines
 - `full` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `full` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `full` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `hackathon` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `hackathon` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `hackathon` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `fullstack` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `fullstack` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, emil-design-eng, frontend-design, implementation-review, karpathy-guidelines, launch-compliance-check, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, web-design-guidelines
+- `fullstack` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, emil-design-eng, frontend-design, grounded-answer, implementation-review, karpathy-guidelines, launch-compliance-check, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, web-design-guidelines
 - `ai-research` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `ai-research` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, experimental-design, exploratory-data-analysis, implementation-review, karpathy-guidelines, pytorch-lightning, receiving-code-review, requesting-code-review, scientific-critical-thinking, scikit-learn, session-recovery, statistical-analysis, statistical-power, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `ai-research` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, experimental-design, exploratory-data-analysis, grounded-answer, implementation-review, karpathy-guidelines, pytorch-lightning, receiving-code-review, requesting-code-review, scientific-critical-thinking, scikit-learn, session-recovery, statistical-analysis, statistical-power, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `core,workflow` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,workflow` / standard: algorithm-optimizer, algorithm-options, benchmark, brainstorming, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, executing-plans, finishing-a-development-branch, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, subagent-driven-development, systematic-debugging, task-approval, task-router, test-driven-development, using-git-worktrees, verification-before-completion, writing-plans
+- `core,workflow` / standard: algorithm-optimizer, algorithm-options, benchmark, brainstorming, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, executing-plans, finishing-a-development-branch, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, subagent-driven-development, systematic-debugging, task-approval, task-router, test-driven-development, using-git-worktrees, verification-before-completion, writing-plans
 - `core,research` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,research` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, experimental-design, exploratory-data-analysis, implementation-review, karpathy-guidelines, pytorch-lightning, receiving-code-review, requesting-code-review, scientific-critical-thinking, scikit-learn, session-recovery, statistical-analysis, statistical-power, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `core,research` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, experimental-design, exploratory-data-analysis, grounded-answer, implementation-review, karpathy-guidelines, pytorch-lightning, receiving-code-review, requesting-code-review, scientific-critical-thinking, scikit-learn, session-recovery, statistical-analysis, statistical-power, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `core,eng-patterns` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,eng-patterns` / standard: accessibility, algorithm-optimizer, algorithm-options, api-design, architecture-decision-records, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, database-migrations, design-review, error-handling, implementation-review, karpathy-guidelines, python-testing, receiving-code-review, regex-vs-llm-structured-text, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `core,eng-patterns` / standard: accessibility, algorithm-optimizer, algorithm-options, api-design, architecture-decision-records, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, database-migrations, design-review, error-handling, grounded-answer, implementation-review, karpathy-guidelines, python-testing, receiving-code-review, regex-vs-llm-structured-text, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `core,lean` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,lean` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, implementation-review, karpathy-guidelines, ponytail, ponytail-audit, ponytail-debt, ponytail-gain, ponytail-review, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
+- `core,lean` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, ponytail, ponytail-audit, ponytail-debt, ponytail-gain, ponytail-review, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 - `core,cloudflare` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,cloudflare` / standard: agents-sdk, algorithm-optimizer, algorithm-options, benchmark, cloudflare-app-bootstrap, cloudflare-one-migrations, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, durable-objects, frameworks-on-cloudflare, implementation-review, k2, karpathy-guidelines, receiving-code-review, requesting-code-review, sandbox-migrate-to-next, sandbox-next, sandbox-stable, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, workers-best-practices, workers-development, workers-profiling, wrangler
+- `core,cloudflare` / standard: agents-sdk, algorithm-optimizer, algorithm-options, benchmark, cloudflare-app-bootstrap, cloudflare-one-migrations, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, durable-objects, frameworks-on-cloudflare, grounded-answer, implementation-review, k2, karpathy-guidelines, receiving-code-review, requesting-code-review, sandbox-migrate-to-next, sandbox-next, sandbox-stable, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, workers-best-practices, workers-development, workers-profiling, wrangler
 - `core,motion` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,motion` / standard: algorithm-optimizer, algorithm-options, animate, animate-expo, animation-performance, animation-vocabulary, apple-design, ask-sonner, benchmark, break-ui, choreograph, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, find-animation-opportunities, implementation-review, improve-animations, karpathy-guidelines, mobile-native, pick-ui-library, prototype, receiving-code-review, remove-animations, requesting-code-review, review-animations, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, write-swift
+- `core,motion` / standard: algorithm-optimizer, algorithm-options, animate, animate-expo, animation-performance, animation-vocabulary, apple-design, ask-sonner, benchmark, break-ui, choreograph, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, find-animation-opportunities, grounded-answer, implementation-review, improve-animations, karpathy-guidelines, mobile-native, pick-ui-library, prototype, receiving-code-review, remove-animations, requesting-code-review, review-animations, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion, write-swift
 - `core,planning-extras` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
-- `core,planning-extras` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, domain-modeling, handoff, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, to-spec, verification-before-completion
+- `core,planning-extras` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, domain-modeling, grounded-answer, handoff, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, systematic-debugging, task-approval, task-router, test-driven-development, to-spec, verification-before-completion
+- `core,skill-tooling` / restricted: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, design-review, implementation-review, submission-validator, systematic-debugging, task-router, tdd-automator
+- `core,skill-tooling` / standard: algorithm-optimizer, algorithm-options, benchmark, codebase-explorer, counterexample-hunter, data-quality-validator, design-review, grounded-answer, implementation-review, karpathy-guidelines, receiving-code-review, requesting-code-review, session-recovery, skill-inspector, skillevaluator, systematic-debugging, task-approval, task-router, test-driven-development, verification-before-completion
 
 ## 3. MCP 서버 (`catalog/mcp.json`)
 
@@ -177,6 +183,7 @@
 | `replay-theater` | claude | standard | medium | Apache-2.0 | Claude Code mod with hooks (hooks/hooks.json, replay-theater.mjs) that steps through the last turn's edits; needs Claude Code 2.1.287 or later. Opt in with --plugin replay-theater |
 | `savvy-progress` | claude | standard | medium | MIT | Claude Code mod (progress bar and agents panel) that runs its own code in every session. Opt in with --plugin savvy-progress |
 | `effortless` | claude | standard | high | MIT | calls Haiku on every prompt (and for every compaction) on your Claude login; its in-app Update button copies a newer version over the pinned one, bypassing the pin; a key pasted into its setup guide is stored in plain text in ~/.config/jev/.env; it needs CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 in your user settings, which the kit does not set. Opt in with --plugin effortless |
+| `ralph-loop` | claude | standard | low | Apache-2.0 | its Stop hook keeps the session going with the same prompt while .claude/ralph-loop.local.md exists; without --max-iterations or --completion-promise the loop never ends. Opt in with --plugin ralph-loop |
 
 ## 5. 수동 도구 (`catalog/manual.json`)
 

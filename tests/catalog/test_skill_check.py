@@ -76,8 +76,9 @@ def test_every_catalog_skill_is_clean(kit_root, agent, policy):
         checked += 1
     # standard: +7 research pack (U-40), +task-approval (P5-T2), +launch-compliance-check,
     # +44 opt-in pack skills (2026-11-08: eng-patterns 7, lean 5, cloudflare 13, motion 16,
-    # planning-extras 3)
-    assert checked == {"restricted": 11, "standard": 79}[policy]
+    # planning-extras 3), +2 skill tooling (2026-11-17: skillevaluator, skill-inspector),
+    # +grounded-answer (2026-11-17)
+    assert checked == {"restricted": 11, "standard": 82}[policy]
 
 
 # ---------------------------------------------------------------- spec rules (both agents)

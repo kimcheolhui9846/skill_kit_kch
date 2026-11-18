@@ -189,6 +189,7 @@ def test_standard_replaces_and_adds_vendored_skills(kit_root, workspace):
             "counterexample-hunter",
             "data-quality-validator",
             "session-recovery",
+            "grounded-answer",  # 2026-11-17
             "design-review",
             "implementation-review",
             "task-approval",

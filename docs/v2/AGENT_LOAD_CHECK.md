@@ -36,14 +36,14 @@ cd "$WS"
 
 **기대 결과:** 두 명령 모두 `Status: READY`로 끝난다. `verify`의 Load 칸은 `UNVERIFIED`다.
 
-**설치되는 것** (2026-11-08에 임시 폴더에 실제로 설치해 확인했다):
+**현재 기본 설치 항목**
 
 | 대상 | 파일 |
 |---|---|
-| Codex | `AGENTS.md`, `.agents/skills/`(스킬 17개), `.codex/config.toml`(`[mcp_servers.context7]`), `.codex/hooks.json`, `.codex/hooks/kit_approval.py` |
-| Claude Code | `CLAUDE.md`, `.claude/skills/`(같은 17개), `.mcp.json`(`context7`), `.claude/settings.json`(`hooks`), `.claude/hooks/kit_approval.py`, `.claude/agents/counterexample-blackbox.md` |
+| Codex | `AGENTS.md`, `.agents/skills/`(스킬 18개), `.codex/config.toml`(`[mcp_servers.context7]`), `.codex/hooks.json`, `.codex/hooks/kit_approval.py` |
+| Claude Code | `CLAUDE.md`, `.claude/skills/`(같은 18개), `.mcp.json`(`context7`), `.claude/settings.json`(`hooks`), `.claude/hooks/kit_approval.py`, `.claude/agents/counterexample-blackbox.md` |
 
-**스킬 17개:** `algorithm-optimizer`, `algorithm-options`, `benchmark`, `codebase-explorer`, `counterexample-hunter`, `data-quality-validator`, `design-review`, `implementation-review`, `karpathy-guidelines`, `receiving-code-review`, `requesting-code-review`, `session-recovery`, `systematic-debugging`, `task-approval`, `task-router`, `test-driven-development`, `verification-before-completion`
+**스킬 18개:** `algorithm-optimizer`, `algorithm-options`, `benchmark`, `codebase-explorer`, `counterexample-hunter`, `data-quality-validator`, `design-review`, `grounded-answer`, `implementation-review`, `karpathy-guidelines`, `receiving-code-review`, `requesting-code-review`, `session-recovery`, `systematic-debugging`, `task-approval`, `task-router`, `test-driven-development`, `verification-before-completion`
 
 **참고:**
 - `context7` 서버는 에이전트가 시작할 때 `npx`로 패키지를 받는다. 이 단계는 키트가 아니라 에이전트가 네트워크를 쓴다.
@@ -54,7 +54,7 @@ cd "$WS"
 | ID | 확인 항목 | 명령(어디서) | 기대 결과 | 출처 | 결과(검토자) | 날짜·버전 |
 |---|---|---|---|---|---|---|
 | C-01 | 프로젝트 지침(`AGENTS.md`) 로드 | 셸, `$WS`에서: `codex --ask-for-approval never "Summarize the current instructions."` | 요약에 키트 정책이 나온다. 예: 복잡한 작업은 task-router로 시작, 실행하지 않은 테스트를 통과라고 하지 않음 | CX-AG | | |
-| C-02 | 프로젝트 스킬 로드 | `codex` TUI에서 `/skills` | 위 17개가 보인다. 같은 이름이 두 번 나오지 않는다. `.claude/skills`의 사본이 따로 보이지 않는다(R-4: 문서에 근거가 없어 확인이 필요함) | CX-SK | | |
+| C-02 | 프로젝트 스킬 로드 | `codex` TUI에서 `/skills` | 위 목록의 스킬이 모두 보인다. 같은 이름이 두 번 나오지 않는다. `.claude/skills`의 사본이 따로 보이지 않는다(R-4: 문서에 근거가 없어 확인이 필요함) | CX-SK | | |
 | C-03 | 스킬 호출 | TUI 입력창에 `$` 입력 | 목록에 `task-router` 등 키트 스킬이 나온다 | CX-SK | | |
 | C-04 | 신뢰 전 MCP | 이 폴더를 신뢰하지 않은 상태로 TUI에서 `/mcp` | 프로젝트 `.codex/` 층은 신뢰한 프로젝트에서만 로드된다. 그래서 `context7`이 없다. 키트가 MCP 로드를 `UNVERIFIED`로 보고하는 이유다 | CX-MCP | | |
 | C-05 | 신뢰 후 MCP | 폴더를 신뢰한 뒤 셸에서 `codex mcp list`, TUI에서 `/mcp` | `context7`이 목록에 있고, `/mcp`에서 활성 서버로 보인다 | CX-MCP | | |
@@ -66,7 +66,7 @@ cd "$WS"
 | ID | 확인 항목 | 명령(어디서) | 기대 결과 | 출처 | 결과(검토자) | 날짜·버전 |
 |---|---|---|---|---|---|---|
 | L-01 | 프로젝트 지침(`CLAUDE.md`) 로드 | `$WS`에서 `claude`를 열고 `/context all` | **Memory files** 목록에 `CLAUDE.md`가 있다. `AGENTS.md`는 없다. 문서상 `CLAUDE.md`가 있으면 `AGENTS.md`는 읽지 않는다(기본값 `claude-md-or-agents-md`). `both` 설치에서는 이것이 맞다 | CC-MEM | | |
-| L-02 | 프로젝트 스킬 로드 | `/skills` | 위 17개가 보인다. 같은 이름이 두 번 나오지 않는다. `.agents/skills`의 사본이 따로 보이지 않는다(R-4) | CC-SK | | |
+| L-02 | 프로젝트 스킬 로드 | `/skills` | 위 목록의 스킬이 모두 보인다. 같은 이름이 두 번 나오지 않는다. `.agents/skills`의 사본이 따로 보이지 않는다(R-4) | CC-SK | | |
 | L-03 | 스킬 호출 | 입력창에 `/task-router` 입력 | 스킬로 실행된다(`/` 메뉴에 나옴) | CC-SK | | |
 | L-04 | 승인 전 MCP | 셸, `$WS`에서: `claude mcp list` 그리고 `claude mcp get context7` | `context7`이 `⏸ Pending approval (run claude to approve)` 상태다. `.mcp.json` 서버는 대화형 세션에서 승인해야 쓴다 | CC-MCP | | |
 | L-05 | 승인 후 MCP | `claude`를 열고 승인 프롬프트에서 `context7` 승인 → `/mcp` | `context7`이 보이고 상태가 나온다. 승인을 되돌리려면 `claude mcp reset-project-choices` | CC-MCP | | |

@@ -34,6 +34,7 @@ STANDARD_CORE = sorted(
         "task-approval",  # P5-T2
         "data-quality-validator",  # P5-T6
         "session-recovery",  # P5-T7
+        "grounded-answer",  # 2026-11-17
     }
 )
 WEB_DESIGN = ["emil-design-eng", "frontend-design", "web-design-guidelines"]

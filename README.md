@@ -117,7 +117,7 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 | | Codex | Claude Code |
 |---|---|---|
 | 정책 | `AGENTS.md`의 키트 구간 | `CLAUDE.md`의 키트 구간 |
-| Skill(17개) | `.agents/skills/` | `.claude/skills/` |
+| Skill(18개) | `.agents/skills/` | `.claude/skills/` |
 | MCP(프로필이나 `--mcp`로 고른 것만) | `.codex/config.toml`의 키트 구간 | `.mcp.json`의 키트 소유 키 |
 | 기타 | 승인 훅(`--hooks`) | 승인 훅(`--hooks`), 반례용 서브에이전트, 플러그인 선언(`--plugin`) |
 
@@ -126,7 +126,7 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 
 ## 프로필과 팩
 
-`--profile`에 쉼표로 여러 개를 준다. 예: `--profile core,motion`은 기본 Skill 17개에 motion 팩 16개를 더해 33개를 설치한다. 설치 전에 `kit profiles show core,motion`으로 실제로 들어갈 Skill을 볼 수 있다.
+`--profile`에 쉼표로 여러 개를 준다. 예: `--profile core,motion`은 기본 Skill 18개에 motion 팩 16개를 더해 34개를 설치한다. 설치 전에 `kit profiles show core,motion`으로 실제로 들어갈 Skill을 볼 수 있다.
 
 | 종류 | 이름 | 내용 |
 |---|---|---|
@@ -134,7 +134,7 @@ Windows PowerShell에서는 같은 인수를 `bootstrap.ps1`에 준다.
 | 프로필 | `python`, `data`, `web`, `full` | v1 프로필. 도구 확인과 `sequential-thinking` MCP |
 | 프로필 | `hackathon`, `fullstack`, `ai-research` | 시간 제한 대회, 프런트·백엔드, 실험·연구용 조합 |
 | 팩 | `hitl`, `workflow`, `research`, `launch` | 승인 흐름, 계획 체인(superpowers), 실험·통계, 출시 전 점검 |
-| opt-in 팩 | `eng-patterns`, `lean`, `cloudflare`, `motion`, `planning-extras` | 외부 스킬 44개. standard 정책에서 고를 때만 설치된다 |
+| opt-in 팩 | `eng-patterns`, `lean`, `cloudflare`, `motion`, `planning-extras`, `skill-tooling` | 외부 스킬 46개. standard 정책에서 고를 때만 설치된다 |
 
 - 외부 스킬은 커밋을 고정해 `third_party/`에 그대로 복사했고, 라이선스는 `THIRD_PARTY_NOTICES.md`에 있다.
 - 전역 설치나 토큰 저장을 지시하는 스킬 등 위험한 것은 팩에서 뺐다. 이유는 팩 설명(`kit profiles list`)과 `docs/v2/07_SOURCES_EVALUATION.md`에 있다.
@@ -178,6 +178,7 @@ GitHub 주소에서 Skill을 받아 키트에 더한다. 먼저 계획만 보여
 | 프로필·팩 보기 | `kit profiles list`, `kit profiles show <이름> --policy standard` |
 | 검증 | `kit verify --agent both` |
 | 키트 업데이트 뒤 다시 맞추기 | `kit update --agent both` |
+| 스킬만 전역(`~/.codex/skills`, `~/.claude/skills`)에 설치 | `kit install --agent both --scope user --skills-only --profile core,skill-tooling --yes` |
 | 제거 | `kit uninstall --agent both` |
 | 백업에서 되돌리기 | `kit restore --backup <시각>` |
 | 진단 | `kit doctor` |
@@ -185,6 +186,8 @@ GitHub 주소에서 Skill을 받아 키트에 더한다. 먼저 계획만 보여
 | 도움말 | `kit help` (v1 도움말은 `kit --help`) |
 
 종료 코드: 0 READY, 1 PARTIAL, 2 BLOCKED, 64 잘못된 인수, 65 대상 문제.
+
+같은 명령을 다시 실행하면 이미 같은 내용인 파일은 `UNCHANGED`로 건너뛰고, 새로 생기거나 바뀐 스킬만 쓴다. 키트에 스킬이 추가된 뒤에는 설치 명령을 그대로 다시 실행하거나 `kit update`를 쓴다. `--skills-only`는 전역의 AGENTS.md/CLAUDE.md, OMX, `config.toml`, `settings.json`, MCP를 건드리지 않는다. `update`와 `verify`도 이 선택을 그대로 따른다.
 
 ## 문서
 

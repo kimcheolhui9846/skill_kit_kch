@@ -127,6 +127,7 @@ All off by default; the kit writes a pinned entry only after `--mcp NAME` / `--p
 | plugin `replay-theater` (`claude-code/mods/replay-theater`) | https://github.com/anthropics/claude-code-playground | 569c5283d9a0a7ee7938df85bb32e4f48cbb8c86 | 0.1.0 | Apache-2.0 |
 | plugin `savvy-progress` (`plugins/savvy-progress`) | https://github.com/JohnnyVizz/claude-kit | c871c153ead54ad9547cc717d0f3e5a676c73986 | 1.2.1 | MIT |
 | plugin `effortless` | https://github.com/HeyCubit/effortless | 7912a6ccdf0a562274a74f1f06f1306722c163db | 1.72.0 | MIT |
+| plugin `ralph-loop` (`plugins/ralph-loop`, added 2026-11-17) | https://github.com/anthropics/claude-plugins-official | fd30cee3ecd5a8ee772733c5d20c0f2bae2da2f0 | 1.0.1 | Apache-2.0 |
 
 <!-- kit-source:begin k-dense-ai-scientific-agent-skills -->
 ### K-Dense-AI/scientific-agent-skills — experimental-design, exploratory-data-analysis, pytorch-lightning, scientific-critical-thinking, scikit-learn, statistical-analysis, statistical-power
@@ -187,3 +188,23 @@ All off by default; the kit writes a pinned entry only after `--mcp NAME` / `--p
 - Used verbatim: `skills/agents-sdk`, `skills/cloudflare-app-bootstrap`, `skills/cloudflare-one-migrations`, `skills/durable-objects`, `skills/frameworks-on-cloudflare`, `skills/k2`, `skills/sandbox-migrate-to-next`, `skills/sandbox-next`, `skills/sandbox-stable`, `skills/workers-best-practices`, `skills/workers-development`, `skills/workers-profiling`, `skills/wrangler`
 - Added by `kit source add` (2026-11-08).
 <!-- kit-source:end cloudflare-skills -->
+
+<!-- kit-source:begin skillevaluator -->
+### NVIDIA/SkillEvaluator — skillevaluator
+
+- Repository: https://github.com/NVIDIA/SkillEvaluator
+- Commit: 64b237f017264e7a82447d7e1a217d8893ed7e84
+- License: Apache-2.0, in `third_party/NVIDIA-SkillEvaluator/LICENSE` (installed with the skill)
+- Used verbatim: `skills/skillevaluator`
+- Added by `kit source add` (2026-11-17).
+<!-- kit-source:end skillevaluator -->
+
+<!-- kit-source:begin skill-inspector -->
+### NVIDIA/SkillSpector — skill-inspector
+
+- Repository: https://github.com/NVIDIA/SkillSpector
+- Commit: a09091e0ebf6c96ff327457529d7b0d372125884
+- License: Apache-2.0, in `third_party/NVIDIA-SkillSpector/LICENSE` (installed with the skill)
+- Used verbatim: `skills/skill-inspector`
+- Added by `kit source add` (2026-11-17).
+<!-- kit-source:end skill-inspector -->

@@ -1366,6 +1366,138 @@
         "at": "2026-11-08",
         "notes": "Not copied and not installed by the kit. Declared (url source pinned to the commit) only with --plugin effortless. plugin.json 1.72.0, LICENSE MIT at the commit. High: Haiku call per prompt, in-app Update bypasses the pin, plain-text key file ~/.config/jev/.env, needs CLAUDE_CODE_ENABLE_FUNCTION_HOOKS=1 in user settings. Optional TYPESAFE_API_KEY by name only."
       }
+    },
+    {
+      "id": "ralph-loop",
+      "kind": "plugin",
+      "origin": "https://github.com/anthropics/claude-plugins-official",
+      "path": "plugins/ralph-loop",
+      "paths": [
+        "plugins/ralph-loop"
+      ],
+      "ref": "main",
+      "commit": "fd30cee3ecd5a8ee772733c5d20c0f2bae2da2f0",
+      "version": null,
+      "license": "Apache-2.0",
+      "integration": "referenced",
+      "local_paths": [],
+      "files": {},
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [],
+      "risk": "low",
+      "added": "2026-11-17",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "referenced",
+        "by": "kit source add",
+        "at": "2026-11-17",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      }
+    },
+    {
+      "id": "skillevaluator",
+      "kind": "skill",
+      "origin": "https://github.com/NVIDIA/SkillEvaluator",
+      "path": "skills/skillevaluator",
+      "paths": [
+        "skills/skillevaluator"
+      ],
+      "ref": "main",
+      "commit": "64b237f017264e7a82447d7e1a217d8893ed7e84",
+      "version": null,
+      "license": "Apache-2.0",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator"
+      ],
+      "files": {
+        "third_party/NVIDIA-SkillEvaluator/LICENSE": "61423261b7a3f50cbeef78c828dafc95fbc24e0f228e53ce3f31c101cb62eb7b",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/SKILL.md": "2147e4076c115b914bcd4a10c9760abc904bf2a544699e6eb4301dd2f89c3f94",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/evals/config.yml": "aacbe7d376e67cae7dba124244ea1b1270a11ac652004b98bf7a06db177cd462",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/evals/evals.json": "d3a7a88f5b7d8ce29e467627e1f0a93073e43857afa09ccd07c71ec09f19ed9f",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/commands-tier1.md": "f0e29a7c28f5b5f318724dfafc7ef605616dd0fdd4dd70d312edc018c40ec1e3",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/commands-tier2-tier3.md": "4a2e110c190f7217392fe79ba196cfcd1bc08efe648e8df5febbf0a80ac425a0",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/commands-validate.md": "14d5d6895e836d0cd218620128b17468975c6af89ff8f9fff03f6eaa4795d2aa",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/custom-graders.md": "5dfe8491be29a49e2390239d846b78bf807752dff21497fafe43c3d3b50720d4",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/providers.md": "080ce23e23ff46c6247abd30bff73f889dcf077fe0a4fc85e4e30c14e9cd7930",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/reports-and-ci.md": "2b19309eb453eecc4339fd60677bc66050b94d0c7a76591094585b248cc0560a",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/tier3-datasets.md": "53547f997fd63e5ccaaba8c1f774a848a87988c006f70d9af6893ea44b3f9286",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/tier3-running.md": "84f251050a54608ba7bf910665b22f2cda40e08af0a88b9993bba780877646e7",
+        "third_party/NVIDIA-SkillEvaluator/skills/skillevaluator/references/troubleshooting.md": "12872c2262b50f62fbee5acce26e4b871e323b8494e98355d5d9a834794dd341"
+      },
+      "content_sha256": "abf41cae2713cae73d42bb74876f846eb3f628cef6028c554097e07284f02382",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "skill-tooling"
+      ],
+      "risk": "low",
+      "added": "2026-11-17",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-17",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/NVIDIA-SkillEvaluator/LICENSE"
+    },
+    {
+      "id": "skill-inspector",
+      "kind": "skill",
+      "origin": "https://github.com/NVIDIA/SkillSpector",
+      "path": "skills/skill-inspector",
+      "paths": [
+        "skills/skill-inspector"
+      ],
+      "ref": "main",
+      "commit": "a09091e0ebf6c96ff327457529d7b0d372125884",
+      "version": null,
+      "license": "Apache-2.0",
+      "integration": "vendored-verbatim",
+      "local_paths": [
+        "third_party/NVIDIA-SkillSpector/skills/skill-inspector"
+      ],
+      "files": {
+        "third_party/NVIDIA-SkillSpector/LICENSE": "9f8785b47596b2993a17a3fa8d747ae63126a2c5e80a9e77195a907273d71839",
+        "third_party/NVIDIA-SkillSpector/skills/skill-inspector/SKILL.md": "1acc220016936ba68f7b9083c19575a8866c9cf74c251d689285a0d9fbe2a067"
+      },
+      "content_sha256": "82e979c392dce0ee93efa11c3ad8da40c4cc524c34891ad17fce015128a8abea",
+      "agents": [
+        "codex",
+        "claude"
+      ],
+      "scope": [
+        "project"
+      ],
+      "packs": [
+        "skill-tooling"
+      ],
+      "risk": "low",
+      "added": "2026-11-17",
+      "added_by": "source add",
+      "overlap": [],
+      "verification": {
+        "status": "verified",
+        "by": "kit source add",
+        "at": "2026-11-17",
+        "notes": "Fetched from codeload at the pinned commit and unpacked in memory; nothing was executed."
+      },
+      "license_file": "third_party/NVIDIA-SkillSpector/LICENSE"
     }
   ]
 }

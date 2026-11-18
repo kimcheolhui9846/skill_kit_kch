@@ -424,3 +424,10 @@
 | 2026-11-08 | add | `affaan-m-ecc` | affaan-m/ECC@d2ef2680594f | MIT | vendored-verbatim | eng-patterns | — |
 | 2026-11-08 | remove | `cloudflare-skills` | cloudflare/skills@6eb6c781aa9b | Apache-2.0 | vendored-verbatim | cloudflare | — |
 | 2026-11-08 | add | `cloudflare-skills` | cloudflare/skills@6eb6c781aa9b | Apache-2.0 | vendored-verbatim | cloudflare | — |
+| 2026-11-17 | add | `skillevaluator` | NVIDIA/SkillEvaluator@64b237f01726 | Apache-2.0 | vendored-verbatim | full | — |
+| 2026-11-17 | add | `skill-inspector` | NVIDIA/SkillSpector@a09091e0ebf6 | Apache-2.0 | vendored-verbatim | full | — |
+| 2026-11-17 | add | `ralph-loop` | anthropics/claude-plugins-official@fd30cee3ecd5 | Apache-2.0 | referenced | — | — |
+| 2026-11-17 | remove | `skillevaluator` | NVIDIA/SkillEvaluator@64b237f01726 | Apache-2.0 | vendored-verbatim | full | — |
+| 2026-11-17 | remove | `skill-inspector` | NVIDIA/SkillSpector@a09091e0ebf6 | Apache-2.0 | vendored-verbatim | full | — |
+| 2026-11-17 | add | `skillevaluator` | NVIDIA/SkillEvaluator@64b237f01726 | Apache-2.0 | vendored-verbatim | skill-tooling | — |
+| 2026-11-17 | add | `skill-inspector` | NVIDIA/SkillSpector@a09091e0ebf6 | Apache-2.0 | vendored-verbatim | skill-tooling | — |

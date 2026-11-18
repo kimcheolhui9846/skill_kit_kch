@@ -12,7 +12,7 @@ kit install --agent claude --mcp context7 --hooks
 | 파일 | 내용 | 키트가 쓰는 범위 |
 |---|---|---|
 | `CLAUDE.md` | 작업 정책 | `<!-- hackathon-kit:begin -->` … `end` 구간만 |
-| `.claude/skills/<이름>/` | 스킬(기본 17개) | 키트가 만든 파일만 |
+| `.claude/skills/<이름>/` | 스킬(기본 18개) | 키트가 만든 파일만 |
 | `.claude/agents/counterexample-blackbox.md` | 반례 검토의 블랙박스 단계용 서브에이전트(standard 정책) | 키트가 만든 파일만 |
 | `.mcp.json` | MCP 서버(프로필이나 `--mcp`로 고른 것) | `mcpServers`의 키트 소유 키만 |
 | `.claude/settings.json`, `.claude/hooks/kit_approval.py` | 승인 훅(`--hooks`만), 플러그인 선언(`--plugin`만) | 키트 소유 키만 |

@@ -2,7 +2,7 @@
 ## When to use which skill
 Each skill holds its own steps; this policy only says when.
 - Any S or C task: start with task-router. Tasks that wait for approval: task-approval.
-- Session start or resumed work in a folder with .kit/work/: session-recovery.
+- Session start or resumed work in a folder with .kit/work/: session-recovery. Facts only the user can give, or an ambiguous request: grounded-answer.
 - Unfamiliar code: codebase-explorer. Design choices: design-review. Algorithms with stated limits: algorithm-options.
 - Writing code: test-driven-development (principle 4). Bugs or failing tests: systematic-debugging.
 - Before calling it done: counterexample-hunter (principle 7), verification-before-completion (principle 5), implementation-review.

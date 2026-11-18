@@ -7,6 +7,9 @@ installed is described in kit.userscope. Rules that differ from project scope:
   user) put there. A different file at a kit path is a CONFLICT (e.g. OMX installed by
   `omx setup`), never overwritten.
 - No MCP handshake, no tools, no plugin CLI: those are per workspace.
+- --skills-only writes the profile's skills and nothing else: no captured policy block, no
+  OMX, no own files, no config.toml block, no settings keys, no MCP commands. For a home that
+  already has its own AGENTS.md/CLAUDE.md, OMX or MCP setup.
 """
 
 from __future__ import annotations
@@ -96,10 +99,14 @@ class _UserBase:
     scope = "user"
     mcp_cli_check = False
 
-    def __init__(self, home: Path):
+    def __init__(self, home: Path, skills_only: bool = False):
         self.home = home
         self.dir = userscope.agent_dir(self.name, home)
+        self.skills_only = skills_only
         self._manual: List[str] = []
+
+    def _policy_body(self, kit_root: Path) -> Optional[str]:
+        return None if self.skills_only else userscope.policy_block(kit_root, self.name, self.home)
 
     def audit(self, target: Path, kit_root: Path, allowlist: Optional[dict] = None):
         return None  # the home config is the user's own; kit entries come from the catalog
@@ -116,8 +123,8 @@ class CodexUserAdapter(_UserBase):
     display_name = "Codex"
     cli = "codex"
 
-    def __init__(self, home: Path):
-        super().__init__(home)
+    def __init__(self, home: Path, skills_only: bool = False):
+        super().__init__(home, skills_only)
         self.policy = BlockTarget(f"{self.dir}/AGENTS.md", markdown_block.BEGIN, markdown_block.END)
         self.skill_root = f"{self.dir}/skills"
         self.mcp_config = BlockTarget(f"{self.dir}/config.toml", toml_block.BEGIN, toml_block.END)
@@ -204,7 +211,7 @@ class CodexUserAdapter(_UserBase):
         hooks: bool = False,
     ) -> List[FileChange]:
         changes: List[FileChange] = []
-        body = userscope.policy_block(kit_root, "codex", self.home)
+        body = self._policy_body(kit_root)
         if body:
             changes.append(
                 _plan_block(
@@ -228,6 +235,9 @@ class CodexUserAdapter(_UserBase):
                 f"skill '{clash[0]}' in {userscope.OWN_DIR} is also a kit or OMX skill"
             )
         changes += _skills(target, kit_root, profile, state, self.skill_root, skill_source)
+        if self.skills_only:
+            _not_adopted(changes, state)
+            return changes
         for rel, _, data in userscope.omx_files(kit_root, self.dir):
             changes.append(plan_file(target, rel, OMX_OWNER, data, state))
         for rel, _, data in userscope.own_files(kit_root, self.dir):
@@ -256,7 +266,7 @@ class CodexUserAdapter(_UserBase):
             c.owner: f"{c.rel}: {c.detail}" for c in changes if c.outcome == Outcome.CONFLICT
         }
         items = []
-        body = userscope.policy_block(kit_root, "codex", self.home)
+        body = self._policy_body(kit_root)
         if body:
             items.append(_verify_agents_md(target, kit_root, conflicts, self.policy.rel, body))
         for name in profile.skills:
@@ -271,6 +281,8 @@ class CodexUserAdapter(_UserBase):
                     skill_source,
                 )
             )
+        if self.skills_only:
+            return items
         items.append(self._verify_omx(target, kit_root, changes))
         if userscope.own_files(kit_root, self.dir):
             items.append(self._verify_own(target, kit_root, changes))
@@ -372,8 +384,8 @@ class ClaudeUserAdapter(_UserBase):
     cli = "claude"
     mcp_manual = True  # ~/.claude.json is Claude's own file (ADR-018)
 
-    def __init__(self, home: Path):
-        super().__init__(home)
+    def __init__(self, home: Path, skills_only: bool = False):
+        super().__init__(home, skills_only)
         self.policy = BlockTarget(f"{self.dir}/CLAUDE.md", markdown_block.BEGIN, markdown_block.END)
         self.skill_root = f"{self.dir}/skills"
         self.mcp_config = BlockTarget(f"{self.dir}/settings.json", "", "")
@@ -395,7 +407,7 @@ class ClaudeUserAdapter(_UserBase):
         hooks: bool = False,
     ) -> List[FileChange]:
         changes: List[FileChange] = []
-        body = userscope.policy_block(kit_root, "claude", self.home)
+        body = self._policy_body(kit_root)
         if body:
             changes.append(
                 _plan_block(
@@ -409,6 +421,10 @@ class ClaudeUserAdapter(_UserBase):
                 )
             )
         changes += _skills(target, kit_root, profile, state, self.skill_root, skill_source)
+        if self.skills_only:
+            self._manual = []
+            _not_adopted(changes, state)
+            return changes
         keys = self._keys(kit_root)
         if keys:
             change = plan_owned_keys(target, self.settings_rel, SETTINGS_OWNER, keys, state)
@@ -454,7 +470,7 @@ class ClaudeUserAdapter(_UserBase):
             c.owner: f"{c.rel}: {c.detail}" for c in changes if c.outcome == Outcome.CONFLICT
         }
         items = []
-        body = userscope.policy_block(kit_root, "claude", self.home)
+        body = self._policy_body(kit_root)
         if body:
             items.append(_verify_agents_md(target, kit_root, conflicts, self.policy.rel, body))
         for name in profile.skills:
@@ -469,7 +485,7 @@ class ClaudeUserAdapter(_UserBase):
                     skill_source,
                 )
             )
-        keys = self._keys(kit_root)
+        keys = {} if self.skills_only else self._keys(kit_root)
         if keys:
             items.append(
                 verify_owned_keys(
@@ -495,5 +511,5 @@ class ClaudeUserAdapter(_UserBase):
         return steps
 
 
-def adapter_for(name: str, home: Path):
-    return {"codex": CodexUserAdapter, "claude": ClaudeUserAdapter}[name](home)
+def adapter_for(name: str, home: Path, skills_only: bool = False):
+    return {"codex": CodexUserAdapter, "claude": ClaudeUserAdapter}[name](home, skills_only)
