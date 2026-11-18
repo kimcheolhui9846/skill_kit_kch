@@ -2,7 +2,7 @@
 
 - P5-T1 8-1: a standard install that leaves out skills the policy names gets a warning.
 - U-23: `--manual NAME` prints a guide from catalog/manual.json; the kit runs none of it.
-- add-skill-source: the repo's own .claude/skills copy stays identical to shared/skills.
+- add-skill-source: both agents' repo-local copies match the shared skill.
 - the claude mcp add reference 'NAME=${NAME}' stays readable after masking.
 """
 
@@ -138,9 +138,10 @@ def test_bad_manual_catalog_is_refused(kit, change, message):
 # ---------------------------------------------------------------- add-skill-source copy
 
 
-def test_repo_claude_copy_of_add_skill_source_matches_the_kit_skill():
+@pytest.mark.parametrize("agent_root", [".claude/skills", ".codex/skills"])
+def test_repo_agent_copy_of_add_skill_source_matches_the_kit_skill(agent_root):
     shared = KIT_ROOT / "shared/skills/add-skill-source"
-    copy = KIT_ROOT / ".claude/skills/add-skill-source"
+    copy = KIT_ROOT / agent_root / "add-skill-source"
     files = sorted(p.relative_to(shared) for p in shared.rglob("*") if p.is_file())
     assert files == sorted(p.relative_to(copy) for p in copy.rglob("*") if p.is_file())
     for rel in files:
