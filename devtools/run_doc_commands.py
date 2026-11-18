@@ -316,12 +316,21 @@ def readme(r: Runner) -> None:
         r.env = env
 
     r.workspace("readme-project")
-    for command in ("install", "verify"):
-        args = [command, "--agent", "both"]
+    servers = "--mcp sequential-thinking --mcp playwright --mcp context7"
+    for args, offline in (
+        ("install --agent both", False),
+        ("verify --agent both", False),
+        (f"install --agent both {servers}", True),
+        ("verify --agent both", True),
+        ("plan --agent claude --manual mobbin", False),
+    ):
+        argv = [sys.executable, str(ROOT / "run_kit.py"), *split(args)]
+        if offline:
+            argv.append("--offline")
         r.shell(
             d,
-            f"python ../skill_kit_kch/run_kit.py {' '.join(args)}",
-            [sys.executable, str(ROOT / "run_kit.py"), *args],
+            f"python ../skill_kit_kch/run_kit.py {args}",
+            argv,
         )
 
     r.workspace("exam-offline")

@@ -21,3 +21,8 @@
 - 원본은 `shared/skills/add-skill-source/SKILL.md`다. Claude 사본이 존재하고 기존 Codex 세션 목록에는 이 스킬이 없었다.
 - `main`의 `tests/test_doc_commands.py`에 Ruff E501 네 건이 있다. 설치 명령을 담은 23, 24, 27, 28행이다.
 - 기존 설치 및 점검표 테스트 7개 통과. 현재 작업 트리에서 전체 회귀 검증을 진행한다.
+
+## 후속 작업 · README의 MCP 목록과 설치 방법
+
+- README에 수집한 MCP의 이름, 용도, 등록 방식과 복사해서 쓸 명령을 넣는다. 설치기와 기본 설정은 기존 동작을 유지한다.
+- 기준선은 `tests/test_doc_commands.py`와 `tests/catalog/test_mcp_catalog.py` 142개 통과다. 문서 명령 실행기와 기록을 갱신하고, 목록의 누락·중복과 프로젝트별 설정을 검증한다.
