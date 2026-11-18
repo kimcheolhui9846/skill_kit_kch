@@ -53,7 +53,8 @@ def test_malformed_profile_json_exits_2(workspace, tmp_path, kit_root):
     import shutil
 
     root = tmp_path / "kit"
-    shutil.copytree(kit_root, root, ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__"))
+    ignore = shutil.ignore_patterns(".git", ".kit", ".venv", "__pycache__")
+    shutil.copytree(kit_root, root, ignore=ignore)
     (root / "profiles" / "core.json").write_text("{not json", encoding="utf-8")
     env = dict(os.environ)
     proc = subprocess.run(

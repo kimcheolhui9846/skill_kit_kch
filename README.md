@@ -167,6 +167,8 @@ GitHub 주소에서 Skill을 받아 키트에 더한다. 먼저 계획만 보여
 
 ## 자주 쓰는 명령
 
+Codex와 Claude Code를 함께 쓰는 기기는 [협업 설정 설치 안내](user/workflow/README.md)를 따른다. 저장소 루트에서 `python devtools/install_agent_workflow.py`로 변경할 전역 파일을 확인하고 `--apply`로 적용한다.
+
 아래 `kit`은 `bootstrap.sh`, `bootstrap.ps1`, `python run_kit.py` 중 하나다.
 
 | 하려는 일 | 명령 |
