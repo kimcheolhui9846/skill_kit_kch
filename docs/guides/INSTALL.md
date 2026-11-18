@@ -19,14 +19,25 @@
 
 ## 1. 키트 받기
 
-```bash
-git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch ../skill_kit_kch
+일반 절차는 [빠른 시작](../../README.md)을 따른다. 재설치를 포함해 한 줄로 실행하려면 작업 프로젝트 루트에서 아래 명령을 사용한다. 키트가 있으면 갱신하고 없으면 작업 프로젝트의 형제 폴더에 받는다.
+
+Windows PowerShell:
+
+```powershell
+$k='..\skill_kit_kch'; if (Test-Path "$k\.git") { git -C $k pull --ff-only } elseif (Test-Path $k) { Write-Error "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." } else { git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git $k }; if ($? -and $LASTEXITCODE -eq 0) { powershell -NoProfile -ExecutionPolicy Bypass -File "$k\bootstrap.ps1" install --agent both }
 ```
 
-**미검증(P7-T1 자동 기록 밖):**
-- 네트워크가 필요한 명령이라 문서 명령 기록(`P7-T1-doc-commands.md`)에는 없다.
-- v2를 `main`에 병합한 뒤(2026-11-09, PR #10) 직접 clone해서 `install --agent both`와 `verify`가 READY인 것을 확인했다.
-- v1의 같은 명령은 `docs/TEST_REPORT.md`(v1)에 실행 기록이 있다.
+bash (Linux, macOS, Git Bash, WSL):
+
+> Windows에서는 위의 PowerShell 줄을 쓴다. PowerShell 창에 아래 bash 줄을 넣거나 `bash ...`를 실행하면 WSL의 bash가 떠서 경로가 어긋난다. 그러면 `No such file or directory`가 나온다.
+
+```bash
+k=../skill_kit_kch; if [ -d "$k/.git" ]; then git -C "$k" pull --ff-only; elif [ -e "$k" ]; then echo "$k 폴더가 있지만 git 저장소가 아닙니다. 지우거나 옮긴 뒤 다시 실행하세요." >&2; false; else git clone --depth 1 https://github.com/kimcheolhui9846/skill_kit_kch.git "$k"; fi && bash "$k/bootstrap.sh" install --agent both
+```
+
+미검증(자동 문서 기록). 빠른 시작의 복제와 위 한 줄 명령에는 원격 저장소 접근이 필요하다.
+
+한쪽만 설치하려면 `--agent codex` 또는 `--agent claude`를 쓴다. 계획 체인, ponytail, MCP 세 개를 더하려면 설치 인수에 `--profile python,workflow,lean --mcp playwright --mcp context7`을 붙인다. `python` 프로필의 pytest·ruff 설치를 빼려면 대신 `--profile core,workflow,lean --mcp sequential-thinking --mcp playwright --mcp context7`를 쓴다. 목록은 [카탈로그](../CATALOG.md)에 있다.
 
 ## 2. 미리 보기
 
@@ -51,7 +62,7 @@ kit install --agent both       # 둘 다. 하나라도 실패하면 둘 다 되�
 | 옵션 | 뜻 | 기본값 |
 |---|---|---|
 | `--profile a[,b]` | 프로필과 팩 조합. 목록은 `kit profiles list`, 설치될 스킬은 `kit profiles show`나 `docs/CATALOG.md` | `core,hitl` |
-| `--policy standard\|restricted` | `restricted`는 v1과 같은 스킬 11개(시험용). `standard`는 외부 스킬 포함 17개 | `standard` |
+| `--policy standard\|restricted` | 기본 프로필에서 `restricted`는 v1과 같은 스킬 11개, `standard`는 외부 스킬을 포함해 18개 | `standard` |
 | `--offline` | 네트워크를 쓰지 않는다. 네트워크가 필요한 항목은 `SKIPPED` | 끔 |
 | `--yes` | 네트워크 사용과 user 범위 변경을 묻지 않고 허용한다. 터미널이 없으면 이것이 있어야 그런 작업을 한다 | 끔 |
 | `--mcp NAME` | 기본으로 꺼진 MCP 서버를 켠다(예: `context7`) | 없음 |
