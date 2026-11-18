@@ -50,9 +50,10 @@ def test_clean_preview_apply_and_repeat(setup):
     assert content == (claude / "CLAUDE.md").read_bytes()
     assert content.splitlines()[0] == BEGIN
     assert content.splitlines()[-1] == END
-    assert b"\n".join(content.splitlines()[1:-1]) == (
-        ASSETS / "WORKFLOW.md"
-    ).read_bytes().replace(b"\r\n", b"\n").strip()
+    assert (
+        b"\n".join(content.splitlines()[1:-1])
+        == (ASSETS / "WORKFLOW.md").read_bytes().replace(b"\r\n", b"\n").strip()
+    )
     assert (codex / "agents" / CODEX_AGENT).is_file()
     assert all((claude / "agents" / name).is_file() for name in CLAUDE_AGENTS)
 
@@ -164,7 +165,8 @@ def test_owned_agent_replaced_with_backup(setup):
     source = (ASSETS / CODEX_AGENT).read_bytes().replace(b"\r\n", b"\n").strip()
     assert agent.read_bytes() == codecs.BOM_UTF8 + source.replace(b"\n", b"\r\n")
     assert {p.read_bytes() for p in agent.parent.glob(f"{agent.name}.backup-*")} == {
-        original, b"existing backup",
+        original,
+        b"existing backup",
     }
 
 

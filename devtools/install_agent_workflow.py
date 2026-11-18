@@ -92,7 +92,7 @@ def replace_instructions(path: Path, original: FileState | None, body: str) -> T
         if start == 0:
             return Target(path, original, encode(block + text[stop:], raw))
         # Promote a previously placed block while preserving surrounding text.
-        text = text[:start] + text[terminator.end() if terminator else stop:]
+        text = text[:start] + text[terminator.end() if terminator else stop :]
     merged = block + newline + (newline + text if text else "")
     return Target(path, original, encode(merged, raw))
 
@@ -187,7 +187,8 @@ def apply(targets: list[Target], override: tuple[Path, FileState | None]) -> Non
             check_original(target.path, target.original)
             if target.original:
                 backup = write_temp(
-                    target.path.parent, f"{target.path.name}.backup-{stamp}-",
+                    target.path.parent,
+                    f"{target.path.name}.backup-{stamp}-",
                     target.original.content,
                 )
                 print(f"BACKUP    {backup}")
